@@ -1,0 +1,72 @@
+name: {{ cookiecutter.__project_name_no_spaces }}
+options:
+  defaultConfig: "Release"
+  deploymentTarget:
+    iOS: "17.2"
+settings:
+  base:
+    ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: "YES"
+    CLANG_CXX_LANGUAGE_STANDARD: "gnu++20"
+    ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+    GCC_C_LANGUAGE_STANDARD: "gnu17"
+    LOCALIZATION_PREFERS_STRING_CATALOGS: "YES"
+  configs:
+    release:
+      VALIDATE_PRODUCT: "YES"
+targets:
+  {{ cookiecutter.target_name }}:
+    type: application
+    platform: iOS
+    sources:
+      - {{ cookiecutter.target_name }}
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "AccentColor"
+        CODE_SIGN_IDENTITY: "Apple Development"
+        CURRENT_PROJECT_VERSION: "1"
+        DEVELOPMENT_ASSET_PATHS: "\"{{ cookiecutter.target_name }}/Preview Content\""
+        ENABLE_PREVIEWS: "YES"
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: "YES"
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: "YES"
+        INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad:
+          - "UIInterfaceOrientationPortrait"
+          - "UIInterfaceOrientationPortraitUpsideDown"
+          - "UIInterfaceOrientationLandscapeLeft"
+          - "UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone:
+          - "UIInterfaceOrientationPortrait"
+          - "UIInterfaceOrientationLandscapeLeft"
+          - "UIInterfaceOrientationLandscapeRight"
+        MARKETING_VERSION: "1.0"
+        PRODUCT_BUNDLE_IDENTIFIER: "{{ cookiecutter.bundle_identifier }}"
+        SWIFT_EMIT_LOC_STRINGS: "YES"
+  {{ cookiecutter.target_name }}Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - {{ cookiecutter.target_name }}Tests
+    dependencies:
+      - target: {{ cookiecutter.target_name }}
+    settings:
+      base:
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: "YES"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: "YES"
+        MARKETING_VERSION: "1.0"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.{{ cookiecutter.__organization_name_no_spaces_lowercase }}.{{ cookiecutter.target_name }}Tests"
+  {{ cookiecutter.target_name }}UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - {{ cookiecutter.target_name }}UITests
+    dependencies:
+      - target: {{ cookiecutter.target_name }}
+    settings:
+      base:
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: "YES"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: "YES"
+        MARKETING_VERSION: "1.0"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.{{ cookiecutter.__organization_name_no_spaces_lowercase }}.{{ cookiecutter.target_name }}UITests"
