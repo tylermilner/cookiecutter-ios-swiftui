@@ -170,10 +170,6 @@ _TBD_
 pipenv run pytest
 ```
 
-## Todo
+## License
 
-This is currently a work in progress. Misc todos are listed below:
-
-- [ ] TODO - validate bundle id format (see [this SO post](https://stackoverflow.com/a/55623269/4343618) for possible regex)
-- [ ] TODO - add SwiftGen as a dependency
-- [ ] TODO - use Python for hooks instead of shell scripts
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for more information.
