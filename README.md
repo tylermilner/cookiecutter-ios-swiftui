@@ -4,10 +4,16 @@ Cookiecutter template for jump-starting modern iOS apps using SwiftUI.
 
 ## Getting Started
 
-Install Cookiecutter (e.g. using [Homebrew](https://brew.sh)):
+Install [Cookiecutter](https://github.com/cookiecutter/cookiecutter) (e.g. using [Homebrew](https://brew.sh)):
 
 ```Shell
 brew install cookiecutter
+```
+
+Install [XcodeGen](https://github.com/yonaskolb/XcodeGen):
+
+```Shell
+brew install xcodegen
 ```
 
 Run Cookiecutter against this repo:
