@@ -76,10 +76,22 @@ pip install pipenv
 
 ### Installing Project Dependencies
 
-Currently, the project only has development dependencies. Install them using `pipenv`:
+The project has both Python (e.g. Cookiecutter) and non-Python (e.g. XcodeGen) project dependencies that will need to be installed.
+
+#### Python Project Dependencies
+
+Install the project's Python-based development dependencies using `pipenv`:
 
 ```Shell
 pipenv install --dev
+```
+
+#### Non-Python Project Dependencies
+
+The only non-Python project dependency is [XcodeGen](https://github.com/yonaskolb/XcodeGen) so that a final Xcode project can be generated. Install it using Homebrew:
+
+```Shell
+brew install xcodegen
 ```
 
 ### Making Changes
