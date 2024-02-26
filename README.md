@@ -48,13 +48,15 @@ In order to customize or make changes to the project template, you'll first need
 
 ### Development Environment Setup
 
-If you already have Python and `pipenv` installed, skip ahead to [Installing Project Dependencies](#installing-project-dependencies). Otherwise, follow the instructions below to get your Python environment set up.
-
 #### Homebrew
 
 This guide assumes that you already have [Homebrew](https://brew.sh) installed. If you aren't using Homebrew, you will need adjust the setup steps accordingly.
 
 #### Python
+
+If you already have Python and `pipenv` installed, skip ahead to [Installing Project Dependencies](#installing-project-dependencies). Otherwise, follow the instructions below to get your Python environment set up.
+
+##### pyenv
 
 In order to avoid using the system Python, use Homebrew to install [pyenv](https://github.com/pyenv/pyenv) for Python version management:
 
@@ -88,7 +90,7 @@ Then, use `pyenv` to install the version of Python in use by the project (i.e. `
 pyenv install
 ```
 
-#### Pipenv
+##### Pipenv
 
 Once Python is installed, install [pipenv](https://pipenv.pypa.io/en/latest/):
 
