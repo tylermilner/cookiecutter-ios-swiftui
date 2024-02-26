@@ -16,7 +16,29 @@ Run Cookiecutter against this repo:
 cookiecutter gh:tylermilner/cookiecutter-ios-swiftui
 ```
 
-## Resulting Directory Structure
+## About This Project
+
+### Cookiecutter
+
+This project is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) template for quickly spinning up iOS apps.
+
+Cookiecutter is a templating tool written in Python that uses a special `{{ variable_name }}` syntax to automatically replace variables in template files when run. The main template code for the iOS project is located in the `{{ cookiecutter.project_root }}` directory.
+
+### XcodeGen
+
+In addition to Cookiecutter, [XcodeGen](https://github.com/yonaskolb/XcodeGen) is used to generate the final Xcode project.
+
+This differs from some other iOS Cookiecutter templates where the Xcode project file is manually marked up with Cookiecutter `{{ variable_name }}` replacements. Having these raw Cookiecutter variables inside of the `xcodeproj` prevents Xcode from opening the file directly, which means you're on the hook to make all of the edits to the `xcodeproj` file manually as you continue to build out your template by adding files, adjusting build settings, etc.
+
+By using XcodeGen, Cookiecutter first runs its replacements inside of the `project.yml` file, which is then used to generate a fresh Xcode project as part of a post-run step. From there, the `project.yml` file can be discarded or kept, depending on if there is a desire to continue using XcodeGen on an ongoing basis in the generated project.
+
+### Generated Example Project
+
+A generated version of this template that demonstrates the final project structure can be found at:
+
+- [ ] TODO - Add link to generated output version of the template
+
+#### Resulting Directory Structure
 
 - [ ] TODO - document directory structure (see [this example](https://github.com/drivendata/cookiecutter-data-science#the-resulting-directory-structure))
 
