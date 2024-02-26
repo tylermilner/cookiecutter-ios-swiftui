@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+# No non-dev packages currently
+
+[dev-packages]
+cookiecutter = "2.6.0"
+pytest = "8.0.2"
+pytest-cookies = "0.7.0"
+
+[requires]
+python_version = "3.12"
