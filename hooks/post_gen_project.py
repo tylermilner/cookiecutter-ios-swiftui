@@ -25,7 +25,7 @@ if __name__ == "__main__":
     remove_xcodegen_yml()
 
     # Open the generated Xcode project
-    if "{{ cookiecutter.open_xcode_project }}":
+    if {{ cookiecutter.open_xcode_project }} == True:
         open_xcode_project()
 
     print("Post-gen script complete")
