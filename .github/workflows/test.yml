@@ -4,15 +4,13 @@ on: [push, workflow_dispatch]
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: macos-14
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Install XcodeGen
-      run: |
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        brew install xcodegen
+      run: brew install xcodegen
 
     - name: Set up Python, including cache for pipenv virtual environment
       uses: actions/setup-python@v5
