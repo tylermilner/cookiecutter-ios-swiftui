@@ -4,23 +4,25 @@ Cookiecutter template for jump-starting modern iOS apps using SwiftUI.
 
 ## Getting Started
 
-Install [Cookiecutter](https://github.com/cookiecutter/cookiecutter) (e.g. using [Homebrew](https://brew.sh)):
+1. Install [Cookiecutter](https://github.com/cookiecutter/cookiecutter) (e.g. using [Homebrew](https://brew.sh)):
 
 ```Shell
 brew install cookiecutter
 ```
 
-Install [XcodeGen](https://github.com/yonaskolb/XcodeGen):
+2. Install [XcodeGen](https://github.com/yonaskolb/XcodeGen):
 
 ```Shell
 brew install xcodegen
 ```
 
-Run Cookiecutter against this repo:
+3. Run Cookiecutter against this repo:
 
 ```Shell
 cookiecutter gh:tylermilner/cookiecutter-ios-swiftui
 ```
+
+4. Follow the prompts to generate your new iOS project.
 
 ## About This Project
 
@@ -28,7 +30,13 @@ cookiecutter gh:tylermilner/cookiecutter-ios-swiftui
 
 This project is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) template for quickly spinning up iOS apps.
 
-Cookiecutter is a templating tool written in Python that uses a special `{{ variable_name }}` syntax to automatically replace variables in template files when run. The main template code for the iOS project is located in the `{{ cookiecutter.project_root }}` directory.
+Cookiecutter is a templating tool written in Python that uses a special `{{ variable_name }}` syntax to automatically replace variables in template files when run. In this template, the main files involved are:
+
+* `cookiecutter.json` - A configuration file that contains the variables that the user is prompted to input when generating the template, along with their default values.
+* `{{ cookiecutter.project_root }}` - A directory containing the source files for the iOS project template.
+* `hooks` - A directory containing the pre- and post-run hooks that are executed before and after the template is generated.
+
+For more information, see the [Cookiecutter documentation](https://cookiecutter.readthedocs.io/en/stable/overview.html).
 
 ### XcodeGen
 
@@ -164,7 +172,7 @@ pipenv --rm
 
 ### Running Tests
 
-_TBD_
+This project uses [pytest](https://github.com/pytest-dev/pytest) to unit test the template generation process. Run the tests by entering the virtual environment and running `pytest`, or by using `pipenv run`:
 
 ```Shell
 pipenv run pytest

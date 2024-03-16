@@ -2,6 +2,8 @@ import os
 import pytest
 
 # - Test Fixtures
+# The `cookies` fixture is provided by the `pytest-cookies` plugin to give an easy way to generate the project
+# The `baked_cookies` fixture below is a custom fixture that uses the `cookies` fixture to automatically generate the project with defaults appropriate for testing
 
 @pytest.fixture
 def baked_cookies(cookies):
