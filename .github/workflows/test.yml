@@ -9,25 +9,19 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python
+    - name: Set up Python, including cache for pipenv virtual environment
       uses: actions/setup-python@v5
       with:
         python-version-file: .python-version
         cache: pipenv
 
     - name: Install pipenv
-      run: pip install pipenv
+      run: |
+        pip install --upgrade pip
+        pip install pipenv
 
-    - name: Install dependencies
+    - name: Install project dependencies
       run: pipenv install --dev
-
-    # - name: Cache Pipenv dependencies
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ~/.local/share/virtualenvs
-    #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-pipenv-
 
     - name: Run tests
       run: pipenv run pytest
