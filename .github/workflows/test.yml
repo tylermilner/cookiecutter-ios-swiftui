@@ -9,6 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Install XcodeGen
+      run: |
+        git clone https://github.com/yonaskolb/XcodeGen.git
+        cd XcodeGen
+        make install
+
     - name: Set up Python, including cache for pipenv virtual environment
       uses: actions/setup-python@v5
       with:
