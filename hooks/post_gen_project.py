@@ -22,7 +22,8 @@ if __name__ == "__main__":
     # TODO: Initialize git repo (see example: https://github.com/riteshhgupta/swift-cookiecutter/blob/master/cookiecutter/hooks/post_gen_project.sh)
 
     # Remove XcodeGen `project.yml` file now that the Xcode project has been generated
-    remove_xcodegen_yml()
+    if {{ cookiecutter.remove_xcodegen_yml }} == True:
+        remove_xcodegen_yml()
 
     # Open the generated Xcode project
     if {{ cookiecutter.open_xcode_project }} == True:
