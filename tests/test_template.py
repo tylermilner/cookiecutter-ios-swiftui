@@ -7,7 +7,7 @@ import pytest
 
 @pytest.fixture
 def baked_cookies(cookies):
-    result = cookies.bake(extra_context={"open_xcode_project": False})
+    result = cookies.bake(extra_context={"open_xcode_project": False, "remove_xcodegen_yml": False})
     assert result.exit_code == 0
     assert result.exception is None
     return result
@@ -35,6 +35,7 @@ def test_project_generation_file_structure(baked_cookies):
         "MyAppTests/MyAppTests.swift",
         "MyAppUITests/MyAppUITests.swift",
         "MyAppUITests/MyAppUITestsLaunchTests.swift",
+        "project.yml",
         "README.md"
     ]
 
