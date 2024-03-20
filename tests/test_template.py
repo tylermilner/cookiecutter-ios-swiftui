@@ -1,5 +1,6 @@
 import os
 import pytest
+import yaml
 
 # - Test Fixtures
 # The `cookies` fixture is provided by the `pytest-cookies` plugin to give an easy way to generate the project
@@ -62,3 +63,17 @@ def test_project_generation_file_structure(baked_cookies):
                 unexpected_files.append(relative_file_path)
 
     assert not unexpected_files, f"Unexpected files found: {unexpected_files}"
+
+def test_project_name_replaced(baked_cookies):
+    project_path = baked_cookies.project_path
+
+    # Verify project.yml contents
+    with open(os.path.join(project_path, "project.yml")) as file:
+        project_yml = yaml.safe_load(file)
+        assert project_yml["name"] == "MyApp"
+
+    # Verify README contents
+    with open(os.path.join(project_path, "README.md")) as file:
+        readme = file.read()
+        assert "# My App" in readme
+
