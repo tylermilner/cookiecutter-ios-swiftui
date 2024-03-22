@@ -126,3 +126,19 @@ def test_target_name_replaced(baked_cookies):
         app_swift = file.read()
         assert f"//  {app_target_name}App.swift" in app_swift
         assert f"struct {app_target_name}App: App" in app_swift
+
+# Test that organization_name is replaced correctly in all necessary files
+def test_organization_name_replaced(baked_cookies):
+    organization_name = "Example".lower()
+
+    project_path = baked_cookies.project_path
+
+    # Verify project.yml contents
+    with open(os.path.join(project_path, "project.yml")) as file:
+        project_yml = yaml.safe_load(file)
+
+        app_tests_target = project_yml["targets"]["MyAppTests"]
+        assert organization_name in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+
+        app_uitests_target = project_yml["targets"]["MyAppUITests"]
+        assert organization_name in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
