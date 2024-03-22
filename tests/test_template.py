@@ -23,8 +23,10 @@ def baked_cookies(cookies):
 
 # Test that the project generation completes successfully with the expected files on disk
 def test_project_generation_file_structure(baked_cookies):
+    # Act
     project_path = baked_cookies.project_path
 
+    # Assert
     # Check that the project directory was created
     assert os.path.isdir(project_path)
     assert os.path.basename(project_path) == "my-app"
@@ -72,8 +74,10 @@ def test_project_generation_file_structure(baked_cookies):
 
 # Test that project_name is replaced correctly in all necessary files
 def test_project_name_replaced(baked_cookies):
+    # Act
     project_path = baked_cookies.project_path
 
+    # Assert
     # Verify project.yml contents
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
@@ -95,11 +99,15 @@ def check_swift_source_files_for_target_name_header_comment(project_path, target
 
 # Test that target_name is replaced correctly in all necessary files
 def test_target_name_replaced(baked_cookies):
+    # Arrange
     app_target_name = APP_TARGET_NAME
     app_tests_target_name = APP_TESTS_TARGET_NAME
     app_uitests_target_name = APP_UITESTS_TARGET_NAME
+
+    # Act
     project_path = baked_cookies.project_path
     
+    # Assert
     # Verify project.yml contents
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
@@ -134,10 +142,13 @@ def test_target_name_replaced(baked_cookies):
 
 # Test that organization_name is replaced correctly in all necessary files
 def test_organization_name_replaced(baked_cookies):
+    # Arrange
     organization_name = "Example".lower()
 
+    # Act
     project_path = baked_cookies.project_path
 
+    # Assert
     # Verify project.yml contents
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
