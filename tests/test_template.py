@@ -3,7 +3,7 @@ import pytest
 import yaml
 
 # - Test Fixtures
-# The `cookies` fixture is provided by the `pytest-cookies` plugin to give an easy way to generate the project
+# The `cookies` fixture provided by the `pytest-cookies` plugin automatically generates/cleans up a project directory for each test case
 # The `baked_cookies` fixture below is a custom fixture that uses the `cookies` fixture to automatically generate the project with defaults appropriate for testing
 
 @pytest.fixture
@@ -15,6 +15,7 @@ def baked_cookies(cookies):
 
 # - Test Cases
 
+# Test that the project generation completes successfully with the expected files on disk
 def test_project_generation_file_structure(baked_cookies):
     project_path = baked_cookies.project_path
 
@@ -44,7 +45,6 @@ def test_project_generation_file_structure(baked_cookies):
         full_file_path = os.path.join(project_path, file_path)
         assert os.path.isfile(full_file_path), f"File not found: {full_file_path}"
 
-    
     # Check that no unexpected files exist
     unexpected_files = []
     ignored_files = [
@@ -64,6 +64,7 @@ def test_project_generation_file_structure(baked_cookies):
 
     assert not unexpected_files, f"Unexpected files found: {unexpected_files}"
 
+# Test that project_name is replaced correctly in all necessary files
 def test_project_name_replaced(baked_cookies):
     project_path = baked_cookies.project_path
 
