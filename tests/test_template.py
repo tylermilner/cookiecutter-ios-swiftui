@@ -3,6 +3,11 @@ import pytest
 import re
 import yaml
 
+# - Constants
+APP_TARGET_NAME = "MyApp"
+APP_TESTS_TARGET_NAME = "MyAppTests"
+APP_UITESTS_TARGET_NAME = "MyAppUITests"
+
 # - Test Fixtures
 # The `cookies` fixture provided by the `pytest-cookies` plugin automatically generates/cleans up a project directory for each test case
 # The `baked_cookies` fixture below is a custom fixture that uses the `cookies` fixture to automatically generate the project with defaults appropriate for testing
@@ -90,9 +95,9 @@ def check_swift_source_files_for_target_name_header_comment(project_path, target
 
 # Test that target_name is replaced correctly in all necessary files
 def test_target_name_replaced(baked_cookies):
-    app_target_name = "MyApp"
-    app_tests_target_name = "MyAppTests"
-    app_uitests_target_name = "MyAppUITests"
+    app_target_name = APP_TARGET_NAME
+    app_tests_target_name = APP_TESTS_TARGET_NAME
+    app_uitests_target_name = APP_UITESTS_TARGET_NAME
     project_path = baked_cookies.project_path
     
     # Verify project.yml contents
@@ -137,8 +142,8 @@ def test_organization_name_replaced(baked_cookies):
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
 
-        app_tests_target = project_yml["targets"]["MyAppTests"]
+        app_tests_target = project_yml["targets"][APP_TESTS_TARGET_NAME]
         assert organization_name in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
-        app_uitests_target = project_yml["targets"]["MyAppUITests"]
+        app_uitests_target = project_yml["targets"][APP_UITESTS_TARGET_NAME]
         assert organization_name in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
