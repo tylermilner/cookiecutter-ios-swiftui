@@ -1,5 +1,6 @@
 import os
 import pytest
+import re
 import yaml
 
 # - Test Fixtures
@@ -78,3 +79,50 @@ def test_project_name_replaced(baked_cookies):
         readme = file.read()
         assert "# My App" in readme
 
+# Helper function to check Swift source files for header comment with target name
+def check_swift_source_files_for_target_name_header_comment(project_path, target_name):
+        for root, dirs, files in os.walk(os.path.join(project_path, target_name)):
+            for file in files:
+                if file.endswith(".swift"):
+                    with open(os.path.join(root, file), 'r') as swift_file:
+                        lines = [next(swift_file) for x in range(3)]  
+                        assert re.match(f"//  {target_name}", lines[2].strip()), f"File {file} does not match pattern in line 3"
+
+# Test that target_name is replaced correctly in all necessary files
+def test_target_name_replaced(baked_cookies):
+    app_target_name = "MyApp"
+    app_tests_target_name = "MyAppTests"
+    app_uitests_target_name = "MyAppUITests"
+    project_path = baked_cookies.project_path
+    
+    # Verify project.yml contents
+    with open(os.path.join(project_path, "project.yml")) as file:
+        project_yml = yaml.safe_load(file)
+
+        assert app_target_name in project_yml["targets"]
+        app_target = project_yml["targets"][app_target_name]
+        assert app_target_name in app_target["sources"]
+        assert f"{app_target_name}/Preview Content" in app_target["settings"]["base"]["DEVELOPMENT_ASSET_PATHS"]
+
+        assert app_tests_target_name in project_yml["targets"]
+        app_tests_target = project_yml["targets"][app_tests_target_name]
+        assert app_tests_target_name in app_tests_target["sources"]
+        assert app_target_name in app_tests_target["dependencies"][0]["target"]
+        assert app_tests_target_name in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+
+        assert app_uitests_target_name in project_yml["targets"]
+        app_uitests_target = project_yml["targets"][app_uitests_target_name]
+        assert app_uitests_target_name in app_uitests_target["sources"]
+        assert app_target_name in app_uitests_target["dependencies"][0]["target"]
+        assert app_uitests_target_name in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+
+    # Verify target name header comment in Swift source files for each target
+    targets = [app_target_name, app_tests_target_name, app_uitests_target_name]
+    for target in targets:
+        check_swift_source_files_for_target_name_header_comment(project_path, target)
+
+    # Verify remaining header comments for main app source file
+    with open(os.path.join(project_path, app_target_name, f"{app_target_name}App.swift")) as file:
+        app_swift = file.read()
+        assert f"//  {app_target_name}App.swift" in app_swift
+        assert f"struct {app_target_name}App: App" in app_swift
