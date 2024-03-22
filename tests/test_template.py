@@ -9,11 +9,11 @@ APP_TESTS_TARGET_NAME = "MyAppTests"
 APP_UITESTS_TARGET_NAME = "MyAppUITests"
 
 # - Test Fixtures
-# The `cookies` fixture provided by the `pytest-cookies` plugin automatically generates/cleans up a project directory for each test case
-# The `baked_cookies` fixture below is a custom fixture that uses the `cookies` fixture to automatically generate the project with defaults appropriate for testing
 
+# Automatically generate a project with defaults appropriate for testing
 @pytest.fixture
 def baked_cookies(cookies):
+    # Generate the project using the 'cookies' fixture provided by pytest-cookies
     result = cookies.bake(extra_context={"open_xcode_project": False, "remove_xcodegen_yml": False})
     assert result.exit_code == 0
     assert result.exception is None
