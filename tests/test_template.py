@@ -158,3 +158,19 @@ def test_organization_name_replaced(baked_cookies):
 
         app_uitests_target = project_yml["targets"][APP_UITESTS_TARGET_NAME]
         assert organization_name in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+
+# Test that bundle_identifier is replaced correctly in all necessary files
+def test_bundle_identifier_replaced(baked_cookies):
+    #Arrange
+    bundle_identifier = "com.example.myapp"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify project.yml contents
+    with open(os.path.join(project_path, "project.yml")) as file:
+        project_yml = yaml.safe_load(file)
+
+        app_target = project_yml["targets"][APP_TARGET_NAME]
+        assert bundle_identifier in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
