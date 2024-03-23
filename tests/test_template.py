@@ -89,13 +89,13 @@ def test_project_name_replaced(baked_cookies):
         assert "# My App" in readme
 
 # Helper function to check Swift source files for header comment with target name
-def check_swift_source_files_for_target_name_header_comment(project_path, target_name):
-        for root, dirs, files in os.walk(os.path.join(project_path, target_name)):
-            for file in files:
-                if file.endswith(".swift"):
-                    with open(os.path.join(root, file), 'r') as swift_file:
-                        lines = [next(swift_file) for x in range(3)]  
-                        assert re.match(f"//  {target_name}", lines[2].strip()), f"File {file} does not match pattern in line 3"
+def check_swift_files_for_header_comment_pattern(source_directory, pattern, line_number):
+    for root, dirs, files in os.walk(source_directory):
+        for file in files:
+            if file.endswith(".swift"):
+                with open(os.path.join(root, file), 'r') as swift_file:
+                    lines = [next(swift_file) for x in range(6)]
+                    assert re.match(pattern, lines[line_number].strip()), f"File {file} does not have expected header comment pattern"
 
 # Test that target_name is replaced correctly in all necessary files
 def test_target_name_replaced(baked_cookies):
@@ -132,7 +132,7 @@ def test_target_name_replaced(baked_cookies):
     # Verify target name header comment in Swift source files for each target
     targets = [app_target_name, app_tests_target_name, app_uitests_target_name]
     for target in targets:
-        check_swift_source_files_for_target_name_header_comment(project_path, target)
+        check_swift_files_for_header_comment_pattern(os.path.join(project_path, target), f"//  {target}", 2)
 
     # Verify remaining header comments for main app source file
     with open(os.path.join(project_path, app_target_name, f"{app_target_name}App.swift")) as file:
@@ -174,3 +174,14 @@ def test_bundle_identifier_replaced(baked_cookies):
 
         app_target = project_yml["targets"][APP_TARGET_NAME]
         assert bundle_identifier in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+
+# Test that full_name is replaced correctly in all necessary files
+def test_full_name_replaced(baked_cookies):
+    # Arrange
+    full_name = "First Last"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    check_swift_files_for_header_comment_pattern(project_path, f"//  Created by {full_name} on .*", 4)
