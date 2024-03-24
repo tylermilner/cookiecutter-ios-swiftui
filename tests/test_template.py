@@ -197,3 +197,11 @@ def test_date_replaced(baked_cookies):
 
     # Assert
     check_swift_files_for_header_comment_pattern(project_path, f"//  Created by .* on {date}", 4)
+
+def test_remove_xcodegen_yml(cookies):
+    # Act
+    result = cookies.bake(extra_context={"open_xcode_project": False, "remove_xcodegen_yml": True})
+
+    # Assert
+    project_path = result.project_path
+    assert not os.path.isfile(os.path.join(project_path, "project.yml"))
