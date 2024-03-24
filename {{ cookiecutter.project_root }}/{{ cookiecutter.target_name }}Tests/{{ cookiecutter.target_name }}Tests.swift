@@ -2,7 +2,7 @@
 //  {{ cookiecutter.target_name }}Tests.swift
 //  {{ cookiecutter.target_name }}Tests
 //
-//  Created by {{ cookiecutter.full_name }} on {% now 'local', '%-m/%-d/%y' %}.
+//  Created by {{ cookiecutter.full_name }} on {{ cookiecutter.date }}.
 //
 
 import XCTest

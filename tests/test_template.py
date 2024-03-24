@@ -1,3 +1,4 @@
+import datetime
 import os
 import pytest
 import re
@@ -185,3 +186,14 @@ def test_full_name_replaced(baked_cookies):
 
     # Assert
     check_swift_files_for_header_comment_pattern(project_path, f"//  Created by {full_name} on .*", 4)
+
+def test_date_replaced(baked_cookies):
+    # Arrange
+    # Today's date in format M/D/YY
+    date = datetime.datetime.now().strftime("%-m/%-d/%y")
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    check_swift_files_for_header_comment_pattern(project_path, f"//  Created by .* on {date}", 4)

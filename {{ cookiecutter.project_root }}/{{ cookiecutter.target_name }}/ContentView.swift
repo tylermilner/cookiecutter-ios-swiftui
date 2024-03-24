@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  {{ cookiecutter.target_name }}
 //
-//  Created by {{ cookiecutter.full_name }} on {% now 'local', '%-m/%-d/%y' %}.
+//  Created by {{ cookiecutter.full_name }} on {{ cookiecutter.date }}.
 //
 
 import SwiftUI
