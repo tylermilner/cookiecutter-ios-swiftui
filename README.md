@@ -180,6 +180,14 @@ This project uses [pytest](https://github.com/pytest-dev/pytest) to unit test th
 pipenv run pytest
 ```
 
+### Debugging
+
+When running tests, use the `-s` or `--capture=no` flag to disable output capture and see the output of the tests, which will make any `print()` statements in your tests visible:
+
+```Shell
+pipenv run pytest -s
+```
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for more information.
