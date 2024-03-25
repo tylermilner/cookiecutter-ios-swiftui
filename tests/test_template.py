@@ -4,11 +4,6 @@ import pytest
 import re
 import yaml
 
-# - Constants
-APP_TARGET_NAME = "MyApp"
-APP_TESTS_TARGET_NAME = "MyAppTests"
-APP_UITESTS_TARGET_NAME = "MyAppUITests"
-
 # - Test Fixtures
 
 # Automatically generate a project with defaults appropriate for testing
@@ -28,11 +23,11 @@ def test_project_generation_file_structure(baked_cookies):
     project_path = baked_cookies.project_path
 
     # Assert
-    # Check that the project directory was created
+    # Verify that the project directory was created
     assert os.path.isdir(project_path)
     assert os.path.basename(project_path) == "my-app"
 
-    # Check that all expected files exist
+    # Verify that all expected files exist
     expected_file_paths = [
         ".gitignore",
         "MyApp/Assets.xcassets/AccentColor.colorset/Contents.json",
@@ -54,7 +49,8 @@ def test_project_generation_file_structure(baked_cookies):
         full_file_path = os.path.join(project_path, file_path)
         assert os.path.isfile(full_file_path), f"File not found: {full_file_path}"
 
-    # Check that no unexpected files exist
+    # Verify that no unexpected files exist
+    # TODO: Possibly check path via regex to ignore .DS_Store files so that each one doesn't have to be ignored individually
     unexpected_files = []
     ignored_files = [
         ".DS_Store",
@@ -101,9 +97,9 @@ def check_swift_files_for_header_comment_pattern(source_directory, pattern, line
 # Test that target_name is replaced correctly in all necessary files
 def test_target_name_replaced(baked_cookies):
     # Arrange
-    app_target_name = APP_TARGET_NAME
-    app_tests_target_name = APP_TESTS_TARGET_NAME
-    app_uitests_target_name = APP_UITESTS_TARGET_NAME
+    app_target_name = "MyApp"
+    app_tests_target_name = "MyAppTests"
+    app_uitests_target_name = "MyAppUITests"
 
     # Act
     project_path = baked_cookies.project_path
@@ -143,9 +139,6 @@ def test_target_name_replaced(baked_cookies):
 
 # Test that organization_name is replaced correctly in all necessary files
 def test_organization_name_replaced(baked_cookies):
-    # Arrange
-    organization_name = "Example".lower()
-
     # Act
     project_path = baked_cookies.project_path
 
@@ -154,17 +147,14 @@ def test_organization_name_replaced(baked_cookies):
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
 
-        app_tests_target = project_yml["targets"][APP_TESTS_TARGET_NAME]
-        assert organization_name in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        app_tests_target = project_yml["targets"]["MyAppTests"]
+        assert "com.example.MyAppTests" in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
-        app_uitests_target = project_yml["targets"][APP_UITESTS_TARGET_NAME]
-        assert organization_name in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        app_uitests_target = project_yml["targets"]["MyAppUITests"]
+        assert "com.example.MyAppUITests" in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
 # Test that bundle_identifier is replaced correctly in all necessary files
 def test_bundle_identifier_replaced(baked_cookies):
-    #Arrange
-    bundle_identifier = "com.example.myapp"
-
     # Act
     project_path = baked_cookies.project_path
 
@@ -173,8 +163,8 @@ def test_bundle_identifier_replaced(baked_cookies):
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
 
-        app_target = project_yml["targets"][APP_TARGET_NAME]
-        assert bundle_identifier in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        app_target = project_yml["targets"]["MyApp"]
+        assert "com.example.myapp" in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
 # Test that full_name is replaced correctly in all necessary files
 def test_full_name_replaced(baked_cookies):
