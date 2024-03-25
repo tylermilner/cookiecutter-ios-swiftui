@@ -202,15 +202,15 @@ def test_full_name_replaced(baked_cookies):
     # Assert
     check_swift_files_for_header_comment_pattern(project_path, f"//  Created by {full_name} on .*", 4)
 
-def test_date_replaced(baked_cookies):
+def test_date_replaced(cookies):
     # Arrange
-    # Today's date in format M/D/YY
-    date = datetime.datetime.now().strftime("%-m/%-d/%y")
+    date = "1/1/24"
 
     # Act
-    project_path = baked_cookies.project_path
+    result = cookies.bake(extra_context={"open_xcode_project": False, "date": date})
 
     # Assert
+    project_path = result.project_path
     check_swift_files_for_header_comment_pattern(project_path, f"//  Created by .* on {date}", 4)
 
 def test_remove_xcodegen_yml(cookies):
