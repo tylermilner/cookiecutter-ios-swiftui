@@ -1,4 +1,5 @@
 import datetime
+import fnmatch
 import os
 import pytest
 import re
@@ -67,7 +68,7 @@ def test_project_generation_file_structure(baked_cookies):
         "MyAppUITests/MyAppUITests.swift",
         "MyAppUITests/MyAppUITestsLaunchTests.swift",
         "project.yml",
-        "README.md"
+        "README.md",
     ]
 
     for file_path in expected_file_paths:
@@ -75,13 +76,9 @@ def test_project_generation_file_structure(baked_cookies):
         assert os.path.isfile(full_file_path), f"File not found: {full_file_path}"
 
     # Verify that no unexpected files exist
-    # TODO: Possibly check path via regex to ignore .DS_Store files so that each one doesn't have to be ignored individually
     unexpected_files = []
-    ignored_files = [
-        ".DS_Store",
-        "MyApp/.DS_Store",
-        "MyApp/Assets.xcassets/.DS_Store",
-        "MyApp/Preview Content/.DS_Store",
+    ignored_patterns = [
+        "*.DS_Store",
     ]
 
     for root, dirs, files, in os.walk(project_path):
@@ -89,7 +86,7 @@ def test_project_generation_file_structure(baked_cookies):
             file_path = os.path.join(root, file)
             relative_file_path = os.path.relpath(file_path, project_path)
 
-            if relative_file_path not in expected_file_paths and relative_file_path not in ignored_files:
+            if relative_file_path not in expected_file_paths and not any(fnmatch.fnmatch(file, pattern) for pattern in ignored_patterns):
                 unexpected_files.append(relative_file_path)
 
     assert not unexpected_files, f"Unexpected files found: {unexpected_files}"
