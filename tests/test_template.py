@@ -17,6 +17,31 @@ def baked_cookies(cookies):
 
 # - Test Cases
 
+# Test the default values in the cookiecutter.json file
+def test_default_configuration(cookies):
+    # Arrange
+    # Today's date in format M/D/YY
+    date = datetime.datetime.now().strftime("%-m/%-d/%y")
+
+    # Act
+    result = cookies.bake(extra_context={"open_xcode_project": False})
+
+    # Assert
+    context = result.context
+
+    assert context["project_name"] == "My App"
+    assert context["__project_name_no_spaces"] == "MyApp"
+    assert context["__project_name_no_spaces_lowercase"] == "myapp"
+    assert context["project_root"] == "my-app"
+    assert context["target_name"] == "MyApp"
+    assert context["organization_name"] == "Example"
+    assert context["__organization_name_no_spaces_lowercase"] == "example"
+    assert context["bundle_identifier"] == "com.example.myapp"
+    assert context["full_name"] == "First Last"
+    assert context["date"] == date
+    assert context["open_xcode_project"] == False # False because of the extra_context override
+    assert context["remove_xcodegen_yml"] == True
+
 # Test that the project generation completes successfully with the expected files on disk
 def test_project_generation_file_structure(baked_cookies):
     # Act
