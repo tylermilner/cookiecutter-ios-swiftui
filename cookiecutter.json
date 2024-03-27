@@ -10,5 +10,6 @@
     "full_name": "First Last",
     "date": "{% now 'local', '%-m/%-d/%y' %}",
     "open_xcode_project": true,
-    "remove_xcodegen_yml": true
+    "remove_xcodegen_yml": true,
+    "initialize_git_repo": true
 }

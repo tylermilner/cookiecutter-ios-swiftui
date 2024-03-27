@@ -11,7 +11,7 @@ import yaml
 @pytest.fixture
 def baked_cookies(cookies):
     # Generate the project using the 'cookies' fixture provided by pytest-cookies
-    result = cookies.bake(extra_context={"open_xcode_project": False, "remove_xcodegen_yml": False})
+    result = cookies.bake(extra_context={"open_xcode_project": False, "remove_xcodegen_yml": False, "initialize_git_repo": False})
     assert result.exit_code == 0
     assert result.exception is None
     return result
@@ -218,3 +218,11 @@ def test_remove_xcodegen_yml(cookies):
     # Assert
     project_path = result.project_path
     assert not os.path.isfile(os.path.join(project_path, "project.yml"))
+
+def test_initialize_git_repo(cookies):
+    # Act
+    result = cookies.bake(extra_context={"open_xcode_project": False, "initialize_git_repo": True})
+
+    # Assert
+    project_path = result.project_path
+    assert os.path.isdir(os.path.join(project_path, ".git"))
