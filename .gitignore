@@ -1,3 +1,9 @@
+### Project-specific ###
+# Any project-specific files that need to be ignored should be listed here, before the default gitignores below.
+
+# Ignore the default generated project directory
+my-app/
+
 ### Python ###
 # From https://github.com/github/gitignore/blob/main/Python.gitignore
 
