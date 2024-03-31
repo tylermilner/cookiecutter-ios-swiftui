@@ -5,13 +5,21 @@ import pytest
 import re
 import yaml
 
+# - Constants
+
+PROJECT_NAME = "Demo App"
+PROJECT_PATH = "demo-app"
+APP_TARGET_NAME = "DemoApp"
+APP_TESTS_TARGET_NAME = "DemoAppTests"
+APP_UITESTS_TARGET_NAME = "DemoAppUITests"
+
 # - Test Fixtures
 
 # Automatically generate a project with defaults appropriate for testing
 @pytest.fixture
 def baked_cookies(cookies):
     # Generate the project using the 'cookies' fixture provided by pytest-cookies
-    result = cookies.bake(extra_context={"open_xcode_project": False, "remove_xcodegen_yml": False, "initialize_git_repo": False})
+    result = cookies.bake(extra_context={"project_name": PROJECT_NAME, "open_xcode_project": False, "remove_xcodegen_yml": False, "initialize_git_repo": False})
     assert result.exit_code == 0
     assert result.exception is None
     return result
@@ -52,24 +60,24 @@ def test_project_generation_file_structure(baked_cookies):
     # Assert
     # Verify that the project directory was created
     assert os.path.isdir(project_path)
-    assert os.path.basename(project_path) == "my-app"
+    assert os.path.basename(project_path) == PROJECT_PATH
 
     # Verify that all expected files exist
     expected_file_paths = [
         ".gitignore",
-        "MyApp/Assets.xcassets/AccentColor.colorset/Contents.json",
-        "MyApp/Assets.xcassets/AppIcon.appiconset/Contents.json",
-        "MyApp/Assets.xcassets/Contents.json",
-        "MyApp/ContentView.swift",
-        "MyApp/MyAppApp.swift",
-        "MyApp/MyAppTestsApp.swift",
-        "MyApp/MyAppMain.swift",
-        "MyApp/Preview Content/Preview Assets.xcassets/Contents.json",
-        "MyApp.xcodeproj/project.pbxproj",
-        "MyApp.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
-        "MyAppTests/MyAppTests.swift",
-        "MyAppUITests/MyAppUITests.swift",
-        "MyAppUITests/MyAppUITestsLaunchTests.swift",
+        f"{APP_TARGET_NAME}/Assets.xcassets/AccentColor.colorset/Contents.json",
+        f"{APP_TARGET_NAME}/Assets.xcassets/AppIcon.appiconset/Contents.json",
+        f"{APP_TARGET_NAME}/Assets.xcassets/Contents.json",
+        f"{APP_TARGET_NAME}/ContentView.swift",
+        f"{APP_TARGET_NAME}/{APP_TARGET_NAME}App.swift",
+        f"{APP_TARGET_NAME}/{APP_TARGET_NAME}TestsApp.swift",
+        f"{APP_TARGET_NAME}/{APP_TARGET_NAME}Main.swift",
+        f"{APP_TARGET_NAME}/Preview Content/Preview Assets.xcassets/Contents.json",
+        f"{APP_TARGET_NAME}.xcodeproj/project.pbxproj",
+        f"{APP_TARGET_NAME}.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
+        f"{APP_TESTS_TARGET_NAME}/{APP_TESTS_TARGET_NAME}.swift",
+        f"{APP_UITESTS_TARGET_NAME}/{APP_UITESTS_TARGET_NAME}.swift",
+        f"{APP_UITESTS_TARGET_NAME}/{APP_UITESTS_TARGET_NAME}LaunchTests.swift",
         "project.yml",
         "README.md",
     ]
@@ -103,12 +111,12 @@ def test_project_name_replaced(baked_cookies):
     # Verify project.yml contents
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
-        assert project_yml["name"] == "MyApp"
+        assert project_yml["name"] == APP_TARGET_NAME
 
     # Verify README contents
     with open(os.path.join(project_path, "README.md")) as file:
         readme = file.read()
-        assert "# My App" in readme
+        assert f"# {PROJECT_NAME}" in readme
 
 # Helper function to check Swift source files for header comment with target name
 def check_swift_files_for_text(source_directory, pattern, line_number):
@@ -121,11 +129,6 @@ def check_swift_files_for_text(source_directory, pattern, line_number):
 
 # Test that target_name is replaced correctly in all necessary files
 def test_target_name_replaced(baked_cookies):
-    # Arrange
-    app_target_name = "MyApp"
-    app_tests_target_name = "MyAppTests"
-    app_uitests_target_name = "MyAppUITests"
-
     # Act
     project_path = baked_cookies.project_path
     
@@ -134,48 +137,48 @@ def test_target_name_replaced(baked_cookies):
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
 
-        assert app_target_name in project_yml["targets"]
-        app_target = project_yml["targets"][app_target_name]
-        assert app_target_name in app_target["sources"]
-        assert f"{app_target_name}/Preview Content" in app_target["settings"]["base"]["DEVELOPMENT_ASSET_PATHS"]
+        assert APP_TARGET_NAME in project_yml["targets"]
+        app_target = project_yml["targets"][APP_TARGET_NAME]
+        assert APP_TARGET_NAME in app_target["sources"]
+        assert f"{APP_TARGET_NAME}/Preview Content" in app_target["settings"]["base"]["DEVELOPMENT_ASSET_PATHS"]
 
-        assert app_tests_target_name in project_yml["targets"]
-        app_tests_target = project_yml["targets"][app_tests_target_name]
-        assert app_tests_target_name in app_tests_target["sources"]
-        assert app_target_name in app_tests_target["dependencies"][0]["target"]
-        assert app_tests_target_name in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        assert APP_TESTS_TARGET_NAME in project_yml["targets"]
+        app_tests_target = project_yml["targets"][APP_TESTS_TARGET_NAME]
+        assert APP_TESTS_TARGET_NAME in app_tests_target["sources"]
+        assert APP_TARGET_NAME in app_tests_target["dependencies"][0]["target"]
+        assert APP_TESTS_TARGET_NAME in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
-        assert app_uitests_target_name in project_yml["targets"]
-        app_uitests_target = project_yml["targets"][app_uitests_target_name]
-        assert app_uitests_target_name in app_uitests_target["sources"]
-        assert app_target_name in app_uitests_target["dependencies"][0]["target"]
-        assert app_uitests_target_name in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        assert APP_UITESTS_TARGET_NAME in project_yml["targets"]
+        app_uitests_target = project_yml["targets"][APP_UITESTS_TARGET_NAME]
+        assert APP_UITESTS_TARGET_NAME in app_uitests_target["sources"]
+        assert APP_TARGET_NAME in app_uitests_target["dependencies"][0]["target"]
+        assert APP_UITESTS_TARGET_NAME in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
     # Verify target name header comment in Swift source files for each target
-    targets = [app_target_name, app_tests_target_name, app_uitests_target_name]
+    targets = [APP_TARGET_NAME, APP_TESTS_TARGET_NAME, APP_UITESTS_TARGET_NAME]
     for target in targets:
         target_directory = os.path.join(project_path, target)
         check_swift_files_for_text(target_directory, f"//  {target}", 2)
 
     # Verify string replacements for main app source file
-    with open(os.path.join(project_path, app_target_name, f"{app_target_name}App.swift")) as file:
+    with open(os.path.join(project_path, APP_TARGET_NAME, f"{APP_TARGET_NAME}App.swift")) as file:
         app_swift = file.read()
-        assert f"//  {app_target_name}App.swift" in app_swift
-        assert f"struct {app_target_name}App: App" in app_swift
+        assert f"//  {APP_TARGET_NAME}App.swift" in app_swift
+        assert f"struct {APP_TARGET_NAME}App: App" in app_swift
 
     # Verify string replacements for main app tests source file
-    with open(os.path.join(project_path, app_target_name, f"{app_target_name}TestsApp.swift")) as file:
+    with open(os.path.join(project_path, APP_TARGET_NAME, f"{APP_TARGET_NAME}TestsApp.swift")) as file:
         app_tests_app_swift = file.read()
-        assert f"//  {app_target_name}TestsApp.swift" in app_tests_app_swift
-        assert f"struct {app_target_name}TestsApp: App" in app_tests_app_swift
+        assert f"//  {APP_TARGET_NAME}TestsApp.swift" in app_tests_app_swift
+        assert f"struct {APP_TARGET_NAME}TestsApp: App" in app_tests_app_swift
 
     # Verify string replacements for main app entry point source file
-    with open(os.path.join(project_path, app_target_name, f"{app_target_name}Main.swift")) as file:
+    with open(os.path.join(project_path, APP_TARGET_NAME, f"{APP_TARGET_NAME}Main.swift")) as file:
         app_main_swift = file.read()
-        assert f"//  {app_target_name}Main.swift" in app_main_swift
-        assert f"struct {app_target_name}Main" in app_main_swift
-        assert f"{app_target_name}TestsApp.main()" in app_main_swift
-        assert f"{app_target_name}App.main()" in app_main_swift
+        assert f"//  {APP_TARGET_NAME}Main.swift" in app_main_swift
+        assert f"struct {APP_TARGET_NAME}Main" in app_main_swift
+        assert f"{APP_TARGET_NAME}TestsApp.main()" in app_main_swift
+        assert f"{APP_TARGET_NAME}App.main()" in app_main_swift
 
 # Test that organization_name is replaced correctly in all necessary files
 def test_organization_name_replaced(baked_cookies):
@@ -187,14 +190,17 @@ def test_organization_name_replaced(baked_cookies):
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
 
-        app_tests_target = project_yml["targets"]["MyAppTests"]
-        assert "com.example.MyAppTests" in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        app_tests_target = project_yml["targets"][APP_TESTS_TARGET_NAME]
+        assert f"com.example.{APP_TESTS_TARGET_NAME}" in app_tests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
-        app_uitests_target = project_yml["targets"]["MyAppUITests"]
-        assert "com.example.MyAppUITests" in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        app_uitests_target = project_yml["targets"][APP_UITESTS_TARGET_NAME]
+        assert f"com.example.{APP_UITESTS_TARGET_NAME}" in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
 # Test that bundle_identifier is replaced correctly in all necessary files
 def test_bundle_identifier_replaced(baked_cookies):
+    # Arrange
+    bundle_identifier_suffix = APP_TARGET_NAME.lower()
+
     # Act
     project_path = baked_cookies.project_path
 
@@ -203,8 +209,8 @@ def test_bundle_identifier_replaced(baked_cookies):
     with open(os.path.join(project_path, "project.yml")) as file:
         project_yml = yaml.safe_load(file)
 
-        app_target = project_yml["targets"]["MyApp"]
-        assert "com.example.myapp" in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
+        app_target = project_yml["targets"][APP_TARGET_NAME]
+        assert f"com.example.{bundle_identifier_suffix}" in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
 
 # Test that full_name is replaced correctly in all necessary files
 def test_full_name_replaced(baked_cookies):
