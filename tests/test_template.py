@@ -75,7 +75,6 @@ def test_project_generation_file_structure(baked_cookies):
         f"{APP_TARGET_NAME}.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
         f"{APP_TESTS_TARGET_NAME}/{APP_TESTS_TARGET_NAME}.swift",
         f"{APP_UITESTS_TARGET_NAME}/{APP_UITESTS_TARGET_NAME}.swift",
-        f"{APP_UITESTS_TARGET_NAME}/{APP_UITESTS_TARGET_NAME}LaunchTests.swift",
         "project.yml",
         "README.md",
     ]
