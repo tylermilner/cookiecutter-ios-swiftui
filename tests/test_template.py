@@ -61,6 +61,8 @@ def test_project_generation_file_structure(baked_cookies):
         "MyApp/Assets.xcassets/Contents.json",
         "MyApp/ContentView.swift",
         "MyApp/MyAppApp.swift",
+        "MyApp/MyAppTestsApp.swift",
+        "MyApp/MyAppMain.swift",
         "MyApp/Preview Content/Preview Assets.xcassets/Contents.json",
         "MyApp.xcodeproj/project.pbxproj",
         "MyApp.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
@@ -154,11 +156,23 @@ def test_target_name_replaced(baked_cookies):
         target_directory = os.path.join(project_path, target)
         check_swift_files_for_text(target_directory, f"//  {target}", 2)
 
-    # Verify remaining header comments for main app source file
+    # Verify string replacements for main app source file
     with open(os.path.join(project_path, app_target_name, f"{app_target_name}App.swift")) as file:
         app_swift = file.read()
         assert f"//  {app_target_name}App.swift" in app_swift
         assert f"struct {app_target_name}App: App" in app_swift
+
+    # Verify string replacements for main app tests source file
+    with open(os.path.join(project_path, app_target_name, f"{app_target_name}TestsApp.swift")) as file:
+        app_tests_app_swift = file.read()
+        assert f"//  {app_target_name}TestsApp.swift" in app_tests_app_swift
+        assert f"struct {app_target_name}TestsApp: App" in app_tests_app_swift
+
+    # Verify string replacements for main app entry point source file
+    with open(os.path.join(project_path, app_target_name, f"{app_target_name}Main.swift")) as file:
+        app_main_swift = file.read()
+        assert f"//  {app_target_name}Main.swift" in app_main_swift
+        assert f"struct {app_target_name}Main" in app_main_swift
 
 # Test that organization_name is replaced correctly in all necessary files
 def test_organization_name_replaced(baked_cookies):
