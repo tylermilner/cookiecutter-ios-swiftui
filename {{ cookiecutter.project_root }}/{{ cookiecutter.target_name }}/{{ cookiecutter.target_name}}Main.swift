@@ -12,12 +12,12 @@ struct {{ cookiecutter.target_name }}Main {
     static func main() {
         #if DEBUG
         if NSClassFromString("XCTestCase") != nil {
-            MyAppTestsApp.main()
+            {{ cookiecutter.target_name }}TestsApp.main()
         } else {
-            MyAppApp.main()
+            {{ cookiecutter.target_name }}App.main()
         }
         #else
-        MyAppApp.main()
+        {{ cookiecutter.target_name }}App.main()
         #endif
     }
 }

@@ -173,6 +173,8 @@ def test_target_name_replaced(baked_cookies):
         app_main_swift = file.read()
         assert f"//  {app_target_name}Main.swift" in app_main_swift
         assert f"struct {app_target_name}Main" in app_main_swift
+        assert f"{app_target_name}TestsApp.main()" in app_main_swift
+        assert f"{app_target_name}App.main()" in app_main_swift
 
 # Test that organization_name is replaced correctly in all necessary files
 def test_organization_name_replaced(baked_cookies):
