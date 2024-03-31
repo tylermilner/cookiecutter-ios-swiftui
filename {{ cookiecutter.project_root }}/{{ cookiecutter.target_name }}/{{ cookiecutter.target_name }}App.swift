@@ -7,10 +7,27 @@
 
 import SwiftUI
 
+@main
 struct {{ cookiecutter.target_name }}App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if isTesting {
+                Text("Running tests...")
+            } else {
+                ContentView()
+            }
         }
+    }
+}
+
+// MARK: - Private
+
+extension {{ cookiecutter.target_name }}App {
+    private var isTesting: Bool {
+        #if DEBUG
+        return NSClassFromString("XCTestCase") != nil
+        #else
+        return false
+        #endif
     }
 }
