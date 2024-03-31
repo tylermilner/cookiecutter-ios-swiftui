@@ -42,6 +42,7 @@ def test_default_configuration(cookies):
     assert context["date"] == date
     assert context["open_xcode_project"] == False # False because of the extra_context override
     assert context["remove_xcodegen_yml"] == True
+    assert context["initialize_git_repo"] == True
 
 # Test that the project generation completes successfully with the expected files on disk
 def test_project_generation_file_structure(baked_cookies):
