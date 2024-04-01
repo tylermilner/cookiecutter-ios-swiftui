@@ -66,6 +66,7 @@ def test_project_generation_file_structure(baked_cookies):
     expected_file_paths = [
         ".github/workflows/test.yml",
         ".gitignore",
+        "run-tests.sh",
         f"{APP_TARGET_NAME}/Assets.xcassets/AccentColor.colorset/Contents.json",
         f"{APP_TARGET_NAME}/Assets.xcassets/AppIcon.appiconset/Contents.json",
         f"{APP_TARGET_NAME}/Assets.xcassets/Contents.json",
