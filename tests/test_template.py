@@ -64,6 +64,7 @@ def test_project_generation_file_structure(baked_cookies):
 
     # Verify that all expected files exist
     expected_file_paths = [
+        ".github/workflows/test.yml",
         ".gitignore",
         f"{APP_TARGET_NAME}/Assets.xcassets/AccentColor.colorset/Contents.json",
         f"{APP_TARGET_NAME}/Assets.xcassets/AppIcon.appiconset/Contents.json",
