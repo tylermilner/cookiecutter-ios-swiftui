@@ -48,15 +48,6 @@ jobs:
           ref: 'main'
           token:  ${{ secrets.TEMPLATE_OUTPUT_REPO_TOKEN }}
 
-      - name: Print current directory
-        run: pwd
-
-      - name: Print GITHUB_WORKSPACE directory
-        run: echo $GITHUB_WORKSPACE
-
-      - name: List current files
-        run: ls -la
-
       - name: Setup git config
         run: |
           git config --global user.name "GitHub Actions"
@@ -67,13 +58,9 @@ jobs:
         with:
           name: template-output
 
-      - name: List downloaded files
-        run: ls -la
-
       - name: Commit and push generated template
         run: |
           export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref}}@${{ github.sha }}"
-          echo "Commit message: $COMMIT_MESSAGE"
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
