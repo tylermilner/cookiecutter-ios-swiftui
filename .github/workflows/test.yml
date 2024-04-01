@@ -75,4 +75,5 @@ jobs:
           export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref}}@${{ github.sha }}"
           echo "Commit message: $COMMIT_MESSAGE"
           git add .
+          git commit -m "$COMMIT_MESSAGE"
       
