@@ -60,4 +60,11 @@ jobs:
 
       - name: List downloaded files
         run: ls -la
+
+      - name: Commit and push generated template
+        run: |
+          export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref_name}}@${{ github.sha }}"
+          git add -A .
+          git commit -m $COMMIT_MESSAGE
+          echo "Commit message: $COMMIT_MESSAGE"
       
