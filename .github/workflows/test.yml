@@ -66,6 +66,6 @@ jobs:
 
       - name: Commit and push generated template
         run: |
-          export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.github.ref}}@${{ github.sha }}"
+          export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref}}@${{ github.sha }}"
           echo "Commit message: $COMMIT_MESSAGE"
       
