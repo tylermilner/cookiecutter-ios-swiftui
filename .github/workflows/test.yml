@@ -48,6 +48,12 @@ jobs:
           ref: 'main'
           token:  ${{ secrets.TEMPLATE_OUTPUT_REPO_TOKEN }}
 
+      - name: Print current directory
+        run: pwd
+
+      - name: Print GITHUB_WORKSPACE directory
+        run: echo $GITHUB_WORKSPACE
+
       - name: List current files
         run: ls -la
 
