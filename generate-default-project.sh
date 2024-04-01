@@ -4,4 +4,4 @@
 # Usage: ./generate-default-project.sh
 
 # Generate a project with the cookiecutter default values
-pipenv run cookiecutter . --no-input --overwrite-if-exists
+pipenv run cookiecutter . --no-input --overwrite-if-exists initialize_git_repo=False
