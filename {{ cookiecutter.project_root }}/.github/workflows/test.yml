@@ -1,0 +1,11 @@
+name: Test
+
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hello World
+        run: echo Hello, world!
