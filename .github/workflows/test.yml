@@ -44,6 +44,7 @@ jobs:
     outputs:
       template_files: ${{ steps.filter.outputs.template_files }}
     steps:
+    - uses: actions/checkout@v4
     - name: Check for changes in the iOS template files
       uses: dorny/paths-filter@v3
       id: filter
