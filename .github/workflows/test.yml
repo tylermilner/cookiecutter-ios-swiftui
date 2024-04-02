@@ -69,7 +69,7 @@ jobs:
   deploy:
     runs-on: ubuntu-22.04
     needs: [test, changes]
-    if: ${{ needs.changes.outputs.template_files == 'true' }}
+    if: ${{ needs.changes.outputs.template_files == 'true' && github.ref == 'refs/heads/main' }}
     steps:
       - uses: actions/checkout@v4
         with:
