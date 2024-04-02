@@ -53,7 +53,7 @@ jobs:
   changes:
     runs-on: ubuntu-22.04
     needs: test
-    if: ${{ github.ref }} == 'refs/heads/main'
+    if: ${{ github.ref == 'refs/heads/main' }}
     outputs:
       template_files: ${{ steps.filter.outputs.template_files }}
     steps:
