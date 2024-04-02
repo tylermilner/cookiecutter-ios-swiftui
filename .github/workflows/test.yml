@@ -37,10 +37,25 @@ jobs:
       with:
         name: template-output
         path: my-app
+
+  changes:
+    runs-on: ubuntu-22.04
+    needs: test
+    outputs:
+      template_files: ${{ steps.filter.outputs.template_files }}
+    steps:
+    - name: Check for changes in the iOS template files
+      uses: dorny/paths-filter@v3
+      id: filter
+      with:
+        filters: |
+          template_files:
+            - '{{ cookiecutter.project_root }}/**'
   
   deploy:
     runs-on: ubuntu-22.04
-    needs: test
+    needs: [test, changes]
+    if: ${{ needs.changes.outputs.template_files == 'true' }}
     steps:
       - uses: actions/checkout@v4
         with:
