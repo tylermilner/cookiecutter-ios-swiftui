@@ -6,37 +6,37 @@ jobs:
   test:
     runs-on: macos-14
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install XcodeGen
-      run: brew install xcodegen
+      - name: Install XcodeGen
+        run: brew install xcodegen
 
-    - name: Set up Python, including cache for pipenv virtual environment
-      uses: actions/setup-python@v5
-      with:
-        python-version-file: .python-version
-        cache: pipenv
+      - name: Set up Python, including cache for pipenv virtual environment
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pipenv
 
-    - name: Install pipenv
-      run: |
-        pip install --upgrade pip
-        pip install pipenv
+      - name: Install pipenv
+        run: |
+          pip install --upgrade pip
+          pip install pipenv
 
-    - name: Install project dependencies
-      run: pipenv install --dev
+      - name: Install project dependencies
+        run: pipenv install --dev
 
-    - name: Run tests
-      run: pipenv run pytest
+      - name: Run tests
+        run: pipenv run pytest
 
-    - name: Generate template from defaults
-      run: ./generate-default-project.sh
+      - name: Generate template from defaults
+        run: ./generate-default-project.sh
 
-    - name: Upload generated template
-      uses: actions/upload-artifact@v4
-      id: upload-generated-template
-      with:
-        name: template-output
-        path: my-app
+      - name: Upload generated template
+        uses: actions/upload-artifact@v4
+        id: upload-generated-template
+        with:
+          name: template-output
+          path: my-app
 
   changes:
     runs-on: ubuntu-22.04
@@ -44,14 +44,14 @@ jobs:
     outputs:
       template_files: ${{ steps.filter.outputs.template_files }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Check for changes in the iOS template files
-      uses: dorny/paths-filter@v3
-      id: filter
-      with:
-        filters: |
-          template_files:
-            - '{{ cookiecutter.project_root }}/**'
+      - uses: actions/checkout@v4
+      - name: Check for changes in the iOS template files
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            template_files:
+              - '{{ cookiecutter.project_root }}/**'
   
   deploy:
     runs-on: ubuntu-22.04
