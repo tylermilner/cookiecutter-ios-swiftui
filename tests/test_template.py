@@ -235,3 +235,17 @@ def test_initialize_git_repo(cookies):
     # Assert
     project_path = result.project_path
     assert os.path.isdir(os.path.join(project_path, ".git"))
+
+def test_run_tests_script(baked_cookies):
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    run_tests_script_path = os.path.join(project_path, "run-tests.sh")
+    assert os.path.isfile(run_tests_script_path)
+
+    with open(run_tests_script_path) as file:
+        run_tests_script = file.read()
+
+        assert f"-project {APP_TARGET_NAME}.xcodeproj" in run_tests_script
+        assert f"-scheme {APP_TARGET_NAME}" in run_tests_script
