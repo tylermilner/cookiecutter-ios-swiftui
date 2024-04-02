@@ -4,7 +4,7 @@ on: [push, workflow_dispatch]
 
 concurrency:
   # Cancel any in-progress runs for this workflow/branch combination
-  group: ${{ '{{' }} github.workflow {{ '}}' }}-${{ '{{' }} github.ref {{ '}}' }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
