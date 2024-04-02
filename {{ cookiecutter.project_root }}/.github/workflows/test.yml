@@ -1,6 +1,13 @@
 name: Test
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 concurrency:
   # Cancel any in-progress runs for this workflow/branch combination
