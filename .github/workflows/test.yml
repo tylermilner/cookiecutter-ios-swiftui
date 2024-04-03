@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   test:
+    name: Test
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +52,7 @@ jobs:
           path: my-app
 
   changes:
+    name: Check for template changes
     runs-on: ubuntu-22.04
     needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -67,6 +69,7 @@ jobs:
               - '{{ cookiecutter.project_root }}/**'
   
   deploy:
+    name: Deploy generated template
     runs-on: ubuntu-22.04
     needs: [test, changes]
     if: ${{ needs.changes.outputs.template_files == 'true' && github.ref == 'refs/heads/main' }}
