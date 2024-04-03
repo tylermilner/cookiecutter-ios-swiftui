@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   test:
+    name: Test
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
@@ -24,4 +25,4 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_15.2.app
 
       - name: Run tests
-        run: bash run-tests.sh
+        run: ./run-tests.sh
