@@ -247,5 +247,4 @@ def test_run_tests_script(baked_cookies):
     with open(run_tests_script_path) as file:
         run_tests_script = file.read()
 
-        assert f"-project {APP_TARGET_NAME}.xcodeproj" in run_tests_script
-        assert f"-scheme {APP_TARGET_NAME}" in run_tests_script
+        assert f"SCHEME='{APP_TARGET_NAME}'" in run_tests_script
