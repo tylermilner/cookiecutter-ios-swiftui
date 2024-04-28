@@ -24,7 +24,7 @@ jobs:
           if [[ -z "$INPUT_RUN_ID" ]]; then
             # Get run ID using the GitHub CLI
             OTHER_REPO="tylermilner/cookiecutter-ios-swiftui"
-            WF_NAME="test.yml"
+            WF_NAME="Test"
             RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
             echo "Detected latest run id of ${RUN_ID} for workflow ${WF_NAME}"
           else
