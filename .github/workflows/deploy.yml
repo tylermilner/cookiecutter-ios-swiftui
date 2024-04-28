@@ -37,11 +37,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           INPUT_RUN_ID: ${{ inputs.runId }}
 
-      # # Download artifact from "Test" workflow
-      # - uses: actions/download-artifact@v4
-      #   with:
-      #     name: template-output # Name must match the name used in the upload artifact step in "Test" workflow
-      #     github-token: ${{ github.token }} # token with actions:read permissions on target repo
-      #     repository: tylermilner/cookiecutter-ios-swiftui
-      #     run-id: ${{ env.RUN_ID }} # ID of the "Test" workflow run
-      
+      - name: Download artifact from the "Test" workflow
+        uses: actions/download-artifact@v4
+        with:
+          name: template-output # Name must match the name used in the upload artifact step in "Test" workflow
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.get-run-id.outputs.run-id }}
+
+      - name: Show downloaded files
+        run: ls -R template-output
