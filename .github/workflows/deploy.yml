@@ -46,4 +46,4 @@ jobs:
           run-id: ${{ steps.get-run-id.outputs.run-id }}
 
       - name: Show downloaded files
-        run: ls -R template-output
+        run: ls -l
