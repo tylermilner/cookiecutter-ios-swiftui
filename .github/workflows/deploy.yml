@@ -3,8 +3,13 @@ name: Deploy to Output Repo
 on:
   workflow_run:
     workflows: [Test]
-    branches: ['*'] # TODO: Change to 'main'
+    branches: [feature/separate-deploy-workflow] # TODO: Change to 'main'
     types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'The ID of the "Test" workflow run to deploy'
+        required: false
 
 jobs:
   deploy-generated-template:
