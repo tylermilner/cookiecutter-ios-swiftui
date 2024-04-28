@@ -20,10 +20,18 @@ jobs:
       template-files-changed: ${{ steps.check-for-changes.outputs.template-files-changed }}
     steps:
       - uses: actions/checkout@v4
+      - name: Get commit of last deployment
+        id: last-successful-commit
+        uses: tylermilner/last-successful-commit-hash-action@v1
+        with:
+          github-token: ${{ github.token }}
+          workflow-id: deploy.yml
+          branch: main
       - name: Check for changes in the template directory
         uses: dorny/paths-filter@v3
         id: check-for-changes
         with:
+          base: ${{ steps.last-successful-commit.outputs.commit-hash }}
           filters: |
             template-files-changed:
               - '{{ cookiecutter.project_root }}/**'
