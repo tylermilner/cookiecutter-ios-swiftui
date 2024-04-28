@@ -7,7 +7,7 @@ on:
     types: [completed]
   workflow_dispatch:
     inputs:
-      run_id: # TODO: Incorporate manually-provided run ID into logic below
+      runId:
         description: 'The ID of the "Test" workflow run to deploy'
         required: false
 
@@ -21,12 +21,21 @@ jobs:
       - name: Get the run ID of the "Test" workflow
         id: get-run-id
         run: |
-          OTHER_REPO="tylermilner/cookiecutter-ios-swiftui"
-          WF_NAME="test.yml"
-          RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
-          echo "RUN_ID=${RUN_ID}"
+          if [[ -z "$INPUT_RUN_ID" ]]; then
+            # Get run ID using the GitHub CLI
+            OTHER_REPO="tylermilner/cookiecutter-ios-swiftui"
+            WF_NAME="test.yml"
+            RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
+            echo "Using latest run id for workflow ${WF_NAME}: ${RUN_ID}"
+          else
+            # Use the run ID provided by the user
+            RUN_ID="${INPUT_RUN_ID}"
+            echo "Using provided run id: ${RUN_ID}"
+          fi
+          echo "run-id=${RUN_ID}" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ github.token }}
+          INPUT_RUN_ID: ${{ inputs.runId }}
 
       # # Download artifact from "Test" workflow
       # - uses: actions/download-artifact@v4
