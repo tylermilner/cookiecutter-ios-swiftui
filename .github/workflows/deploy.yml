@@ -26,7 +26,7 @@ jobs:
             OTHER_REPO="tylermilner/cookiecutter-ios-swiftui"
             WF_NAME="test.yml"
             RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
-            echo "Using latest run id for workflow ${WF_NAME}: ${RUN_ID}"
+            echo "Detected latest run id of ${RUN_ID} for workflow ${WF_NAME}"
           else
             # Use the run ID provided by the user
             RUN_ID="${INPUT_RUN_ID}"
