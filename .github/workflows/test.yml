@@ -49,7 +49,7 @@ jobs:
         id: upload-generated-template
         with:
           name: template-output
-          path: my-app
+          path: my-app # Template output path must match path used in generate-default-project.sh
 
   changes:
     name: Check for template changes

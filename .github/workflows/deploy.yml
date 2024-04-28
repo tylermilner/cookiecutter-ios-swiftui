@@ -1,0 +1,33 @@
+name: Deploy to Output Repo
+
+on:
+  workflow_run:
+    workflows: [Test]
+    branches: ['*'] # TODO: Change to 'main'
+    types: [completed]
+
+jobs:
+  deploy-generated-template:
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Get the run ID of the "Test" workflow
+        id: get-run-id
+        run: |
+          OTHER_REPO="tylermilner/cookiecutter-ios-swiftui"
+          WF_NAME="test.yml"
+          RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
+          echo "RUN_ID=${RUN_ID}"
+
+      # # Download artifact from "Test" workflow
+      # - uses: actions/download-artifact@v4
+      #   with:
+      #     name: template-output # Name must match the name used in the upload artifact step in "Test" workflow
+      #     github-token: ${{ github.token }} # token with actions:read permissions on target repo
+      #     repository: tylermilner/cookiecutter-ios-swiftui
+      #     run-id: ${{ env.RUN_ID }} # ID of the "Test" workflow run
+      
