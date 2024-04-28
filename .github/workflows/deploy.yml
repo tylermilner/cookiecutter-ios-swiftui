@@ -2,7 +2,7 @@ name: Deploy to Output Repo
 
 on:
   workflow_run:
-    workflows: [Test]
+    workflows: [test.yml]
     branches: [feature/separate-deploy-workflow] # TODO: Change to 'main'
     types: [completed]
   workflow_dispatch:
