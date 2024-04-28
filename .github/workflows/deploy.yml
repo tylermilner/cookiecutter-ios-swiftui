@@ -20,7 +20,7 @@ jobs:
       template-files-changed: ${{ steps.check-for-changes.outputs.template-files-changed }}
     steps:
       - uses: actions/checkout@v4
-      - name: Get commit of last deployment
+      - name: Get commit of last successful deployment
         id: last-successful-commit
         uses: tylermilner/last-successful-commit-hash-action@v1
         with:
@@ -36,7 +36,8 @@ jobs:
             template-files-changed:
               - '{{ cookiecutter.project_root }}/**'
       - name: Show check for changes result
-        run: echo "Template files changed ${{ steps.check-for-changes.outputs.template-files-changed }}"
+        run: |
+          echo "Template files changed: ${{ steps.check-for-changes.outputs.template-files-changed }}"
 
   deploy-generated-template:
     name: Deploy generated template
