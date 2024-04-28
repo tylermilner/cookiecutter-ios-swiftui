@@ -12,9 +12,29 @@ on:
         required: false
 
 jobs:
-  deploy-generated-template:
+  check-for-changes:
+    name: Check for template changes
     runs-on: ubuntu-22.04
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    outputs:
+      template-files-changed: ${{ steps.check-for-changes.outputs.template-files-changed }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for changes in the template directory
+        uses: dorny/paths-filter@v3
+        id: check-for-changes
+        with:
+          filters: |
+            template-files-changed:
+              - '{{ cookiecutter.project_root }}/**'
+      - name: Show check for changes result
+        run: echo "Template files changed ${{ steps.check-for-changes.outputs.template-files-changed }}"
+
+  deploy-generated-template:
+    name: Deploy generated template
+    runs-on: ubuntu-22.04
+    needs: [check-for-changes]
+    if: ${{ needs.check-for-changes.outputs.template-files-changed == 'true' }}
     steps:
       - name: Checkout output repository
         uses: actions/checkout@v4
