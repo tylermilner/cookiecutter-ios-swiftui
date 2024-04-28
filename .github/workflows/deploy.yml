@@ -22,6 +22,8 @@ jobs:
           WF_NAME="test.yml"
           RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
           echo "RUN_ID=${RUN_ID}"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       # # Download artifact from "Test" workflow
       # - uses: actions/download-artifact@v4
