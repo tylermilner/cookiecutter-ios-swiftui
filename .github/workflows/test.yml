@@ -9,6 +9,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   # Cancel any in-progress runs for this workflow/branch combination
   group: ${{ github.workflow }}-${{ github.ref }}
