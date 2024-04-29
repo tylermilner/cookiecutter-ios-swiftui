@@ -12,9 +12,9 @@ open_xcode=$1
 
 # Set the open_xcode_project value based on the open_xcode argument
 if [ "$open_xcode" = "open-xcode" ]; then
-    open_xcode_project=True
+	open_xcode_project=True
 else
-    open_xcode_project=False
+	open_xcode_project=False
 fi
 
 # Generate a project with the cookiecutter default values
