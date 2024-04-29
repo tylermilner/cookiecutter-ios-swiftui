@@ -117,7 +117,7 @@ brew install xcodegen
 
 Make updates to the template files in the `{{ cookiecutter.project_root }}` directory as necessary.
 
-After making changes, regenerate the project locally by running Cookiecutter against the repo directory, applying the `--overwrite-if-exists` flag to automatically overwrite the previous output and optionally the `--no-input` flag to skip needing to provide user input:
+After making changes, regenerate the project locally by running Cookiecutter against the repository directory, applying the `--overwrite-if-exists` flag to automatically overwrite the previous output and optionally the `--no-input` flag to skip needing to provide user input:
 
 ```Shell
 pipenv run cookiecutter . --overwrite-if-exists --no-input
