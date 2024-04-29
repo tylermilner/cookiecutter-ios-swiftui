@@ -1,6 +1,7 @@
 # cookiecutter-ios-swiftui
 
 [![Tests](https://github.com/tylermilner/cookiecutter-ios-swiftui/actions/workflows/test.yml/badge.svg)](https://github.com/tylermilner/cookiecutter-ios-swiftui/actions/workflows/test.yml)
+[![Deploy](https://github.com/tylermilner/cookiecutter-ios-swiftui/actions/workflows/deploy.yml/badge.svg)](https://github.com/tylermilner/cookiecutter-ios-swiftui/actions/workflows/deploy.yml)
 
 [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template for jump-starting modern iOS apps using SwiftUI.
 
