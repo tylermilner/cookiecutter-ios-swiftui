@@ -42,6 +42,12 @@ jobs:
         run: |
           echo "Template files changed: ${{ steps.check-for-changes.outputs.template-files-changed }}"
 
+      - name: Cancel deployment if no changes
+        if: ${{ steps.check-for-changes.outputs.template-files-changed == 'false' }}
+        run: |
+          echo "No changes detected in template directory. Cancelling workflow run."
+          gh run cancel ${{ github.run_id }}
+
   deploy-generated-template:
     name: Deploy generated template
     runs-on: ubuntu-22.04
