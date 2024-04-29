@@ -41,4 +41,4 @@ A generated version of this template that demonstrates the final project structu
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for more information.
+[MIT](LICENSE)
