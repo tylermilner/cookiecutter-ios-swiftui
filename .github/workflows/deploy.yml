@@ -43,10 +43,13 @@ jobs:
           echo "Template files changed: ${{ steps.check-for-changes.outputs.template-files-changed }}"
 
       - name: Cancel deployment if no changes
+        id: cancel-if-necessary
         if: ${{ steps.check-for-changes.outputs.template-files-changed == 'false' }}
         run: |
           echo "No changes detected in template directory. Cancelling workflow run."
           gh run cancel ${{ github.run_id }}
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   deploy-generated-template:
     name: Deploy generated template
