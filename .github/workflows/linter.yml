@@ -1,0 +1,49 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
+jobs:
+  lint:
+    name: Lint Codebase
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python, including cache for pipenv virtual environment
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pipenv
+
+      - name: Install pipenv
+        run: |
+          pip install --upgrade pip
+          pip install pipenv
+
+      - name: Install project dependencies
+        run: pipenv install --dev
+
+      - name: Lint Codebase
+        id: super-linter
+        uses: super-linter/super-linter/slim@v6
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JSCPD: false
