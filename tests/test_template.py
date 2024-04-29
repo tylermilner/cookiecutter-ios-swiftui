@@ -7,7 +7,7 @@ import yaml
 
 # - Constants
 
-PROJECT_NAME = "Demo App"
+PROJECT_NAME = "Demo"
 PROJECT_PATH = "demo-app"
 APP_TARGET_NAME = "DemoApp"
 APP_TESTS_TARGET_NAME = "DemoAppTests"
