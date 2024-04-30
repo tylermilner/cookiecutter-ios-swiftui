@@ -1,6 +1,7 @@
 import sys
 import subprocess
 
+
 def is_xcodegen_installed() -> bool:
     print("Checking for XcodeGen...")
     try:
@@ -8,6 +9,7 @@ def is_xcodegen_installed() -> bool:
         return True
     except Exception:
         return False
+
 
 def is_git_installed() -> bool:
     print("Checking for Git...")
@@ -17,13 +19,18 @@ def is_git_installed() -> bool:
     except Exception:
         return False
 
+
 if __name__ == "__main__":
     if not is_xcodegen_installed():
-        print("ERROR: XcodeGen is not installed. Please install it using `brew install xcodegen`.")
+        print(
+            "ERROR: XcodeGen is not installed. Please install it using `brew install xcodegen`."
+        )
         sys.exit(1)
 
     if not is_git_installed():
-        print("ERROR: Git is not installed. Please install it using `brew install git`.")
+        print(
+            "ERROR: Git is not installed. Please install it using `brew install git`."
+        )
         sys.exit(1)
 
     print("Pre-prompt script complete")
