@@ -32,15 +32,15 @@ if __name__ == "__main__":
     # TODO: Run tests using Fastlane
 
     # Remove XcodeGen `project.yml` file now that the Xcode project has been generated
-    if {{cookiecutter.remove_xcodegen_yml}} == True:
+    if {{cookiecutter.remove_xcodegen_yml}}: # noqa: F821 (ignore undefined name 'cookiecutter')
         remove_xcodegen_yml()
 
     # Initialize git repository
-    if {{cookiecutter.initialize_git_repo}} == True:
+    if {{cookiecutter.initialize_git_repo}}: # noqa: F821 (ignore undefined name 'cookiecutter')
         initialize_git_repo()
 
     # Open the generated Xcode project
-    if {{cookiecutter.open_xcode_project}} == True:
+    if {{cookiecutter.open_xcode_project}}: # noqa: F821 (ignore undefined name 'cookiecutter')
         open_xcode_project()
 
     print("Post-gen script complete")
