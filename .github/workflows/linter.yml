@@ -47,3 +47,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JSCPD: false
+          PYTHON_MYPY_CONFIG_FILE: pyproject.toml
+          PYTHON_RUFF_CONFIG_FILE: pyproject.toml
