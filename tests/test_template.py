@@ -58,9 +58,9 @@ def test_default_configuration(cookies):
     assert context["bundle_identifier"] == "com.example.myapp"
     assert context["full_name"] == "First Last"
     assert context["date"] == date
-    assert (
-        not context["open_xcode_project"]
-    )  # False because of the extra_context override
+    assert not context[
+        "open_xcode_project"
+    ]  # False because of the extra_context override
     assert context["remove_xcodegen_yml"]
     assert context["initialize_git_repo"]
 
