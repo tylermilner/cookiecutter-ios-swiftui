@@ -41,6 +41,12 @@ jobs:
       - name: Install project dependencies
         run: pipenv install --dev
 
+      - name: Check Format
+        run: pipenv run ruff format
+
+      - name: Lint
+        run: pipenv run ruff
+
       - name: Run tests
         run: pipenv run pytest
 
