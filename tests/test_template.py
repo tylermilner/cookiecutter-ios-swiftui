@@ -4,6 +4,7 @@ import os
 import pytest
 import re
 import yaml
+from pytest_cookies import Cookies, Result as BakeResult  # type: ignore[import-untyped]
 
 # - Constants
 
@@ -18,7 +19,7 @@ APP_UITESTS_TARGET_NAME = "DemoAppUITests"
 
 # Automatically generate a project with defaults appropriate for testing
 @pytest.fixture
-def baked_cookies(cookies):
+def baked_cookies(cookies: Cookies) -> BakeResult:
     # Generate the project using the 'cookies' fixture provided by pytest-cookies
     result = cookies.bake(
         extra_context={
@@ -37,7 +38,7 @@ def baked_cookies(cookies):
 
 
 # Test the default values in the cookiecutter.json file
-def test_default_configuration(cookies):
+def test_default_configuration(cookies: Cookies) -> None:
     # Arrange
     # Today's date in format M/D/YY
     date = datetime.datetime.now().strftime("%-m/%-d/%y")
@@ -66,7 +67,7 @@ def test_default_configuration(cookies):
 
 
 # Test that the project generation completes successfully with the expected files on disk
-def test_project_generation_file_structure(baked_cookies):
+def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     # Act
     project_path = baked_cookies.project_path
 
@@ -122,7 +123,7 @@ def test_project_generation_file_structure(baked_cookies):
 
 
 # Test that project_name is replaced correctly in all necessary files
-def test_project_name_replaced(baked_cookies):
+def test_project_name_replaced(baked_cookies: BakeResult) -> None:
     # Act
     project_path = baked_cookies.project_path
 
@@ -139,7 +140,9 @@ def test_project_name_replaced(baked_cookies):
 
 
 # Helper function to check Swift source files for header comment with target name
-def check_swift_files_for_text(source_directory, pattern, line_number):
+def check_swift_files_for_text(
+    source_directory: str, pattern: str, line_number: int
+) -> None:
     for root, dirs, files in os.walk(source_directory):
         for file in files:
             if file.endswith(".swift"):
@@ -151,7 +154,7 @@ def check_swift_files_for_text(source_directory, pattern, line_number):
 
 
 # Test that target_name is replaced correctly in all necessary files
-def test_target_name_replaced(baked_cookies):
+def test_target_name_replaced(baked_cookies: BakeResult) -> None:
     # Act
     project_path = baked_cookies.project_path
 
@@ -203,7 +206,7 @@ def test_target_name_replaced(baked_cookies):
 
 
 # Test that organization_name is replaced correctly in all necessary files
-def test_organization_name_replaced(baked_cookies):
+def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
     # Act
     project_path = baked_cookies.project_path
 
@@ -226,7 +229,7 @@ def test_organization_name_replaced(baked_cookies):
 
 
 # Test that bundle_identifier is replaced correctly in all necessary files
-def test_bundle_identifier_replaced(baked_cookies):
+def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
     # Arrange
     bundle_identifier_suffix = APP_TARGET_NAME.lower()
 
@@ -246,7 +249,7 @@ def test_bundle_identifier_replaced(baked_cookies):
 
 
 # Test that full_name is replaced correctly in all necessary files
-def test_full_name_replaced(baked_cookies):
+def test_full_name_replaced(baked_cookies: BakeResult) -> None:
     # Arrange
     full_name = "First Last"
 
@@ -257,7 +260,7 @@ def test_full_name_replaced(baked_cookies):
     check_swift_files_for_text(project_path, f"//  Created by {full_name} on .*", 4)
 
 
-def test_date_replaced(cookies):
+def test_date_replaced(cookies: BakeResult) -> None:
     # Arrange
     date = "1/1/24"
 
@@ -269,7 +272,7 @@ def test_date_replaced(cookies):
     check_swift_files_for_text(project_path, f"//  Created by .* on {date}", 4)
 
 
-def test_remove_xcodegen_yml(cookies):
+def test_remove_xcodegen_yml(cookies: BakeResult) -> None:
     # Act
     result = cookies.bake(
         extra_context={"open_xcode_project": False, "remove_xcodegen_yml": True}
@@ -280,7 +283,7 @@ def test_remove_xcodegen_yml(cookies):
     assert not os.path.isfile(os.path.join(project_path, "project.yml"))
 
 
-def test_initialize_git_repo(cookies):
+def test_initialize_git_repo(cookies: BakeResult) -> None:
     # Act
     result = cookies.bake(
         extra_context={"open_xcode_project": False, "initialize_git_repo": True}
@@ -291,7 +294,7 @@ def test_initialize_git_repo(cookies):
     assert os.path.isdir(os.path.join(project_path, ".git"))
 
 
-def test_run_tests_script(baked_cookies):
+def test_run_tests_script(baked_cookies: BakeResult) -> None:
     # Act
     project_path = baked_cookies.project_path
 
