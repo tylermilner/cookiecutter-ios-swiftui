@@ -11,6 +11,7 @@ cookiecutter = "==2.*"
 pytest = "==8.*"
 pytest-cookies = "==0.7.*"
 pyyaml = "==6.*"
+types-PyYAML = "==6.*"
 ruff = "==0.4.*"
 mypy = "==1.10.*"
 
