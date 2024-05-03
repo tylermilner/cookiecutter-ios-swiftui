@@ -4,7 +4,7 @@ import os
 import pytest
 import re
 import yaml
-from pytest_cookies import Cookies, Result as BakeResult  # type: ignore[import-untyped]
+from pytest_cookies.plugin import Cookies, Result as BakeResult  # type: ignore[import-untyped]
 
 # - Constants
 
