@@ -1,5 +1,5 @@
-import sys
 import subprocess
+import sys
 
 
 def is_xcodegen_installed() -> bool:

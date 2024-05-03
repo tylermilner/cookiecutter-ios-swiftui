@@ -1,10 +1,12 @@
 import datetime
 import fnmatch
 import os
-import pytest
 import re
+
+import pytest
 import yaml
-from pytest_cookies.plugin import Cookies, Result as BakeResult  # type: ignore[import-untyped]
+from pytest_cookies.plugin import Cookies  # type: ignore[import-untyped]
+from pytest_cookies.plugin import Result as BakeResult
 
 # - Constants
 
