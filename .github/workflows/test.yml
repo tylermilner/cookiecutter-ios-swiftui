@@ -41,6 +41,9 @@ jobs:
       - name: Install project dependencies
         run: pipenv install --dev
 
+      - name: Run mypy
+        run: pipenv run mypy .
+
       - name: Check Format
         run: pipenv run ruff format
 
