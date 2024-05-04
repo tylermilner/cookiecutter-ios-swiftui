@@ -23,7 +23,10 @@ def is_git_installed() -> bool:
 if __name__ == "__main__":
     if not is_xcodegen_installed():
         print(
-            "ERROR: XcodeGen is not installed. Please install it using `brew install xcodegen`."
+            (
+                "ERROR: XcodeGen is not installed. Please install it using `brew "
+                "install xcodegen`."
+            )
         )
         sys.exit(1)
 

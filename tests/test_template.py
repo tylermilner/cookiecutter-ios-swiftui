@@ -68,7 +68,8 @@ def test_default_configuration(cookies: Cookies) -> None:
     assert context["initialize_git_repo"]
 
 
-# Test that the project generation completes successfully with the expected files on disk
+# Test that the project generation completes successfully with the expected files on
+# disk
 def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     # Act
     project_path = baked_cookies.project_path
@@ -150,9 +151,10 @@ def check_swift_files_for_text(
             if file.endswith(".swift"):
                 with open(os.path.join(root, file), "r") as swift_file:
                     lines = [next(swift_file) for x in range(line_number + 1)]
-                    assert re.match(
-                        pattern, lines[line_number].strip()
-                    ), f"File {file} does not have expected text pattern {pattern} on line {line_number}"
+                    assert re.match(pattern, lines[line_number].strip()), (
+                        f"File {file} does not have expected text pattern {pattern} on "
+                        "line {line_number}"
+                    )
 
 
 # Test that target_name is replaced correctly in all necessary files
