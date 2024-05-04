@@ -1,7 +1,10 @@
+"""Test the template generation process."""
+
 import datetime
 import fnmatch
-import os
+import os # TODO: Can we replace all 'os' calls with 'Path'?
 import re
+from pathlib import Path
 
 import pytest
 import yaml
@@ -19,17 +22,27 @@ APP_UITESTS_TARGET_NAME = "DemoAppUITests"
 # - Test Fixtures
 
 
-# Automatically generate a project with defaults appropriate for testing
-@pytest.fixture
+@pytest.fixture()
 def baked_cookies(cookies: Cookies) -> BakeResult:
-    # Generate the project using the 'cookies' fixture provided by pytest-cookies
+    """Generate a project with defaults appropriate for testing, using the 'cookies'
+    fixture provided by pytest-cookies.
+
+    Args:
+    ----
+    cookies (Cookies): The cookies fixture provided by pytest-cookies.
+
+    Returns:
+    -------
+    BakeResult: The result of the baking process.
+
+    """
     result = cookies.bake(
         extra_context={
             "project_name": PROJECT_NAME,
             "open_xcode_project": False,
             "remove_xcodegen_yml": False,
             "initialize_git_repo": False,
-        }
+        },
     )
     assert result.exit_code == 0
     assert result.exception is None
@@ -39,11 +52,17 @@ def baked_cookies(cookies: Cookies) -> BakeResult:
 # - Test Cases
 
 
-# Test the default values in the cookiecutter.json file
 def test_default_configuration(cookies: Cookies) -> None:
+    """Test the default values in the cookiecutter.json file.
+
+    Args:
+    ----
+    cookies (Cookies): The cookies fixture provided by pytest-cookies.
+
+    """
     # Arrange
     # Today's date in format M/D/YY
-    date = datetime.datetime.now().strftime("%-m/%-d/%y")
+    date = datetime.datetime.now().strftime("%-m/%-d/%y")  # noqa: DTZ005 - ignore "datetime.now() called without a `tz`` argument" warning
 
     # Act
     result = cookies.bake(extra_context={"open_xcode_project": False})
@@ -68,16 +87,22 @@ def test_default_configuration(cookies: Cookies) -> None:
     assert context["initialize_git_repo"]
 
 
-# Test that the project generation completes successfully with the expected files on
-# disk
 def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
+    """Test that the project generation completes successfully with the expected files
+    on disk.
+
+    Args:
+    ----
+    baked_cookies (BakeResult): A project template generated with the test defaults.
+
+    """
     # Act
     project_path = baked_cookies.project_path
 
     # Assert
     # Verify that the project directory was created
-    assert os.path.isdir(project_path)
-    assert os.path.basename(project_path) == PROJECT_PATH
+    assert Path(project_path).is_dir()
+    assert Path(project_path).name == PROJECT_PATH
 
     # Verify that all expected files exist
     expected_file_paths = [
@@ -99,8 +124,8 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     ]
 
     for file_path in expected_file_paths:
-        full_file_path = os.path.join(project_path, file_path)
-        assert os.path.isfile(full_file_path), f"File not found: {full_file_path}"
+        full_file_path = Path(project_path) / file_path
+        assert Path(full_file_path).is_file(), f"File not found: {full_file_path}"
 
     # Verify that no unexpected files exist
     unexpected_files = []
@@ -110,11 +135,11 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
 
     for (
         root,
-        dirs,
+        _,
         files,
     ) in os.walk(project_path):
         for file in files:
-            file_path = os.path.join(root, file)
+            file_path = Path(root) / file
             relative_file_path = os.path.relpath(file_path, project_path)
 
             if relative_file_path not in expected_file_paths and not any(
@@ -125,31 +150,47 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     assert not unexpected_files, f"Unexpected files found: {unexpected_files}"
 
 
-# Test that project_name is replaced correctly in all necessary files
 def test_project_name_replaced(baked_cookies: BakeResult) -> None:
+    """Test that project_name is replaced correctly in all necessary files.
+
+    Args:
+    ----
+    baked_cookies (BakeResult): A project template generated with the test defaults.
+
+    """
     # Act
     project_path = baked_cookies.project_path
 
     # Assert
     # Verify project.yml contents
-    with open(os.path.join(project_path, "project.yml")) as file:
+    with Path.open(Path(project_path) / "project.yml") as file:
         project_yml = yaml.safe_load(file)
         assert project_yml["name"] == APP_TARGET_NAME
 
     # Verify README contents
-    with open(os.path.join(project_path, "README.md")) as file:
+    with Path.open(Path(project_path) / "README.md") as file:
         readme = file.read()
         assert f"# {PROJECT_NAME}" in readme
 
 
-# Helper function to check Swift source files for header comment with target name
 def check_swift_files_for_text(
-    source_directory: str, pattern: str, line_number: int
+    source_directory: str,
+    pattern: str,
+    line_number: int,
 ) -> None:
-    for root, dirs, files in os.walk(source_directory):
+    """Check Swift source files for header comment with target name.
+
+    Args:
+    ----
+    source_directory (str): The directory where the source files are located.
+    pattern (str): The pattern to match in the file.
+    line_number (int): The line number to check.
+
+    """
+    for root, _, files in os.walk(source_directory):
         for file in files:
             if file.endswith(".swift"):
-                with open(os.path.join(root, file), "r") as swift_file:
+                with Path.open(Path(root) / file) as swift_file:
                     lines = [next(swift_file) for x in range(line_number + 1)]
                     assert re.match(pattern, lines[line_number].strip()), (
                         f"File {file} does not have expected text pattern {pattern} on "
@@ -157,14 +198,20 @@ def check_swift_files_for_text(
                     )
 
 
-# Test that target_name is replaced correctly in all necessary files
 def test_target_name_replaced(baked_cookies: BakeResult) -> None:
+    """Test that target_name is replaced correctly in all necessary files.
+
+    Args:
+    ----
+    baked_cookies (BakeResult): A project template generated with the test defaults.
+
+    """
     # Act
     project_path = baked_cookies.project_path
 
     # Assert
     # Verify project.yml contents
-    with open(os.path.join(project_path, "project.yml")) as file:
+    with Path.open(Path(project_path) / "project.yml") as file:
         project_yml = yaml.safe_load(file)
 
         assert APP_TARGET_NAME in project_yml["targets"]
@@ -196,12 +243,12 @@ def test_target_name_replaced(baked_cookies: BakeResult) -> None:
     # Verify target name header comment in Swift source files for each target
     targets = [APP_TARGET_NAME, APP_TESTS_TARGET_NAME, APP_UITESTS_TARGET_NAME]
     for target in targets:
-        target_directory = os.path.join(project_path, target)
+        target_directory = Path(project_path) / target
         check_swift_files_for_text(target_directory, f"//  {target}", 2)
 
     # Verify string replacements for main app source file
-    with open(
-        os.path.join(project_path, APP_TARGET_NAME, f"{APP_TARGET_NAME}App.swift")
+    with Path.open(
+        Path(project_path) / APP_TARGET_NAME / f"{APP_TARGET_NAME}App.swift",
     ) as file:
         app_swift = file.read()
         assert f"//  {APP_TARGET_NAME}App.swift" in app_swift
@@ -209,14 +256,20 @@ def test_target_name_replaced(baked_cookies: BakeResult) -> None:
         assert f"extension {APP_TARGET_NAME}" in app_swift
 
 
-# Test that organization_name is replaced correctly in all necessary files
 def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
+    """Test that organization_name is replaced correctly in all necessary files.
+
+    Args:
+    ----
+    baked_cookies (BakeResult): A project template generated with the test defaults.
+
+    """
     # Act
     project_path = baked_cookies.project_path
 
     # Assert
     # Verify project.yml contents
-    with open(os.path.join(project_path, "project.yml")) as file:
+    with Path.open(Path(project_path) / "project.yml") as file:
         project_yml = yaml.safe_load(file)
 
         app_tests_target = project_yml["targets"][APP_TESTS_TARGET_NAME]
@@ -232,8 +285,14 @@ def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
         )
 
 
-# Test that bundle_identifier is replaced correctly in all necessary files
 def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
+    """Test that bundle_identifier is replaced correctly in all necessary files.
+
+    Args:
+    ----
+    baked_cookies (BakeResult): A project template generated with the test defaults.
+
+    """
     # Arrange
     bundle_identifier_suffix = APP_TARGET_NAME.lower()
 
@@ -242,7 +301,7 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
 
     # Assert
     # Verify project.yml contents
-    with open(os.path.join(project_path, "project.yml")) as file:
+    with Path.open(Path(project_path) / "project.yml") as file:
         project_yml = yaml.safe_load(file)
 
         app_target = project_yml["targets"][APP_TARGET_NAME]
@@ -252,8 +311,14 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
         )
 
 
-# Test that full_name is replaced correctly in all necessary files
 def test_full_name_replaced(baked_cookies: BakeResult) -> None:
+    """Test that full_name is replaced correctly in all necessary files.
+
+    Args:
+    ----
+    baked_cookies (BakeResult): A project template generated with the test defaults.
+
+    """
     # Arrange
     full_name = "First Last"
 
@@ -264,7 +329,15 @@ def test_full_name_replaced(baked_cookies: BakeResult) -> None:
     check_swift_files_for_text(project_path, f"//  Created by {full_name} on .*", 4)
 
 
-def test_date_replaced(cookies: BakeResult) -> None:
+def test_date_replaced(cookies: Cookies) -> None:
+    """Test that date is replaced correctly in all necessary files.
+
+    Args:
+    ----
+    cookies (Cookies): Pytest helper class that can be used to
+    generate a project from a template.
+
+    """
     # Arrange
     date = "1/1/24"
 
@@ -276,37 +349,60 @@ def test_date_replaced(cookies: BakeResult) -> None:
     check_swift_files_for_text(project_path, f"//  Created by .* on {date}", 4)
 
 
-def test_remove_xcodegen_yml(cookies: BakeResult) -> None:
+def test_remove_xcodegen_yml(cookies: Cookies) -> None:
+    """Test that the XcodeGen YML file is removed correctly.
+
+    Args:
+    ----
+    cookies (Cookies): Pytest helper class that can be used to
+    generate a project from a template.
+
+    """
     # Act
     result = cookies.bake(
-        extra_context={"open_xcode_project": False, "remove_xcodegen_yml": True}
+        extra_context={"open_xcode_project": False, "remove_xcodegen_yml": True},
     )
 
     # Assert
     project_path = result.project_path
-    assert not os.path.isfile(os.path.join(project_path, "project.yml"))
+    assert not Path.is_file(Path(project_path) / "project.yml")
 
 
-def test_initialize_git_repo(cookies: BakeResult) -> None:
+def test_initialize_git_repo(cookies: Cookies) -> None:
+    """Test that the Git repository is initialized correctly.
+
+    Args:
+    ----
+    cookies (Cookies): Pytest helper class that can be used to
+    generate a project from a template.
+
+    """
     # Act
     result = cookies.bake(
-        extra_context={"open_xcode_project": False, "initialize_git_repo": True}
+        extra_context={"open_xcode_project": False, "initialize_git_repo": True},
     )
 
     # Assert
     project_path = result.project_path
-    assert os.path.isdir(os.path.join(project_path, ".git"))
+    assert Path.is_dir(Path(project_path) / ".git")
 
 
 def test_run_tests_script(baked_cookies: BakeResult) -> None:
+    """Test that the run-tests script is created correctly.
+
+    Args:
+    ----
+    baked_cookies (BakeResult): A project template generated with the test defaults.
+
+    """
     # Act
     project_path = baked_cookies.project_path
 
     # Assert
-    run_tests_script_path = os.path.join(project_path, "run-tests.sh")
-    assert os.path.isfile(run_tests_script_path)
+    run_tests_script_path = Path(project_path) / "run-tests.sh"
+    assert Path.is_file(run_tests_script_path)
 
-    with open(run_tests_script_path) as file:
+    with Path.open(run_tests_script_path) as file:
         run_tests_script = file.read()
 
         assert f"SCHEME='{APP_TARGET_NAME}'" in run_tests_script

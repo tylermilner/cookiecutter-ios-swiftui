@@ -42,7 +42,7 @@ target-version = "py312"
 [tool.ruff.lint]
 # Enable Pyflakes (`F`) and pycodestyle (`E`) codes by default.
 # Enable isort (`I`) for sorted imports
-select = ["E", "F", "I"]
+select = ["ALL"]
 ignore = []
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
@@ -51,6 +51,22 @@ unfixable = []
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore certain errors for cookiecutter hooks
+# INP001: "_ is part of an implicit namespace package. Add an `__init__.py`" - Not needed for cookiecutter hooks
+# T201: "`print` found" - We want to print things when generating the project
+# S603: "`subprocess` call: check for execution of untrusted input" - Seem to be false positives (see https://github.com/astral-sh/ruff/issues/4045)
+# S607: "Starting a process with a partial executable path" - We don't know/care where post-gen tools like xcodegen, git, etc. are installed on the user's system
+"hooks/**.py" = ["INP001", "T201", "S603", "S607"]
+
+# Ignore errors in test module
+# D104: "Missing docstring in public package" - No need to have it for the tests
+# TODO: Maybe we relax docstring requirements on tests in general? (probably no need for argument/parameter/return descriptions)
+"tests/__init__.py" = ["D104"]
+
+# S101: "Use of `assert` detected" - Asserts are needed for tests
+"tests/**.py" = ["S101"]
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.
