@@ -137,7 +137,7 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
         root,
         _,
         files,
-    ) in os.walk(project_path):
+    ) in project_path.walk():
         for file in files:
             file_path = Path(root) / file
             relative_file_path = os.path.relpath(file_path, project_path)
@@ -187,7 +187,7 @@ def check_swift_files_for_text(
     line_number (int): The line number to check.
 
     """
-    for root, _, files in os.walk(source_directory):
+    for root, _, files in source_directory.walk():
         for file in files:
             if file.endswith(".swift"):
                 with Path.open(Path(root) / file) as swift_file:
