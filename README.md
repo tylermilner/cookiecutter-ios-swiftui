@@ -14,21 +14,21 @@ installed in order to properly generate a project using this template.
 1. Install [Cookiecutter](https://github.com/cookiecutter/cookiecutter) (e.g.
    using [Homebrew](https://brew.sh)):
 
-```Shell
-brew install cookiecutter
-```
+    ```Shell
+    brew install cookiecutter
+    ```
 
 2. Install [XcodeGen](https://github.com/yonaskolb/XcodeGen):
 
-```Shell
-brew install xcodegen
-```
+    ```Shell
+    brew install xcodegen
+    ```
 
 3. Run Cookiecutter against this repo:
 
-```Shell
-cookiecutter gh:tylermilner/cookiecutter-ios-swiftui
-```
+    ```Shell
+    cookiecutter gh:tylermilner/cookiecutter-ios-swiftui
+    ```
 
 4. Follow the prompts to generate your new iOS project.
 
