@@ -174,7 +174,7 @@ def test_project_name_replaced(baked_cookies: BakeResult) -> None:
 
 
 def check_swift_files_for_text(
-    source_directory: str,
+    source_directory: Path,
     pattern: str,
     line_number: int,
 ) -> None:
