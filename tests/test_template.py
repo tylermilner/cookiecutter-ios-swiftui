@@ -138,8 +138,8 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
         files,
     ) in project_path.walk():
         for file in files:
-            file_path = Path(root) / file
-            relative_file_path = file_path.relative_to(project_path).as_posix()
+            path = Path(root) / file
+            relative_file_path = path.relative_to(project_path).as_posix()
 
             if relative_file_path not in expected_file_paths and not any(
                 fnmatch.fnmatch(file, pattern) for pattern in ignored_patterns
