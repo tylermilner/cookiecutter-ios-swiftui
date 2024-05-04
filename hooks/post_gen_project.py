@@ -25,6 +25,7 @@ def remove_xcodegen_yml() -> None:
 
 
 def open_xcode_project() -> None:
+    """Open the generated Xcode project."""
     print("Opening Xcode project...")
     xcode_project = "{{ cookiecutter.__project_name_no_spaces }}"
     subprocess.run(["open", f"{xcode_project}.xcodeproj"], check=True)
