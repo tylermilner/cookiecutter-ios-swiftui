@@ -1,14 +1,14 @@
 """Test the template generation process."""
 
-import datetime
-import fnmatch
-import re
+from datetime import datetime
+from fnmatch import fnmatch
 from pathlib import Path
+from re import match
 
 import pytest
-import yaml
 from pytest_cookies.plugin import Cookies  # type: ignore[import-untyped]
 from pytest_cookies.plugin import Result as BakeResult
+from yaml import safe_load as yaml_safe_load
 
 # - Constants
 
@@ -47,7 +47,7 @@ def test_default_configuration(cookies: Cookies) -> None:
     """Test the default values in the cookiecutter.json file."""
     # Arrange
     # Today's date in format M/D/YY
-    date = datetime.datetime.now().strftime("%-m/%-d/%y")  # noqa: DTZ005 - ignore "datetime.now() called without a `tz`` argument" warning
+    date = datetime.now().strftime("%-m/%-d/%y")  # noqa: DTZ005 - ignore "datetime.now() called without a `tz`` argument" warning
 
     # Act
     result = cookies.bake(extra_context={"open_xcode_project": False})
@@ -123,7 +123,7 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
             relative_file_path = path.relative_to(project_path).as_posix()
 
             if relative_file_path not in expected_file_paths and not any(
-                fnmatch.fnmatch(file, pattern) for pattern in ignored_patterns
+                fnmatch(file, pattern) for pattern in ignored_patterns
             ):
                 unexpected_files.append(relative_file_path)
 
@@ -138,7 +138,7 @@ def test_project_name_replaced(baked_cookies: BakeResult) -> None:
     # Assert
     # Verify project.yml contents
     with Path.open(Path(project_path) / "project.yml") as file:
-        project_yml = yaml.safe_load(file)
+        project_yml = yaml_safe_load(file)
         assert project_yml["name"] == APP_TARGET_NAME
 
     # Verify README contents
@@ -158,7 +158,7 @@ def check_swift_files_for_text(
             if file.endswith(".swift"):
                 with Path.open(Path(root) / file) as swift_file:
                     lines = [next(swift_file) for x in range(line_number + 1)]
-                    assert re.match(pattern, lines[line_number].strip()), (
+                    assert match(pattern, lines[line_number].strip()), (
                         f"File {file} does not have expected text pattern {pattern} on "
                         "line {line_number}"
                     )
@@ -172,7 +172,7 @@ def test_target_name_replaced(baked_cookies: BakeResult) -> None:
     # Assert
     # Verify project.yml contents
     with Path.open(Path(project_path) / "project.yml") as file:
-        project_yml = yaml.safe_load(file)
+        project_yml = yaml_safe_load(file)
 
         assert APP_TARGET_NAME in project_yml["targets"]
         app_target = project_yml["targets"][APP_TARGET_NAME]
@@ -224,7 +224,7 @@ def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
     # Assert
     # Verify project.yml contents
     with Path.open(Path(project_path) / "project.yml") as file:
-        project_yml = yaml.safe_load(file)
+        project_yml = yaml_safe_load(file)
 
         app_tests_target = project_yml["targets"][APP_TESTS_TARGET_NAME]
         assert (
@@ -250,7 +250,7 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
     # Assert
     # Verify project.yml contents
     with Path.open(Path(project_path) / "project.yml") as file:
-        project_yml = yaml.safe_load(file)
+        project_yml = yaml_safe_load(file)
 
         app_target = project_yml["targets"][APP_TARGET_NAME]
         assert (
