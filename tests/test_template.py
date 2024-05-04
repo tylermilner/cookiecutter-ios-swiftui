@@ -2,7 +2,6 @@
 
 import datetime
 import fnmatch
-import os # TODO: Can we replace all 'os' calls with 'Path'?
 import re
 from pathlib import Path
 
@@ -140,7 +139,7 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     ) in project_path.walk():
         for file in files:
             file_path = Path(root) / file
-            relative_file_path = os.path.relpath(file_path, project_path)
+            relative_file_path = file_path.relative_to(project_path).as_posix()
 
             if relative_file_path not in expected_file_paths and not any(
                 fnmatch.fnmatch(file, pattern) for pattern in ignored_patterns
