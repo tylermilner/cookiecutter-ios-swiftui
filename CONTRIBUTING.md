@@ -23,9 +23,9 @@ This project is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/)
 
 Cookiecutter is a templating tool written in Python that uses a special `{{ variable_name }}` syntax to automatically replace variables in template files when run. In this template, the main files involved are:
 
-* `cookiecutter.json` - A configuration file that contains the variables that the user is prompted to input when generating the template, along with their default values.
-* `{{ cookiecutter.project_root }}` - A directory containing the source files for the iOS project template.
-* `hooks` - A directory containing the pre- and post-run hooks that are executed before and after the template is generated.
+- `cookiecutter.json` - A configuration file that contains the variables that the user is prompted to input when generating the template, along with their default values.
+- `{{ cookiecutter.project_root }}` - A directory containing the source files for the iOS project template.
+- `hooks` - A directory containing the pre- and post-run hooks that are executed before and after the template is generated.
 
 For more information, see the [Cookiecutter documentation](https://cookiecutter.readthedocs.io/en/stable/overview.html).
 
