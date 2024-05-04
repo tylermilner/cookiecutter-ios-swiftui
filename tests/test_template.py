@@ -12,6 +12,7 @@ from pytest_cookies.plugin import Result as BakeResult
 
 # - Constants
 
+
 PROJECT_NAME = "Demo App"
 PROJECT_PATH = "demo-app"
 APP_TARGET_NAME = "DemoApp"
@@ -23,17 +24,8 @@ APP_UITESTS_TARGET_NAME = "DemoAppUITests"
 
 @pytest.fixture()
 def baked_cookies(cookies: Cookies) -> BakeResult:
-    """Generate a project with defaults appropriate for testing, using the 'cookies'
-    fixture provided by pytest-cookies.
-
-    Args:
-    ----
-    cookies (Cookies): The cookies fixture provided by pytest-cookies.
-
-    Returns:
-    -------
-    BakeResult: The result of the baking process.
-
+    """Generate a project template with defaults appropriate for testing, using the
+    'cookies' fixture provided by pytest-cookies.
     """
     result = cookies.bake(
         extra_context={
@@ -52,13 +44,7 @@ def baked_cookies(cookies: Cookies) -> BakeResult:
 
 
 def test_default_configuration(cookies: Cookies) -> None:
-    """Test the default values in the cookiecutter.json file.
-
-    Args:
-    ----
-    cookies (Cookies): The cookies fixture provided by pytest-cookies.
-
-    """
+    """Test the default values in the cookiecutter.json file."""
     # Arrange
     # Today's date in format M/D/YY
     date = datetime.datetime.now().strftime("%-m/%-d/%y")  # noqa: DTZ005 - ignore "datetime.now() called without a `tz`` argument" warning
@@ -89,11 +75,6 @@ def test_default_configuration(cookies: Cookies) -> None:
 def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     """Test that the project generation completes successfully with the expected files
     on disk.
-
-    Args:
-    ----
-    baked_cookies (BakeResult): A project template generated with the test defaults.
-
     """
     # Act
     project_path = baked_cookies.project_path
@@ -150,13 +131,7 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
 
 
 def test_project_name_replaced(baked_cookies: BakeResult) -> None:
-    """Test that project_name is replaced correctly in all necessary files.
-
-    Args:
-    ----
-    baked_cookies (BakeResult): A project template generated with the test defaults.
-
-    """
+    """Test that project_name is replaced correctly in all necessary files."""
     # Act
     project_path = baked_cookies.project_path
 
@@ -177,15 +152,7 @@ def check_swift_files_for_text(
     pattern: str,
     line_number: int,
 ) -> None:
-    """Check Swift source files for header comment with target name.
-
-    Args:
-    ----
-    source_directory (str): The directory where the source files are located.
-    pattern (str): The pattern to match in the file.
-    line_number (int): The line number to check.
-
-    """
+    """Check Swift source files for header comment with target name."""
     for root, _, files in source_directory.walk():
         for file in files:
             if file.endswith(".swift"):
@@ -198,13 +165,7 @@ def check_swift_files_for_text(
 
 
 def test_target_name_replaced(baked_cookies: BakeResult) -> None:
-    """Test that target_name is replaced correctly in all necessary files.
-
-    Args:
-    ----
-    baked_cookies (BakeResult): A project template generated with the test defaults.
-
-    """
+    """Test that target_name is replaced correctly in all necessary files."""
     # Act
     project_path = baked_cookies.project_path
 
@@ -256,13 +217,7 @@ def test_target_name_replaced(baked_cookies: BakeResult) -> None:
 
 
 def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
-    """Test that organization_name is replaced correctly in all necessary files.
-
-    Args:
-    ----
-    baked_cookies (BakeResult): A project template generated with the test defaults.
-
-    """
+    """Test that organization_name is replaced correctly in all necessary files."""
     # Act
     project_path = baked_cookies.project_path
 
@@ -285,13 +240,7 @@ def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
 
 
 def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
-    """Test that bundle_identifier is replaced correctly in all necessary files.
-
-    Args:
-    ----
-    baked_cookies (BakeResult): A project template generated with the test defaults.
-
-    """
+    """Test that bundle_identifier is replaced correctly in all necessary files."""
     # Arrange
     bundle_identifier_suffix = APP_TARGET_NAME.lower()
 
@@ -311,13 +260,7 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
 
 
 def test_full_name_replaced(baked_cookies: BakeResult) -> None:
-    """Test that full_name is replaced correctly in all necessary files.
-
-    Args:
-    ----
-    baked_cookies (BakeResult): A project template generated with the test defaults.
-
-    """
+    """Test that full_name is replaced correctly in all necessary files."""
     # Arrange
     full_name = "First Last"
 
@@ -329,14 +272,7 @@ def test_full_name_replaced(baked_cookies: BakeResult) -> None:
 
 
 def test_date_replaced(cookies: Cookies) -> None:
-    """Test that date is replaced correctly in all necessary files.
-
-    Args:
-    ----
-    cookies (Cookies): Pytest helper class that can be used to
-    generate a project from a template.
-
-    """
+    """Test that date is replaced correctly in all necessary files."""
     # Arrange
     date = "1/1/24"
 
@@ -349,14 +285,7 @@ def test_date_replaced(cookies: Cookies) -> None:
 
 
 def test_remove_xcodegen_yml(cookies: Cookies) -> None:
-    """Test that the XcodeGen YML file is removed correctly.
-
-    Args:
-    ----
-    cookies (Cookies): Pytest helper class that can be used to
-    generate a project from a template.
-
-    """
+    """Test that the XcodeGen YML file is removed correctly."""
     # Act
     result = cookies.bake(
         extra_context={"open_xcode_project": False, "remove_xcodegen_yml": True},
@@ -368,14 +297,7 @@ def test_remove_xcodegen_yml(cookies: Cookies) -> None:
 
 
 def test_initialize_git_repo(cookies: Cookies) -> None:
-    """Test that the Git repository is initialized correctly.
-
-    Args:
-    ----
-    cookies (Cookies): Pytest helper class that can be used to
-    generate a project from a template.
-
-    """
+    """Test that the Git repository is initialized correctly."""
     # Act
     result = cookies.bake(
         extra_context={"open_xcode_project": False, "initialize_git_repo": True},
@@ -387,13 +309,7 @@ def test_initialize_git_repo(cookies: Cookies) -> None:
 
 
 def test_run_tests_script(baked_cookies: BakeResult) -> None:
-    """Test that the run-tests script is created correctly.
-
-    Args:
-    ----
-    baked_cookies (BakeResult): A project template generated with the test defaults.
-
-    """
+    """Test that the run-tests script is created correctly."""
     # Act
     project_path = baked_cookies.project_path
 
