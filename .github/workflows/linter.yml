@@ -47,7 +47,7 @@ jobs:
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: .  # Set linter rules to repo root
+          LINTER_RULES_PATH: .  # Set linter rules directory to repo root
           MARKDOWN_CONFIG_FILE: .github/linters/.markdown-lint.yml
           PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           VALIDATE_ALL_CODEBASE: true
