@@ -1,6 +1,6 @@
 name: Deploy
 
-on:
+on:  # yamllint disable-line rule:truthy
   workflow_run:
     workflows: [Test]
     branches: [main]
@@ -15,13 +15,13 @@ jobs:
     name: Check for template changes
     runs-on: ubuntu-22.04
     if: |
-      github.event.workflow_run.conclusion == 'success' || 
+      github.event.workflow_run.conclusion == 'success' ||
       github.event_name == 'workflow_dispatch'
     permissions:
       # Needed so that the workflow run can be cancelled if necessary
       actions: write
     outputs:
-      template-files-changed: ${{ steps.check-for-changes.outputs.template-files-changed }} # yamllint disable-line rule:line-length
+      template-files-changed: ${{ steps.check-for-changes.outputs.template-files-changed }}  # yamllint disable-line rule:line-length
     steps:
       - uses: actions/checkout@v4
 
@@ -57,7 +57,7 @@ jobs:
           gh run cancel ${{ github.run_id }}
         env:
           GH_TOKEN: ${{ github.token }}
-      # yamllint enable rule:line-length
+          # yamllint enable rule:line-length
 
   deploy-generated-template:
     name: Deploy generated template
@@ -70,7 +70,7 @@ jobs:
         with:
           repository: 'tylermilner/cookiecutter-ios-swiftui-output'
           ref: 'main'
-          token:  ${{ secrets.TEMPLATE_OUTPUT_REPO_TOKEN }}
+          token: ${{ secrets.TEMPLATE_OUTPUT_REPO_TOKEN }}
 
       # yamllint disable rule:line-length
       - name: Get run ID of "Test" workflow

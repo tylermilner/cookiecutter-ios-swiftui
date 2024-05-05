@@ -1,9 +1,9 @@
 name: Test
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches:
-      - '**' # Run on all branches
+      - '**'  # Run on all branches
   pull_request:
     branches:
       - main
