@@ -14,11 +14,14 @@ jobs:
   check-for-changes:
     name: Check for template changes
     runs-on: ubuntu-22.04
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    if: |
+      github.event.workflow_run.conclusion == 'success' || 
+      github.event_name == 'workflow_dispatch'
     permissions:
-      actions: write # Needed so that the workflow run can be cancelled if necessary
+      # Needed so that the workflow run can be cancelled if necessary
+      actions: write
     outputs:
-      template-files-changed: ${{ steps.check-for-changes.outputs.template-files-changed }}
+      template-files-changed: ${{ steps.check-for-changes.outputs.template-files-changed }} # yamllint disable-line rule:line-length
     steps:
       - uses: actions/checkout@v4
 
@@ -39,10 +42,13 @@ jobs:
             template-files-changed:
               - '{{ cookiecutter.project_root }}/**'
 
+      # yamllint disable rule:line-length
       - name: Show check for changes result
         run: |
           echo "Template files changed: ${{ steps.check-for-changes.outputs.template-files-changed }}"
+      # yamllint enable rule:line-length
 
+      # yamllint disable rule:line-length
       - name: Cancel deployment if no changes
         id: cancel-if-necessary
         if: ${{ steps.check-for-changes.outputs.template-files-changed == 'false' }}
@@ -51,6 +57,7 @@ jobs:
           gh run cancel ${{ github.run_id }}
         env:
           GH_TOKEN: ${{ github.token }}
+      # yamllint enable rule:line-length
 
   deploy-generated-template:
     name: Deploy generated template
@@ -65,6 +72,7 @@ jobs:
           ref: 'main'
           token:  ${{ secrets.TEMPLATE_OUTPUT_REPO_TOKEN }}
 
+      # yamllint disable rule:line-length
       - name: Get run ID of "Test" workflow
         id: get-run-id
         run: |
@@ -75,11 +83,13 @@ jobs:
           echo "run-id=${RUN_ID}" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ github.token }}
+      # yamllint enable rule:line-length
 
       - name: Download artifact from "Test" workflow
         uses: actions/download-artifact@v4
         with:
-          name: template-output # Match name used in test.yml upload artifact step
+          # Match name used in test.yml upload artifact step
+          name: template-output
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: ${{ steps.get-run-id.outputs.run-id }}
@@ -92,9 +102,11 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "<>"
 
+      # yamllint disable rule:line-length
       - name: Commit and push generated template
         run: |
           export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref}}@${{ github.sha }}"
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
+      # yamllint enable rule:line-length

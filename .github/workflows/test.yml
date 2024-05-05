@@ -60,5 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         id: upload-generated-template
         with:
-          name: template-output # Match name used in deploy.yml download artifact step
-          path: my-app # Match path used in generate-default-project.sh
+          # Match name used in deploy.yml download artifact step
+          name: template-output
+          # Match path used in generate-default-project.sh
+          path: my-app
