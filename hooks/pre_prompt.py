@@ -16,6 +16,7 @@ def is_xcodegen_installed() -> bool:
 
 
 def is_git_installed() -> bool:
+    """Check if Git is installed."""
     print("Checking for Git...")
     try:
         subprocess.run(["git", "--version"], capture_output=True, check=True)
