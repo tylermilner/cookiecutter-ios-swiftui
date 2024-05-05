@@ -238,6 +238,44 @@ For convenience, you can also run the linter by executing the `lint.sh` script:
 ./lint.sh
 ```
 
+#### Additional Linters
+
+There are some additional linters that are run via the [super-linter action](https://github.com/super-linter/super-linter)
+in the CI [Lint workflow](.github/workflows/linter.yml), which can be helpful
+to run locally.
+
+##### markdownlint
+
+Running [markdownlint](https://github.com/DavidAnson/markdownlint) locally:
+
+1. Install markdownlint (e.g. using Homebrew):
+
+    ```Shell
+    brew install markdownlint-cli
+    ```
+
+2. Run markdownlint against the Markdown files in the repository:
+
+    ```Shell
+    markdownlint --config .github/linters/.markdown-lint.yml --fix .
+    ```
+
+##### yamllint
+
+Running [yamllint](https://github.com/adrienverge/yamllint) locally:
+
+1. Install yamllint (e.g. using Homebrew):
+
+    ```Shell
+    brew install yamllint
+    ```
+
+2. Run yamllint against the YAML files in the repository:
+
+    ```Shell
+    yamllint --config-file .github/linters/.yaml-lint.yml .
+    ```
+
 ### Debugging
 
 When running tests, use the `-s` or `--capture=no` flag to disable output
