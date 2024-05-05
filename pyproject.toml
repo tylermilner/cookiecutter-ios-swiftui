@@ -44,6 +44,7 @@ target-version = "py312"
 # Enable isort (`I`) for sorted imports
 select = ["ALL"]
 ignore = [
+    "D103",   # temporary -- REMOVE ME
     "D203",   # `one-blank-line-before-class` - conflicts with D211 `no-blank-line-before-class`
     "D205",   # `blank-line-after-summary` - not creating multiline docstrings with extra descriptions
     "D213",   # `multi-line-summary-second-line` - conflicts with D212 `multi-line-summary-first-line`
