@@ -40,6 +40,8 @@ jobs:
 
       - name: Install project dependencies
         run: pipenv sync --dev
+        env:
+          PIPENV_VENV_IN_PROJECT: true
 
       - name: Lint Codebase
         id: super-linter
