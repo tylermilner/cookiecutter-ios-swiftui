@@ -39,7 +39,7 @@ jobs:
           pip install pipenv
 
       - name: Install project dependencies
-        run: pipenv sync --dev
+        run: pipenv install --deploy --dev
         env:
           PIPENV_VENV_IN_PROJECT: true
 
