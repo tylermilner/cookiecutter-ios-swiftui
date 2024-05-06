@@ -57,7 +57,6 @@ jobs:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .  # Set linter rules directory to repo root
-          LOG_LEVEL: DEBUG
           MARKDOWN_CONFIG_FILE: .github/linters/.markdown-lint.yml
           PYTHONPATH: "/github/workspace:/github/workflow/.venv/lib/python3.12/site-packages"
           PYTHON_MYPY_CONFIG_FILE: pyproject.toml
