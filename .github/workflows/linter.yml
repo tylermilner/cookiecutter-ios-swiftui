@@ -43,6 +43,13 @@ jobs:
         env:
           PIPENV_VENV_IN_PROJECT: true
 
+      # Move python dependencies to a location that the super-linter will be
+      # able to access when running inside its Docker container
+      # /home/runner/work/_temp/_github_workflow will map to /github/workflow
+      # in the Docker container
+      - name: Move python dependencies
+        run: mv .venv /home/runner/work/_temp/_github_workflow
+
       - name: Lint Codebase
         id: super-linter
         uses: super-linter/super-linter/slim@v6
@@ -52,6 +59,7 @@ jobs:
           LINTER_RULES_PATH: .  # Set linter rules directory to repo root
           LOG_LEVEL: DEBUG
           MARKDOWN_CONFIG_FILE: .github/linters/.markdown-lint.yml
+          PYTHONPATH: "/github/workspace:/github/workflow/.venv/lib/python3.12/site-packages"
           PYTHON_MYPY_CONFIG_FILE: pyproject.toml
           PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           VALIDATE_ALL_CODEBASE: true
