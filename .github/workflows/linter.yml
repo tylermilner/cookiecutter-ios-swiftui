@@ -39,7 +39,7 @@ jobs:
           pip install pipenv
 
       - name: Install project dependencies
-        run: pipenv install --dev
+        run: pipenv sync --dev
 
       - name: Lint Codebase
         id: super-linter
