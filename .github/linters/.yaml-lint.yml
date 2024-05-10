@@ -1,3 +1,10 @@
+extends: default
+
+# Ignore some files in the template directory since they are Jinja templates
+# for cookiecutter (making them invalid YAML syntax)
+ignore:
+  - '**/project.yml'
+
 rules:
   document-end: disable
   document-start:

@@ -1,9 +1,9 @@
 name: Test
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches:
-      - '**' # Run on all branches
+      - '**'  # Run on all branches
   pull_request:
     branches:
       - main
@@ -41,6 +41,15 @@ jobs:
       - name: Install project dependencies
         run: pipenv install --dev
 
+      - name: Run mypy
+        run: pipenv run mypy .
+
+      - name: Check Format
+        run: pipenv run ruff format
+
+      - name: Lint
+        run: pipenv run ruff check
+
       - name: Run tests
         run: pipenv run pytest
 
@@ -51,5 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         id: upload-generated-template
         with:
-          name: template-output # Match name used in deploy.yml download artifact step
-          path: my-app # Match path used in generate-default-project.sh
+          # Match name used in deploy.yml download artifact step
+          name: template-output
+          # Match path used in generate-default-project.sh
+          path: my-app

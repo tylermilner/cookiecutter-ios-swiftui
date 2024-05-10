@@ -1,3 +1,3 @@
 # {{ cookiecutter.project_name }}
 
-_TBD_
+TBD

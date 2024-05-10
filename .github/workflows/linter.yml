@@ -1,6 +1,6 @@
 name: Lint
 
-on:
+on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - main
@@ -23,6 +23,8 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
         with:
+          # super-linter needs the full git history to get the
+          # list of files that changed across commits
           fetch-depth: 0
 
       - name: Set up Python, including cache for pipenv virtual environment
@@ -37,7 +39,23 @@ jobs:
           pip install pipenv
 
       - name: Install project dependencies
-        run: pipenv install --dev
+        run: pipenv install --deploy --dev
+        env:
+          # Install in project so that we can move the .venv directory later
+          PIPENV_VENV_IN_PROJECT: true
+
+      # Move python dependencies to a location that the super-linter will be
+      # able to access when running inside its Docker container
+      # /home/runner/work/_temp/_github_workflow will map to /github/workflow
+      # in the Docker container
+      - name: Move python dependencies
+        run: mv .venv /home/runner/work/_temp/_github_workflow
+
+      # Extract MAJOR.MINOR version from .python-version file to be used in
+      # Python folder name when setting PYTHONPATH for super-linter
+      - name: Get Python version from .python-version file
+        id: get-python-version
+        run: echo "python-version=$(cut -d '.' -f 1,2 .python-version)" >> "$GITHUB_OUTPUT"
 
       - name: Lint Codebase
         id: super-linter
@@ -45,5 +63,14 @@ jobs:
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINTER_RULES_PATH: .  # Set linter rules directory to repo root
+          MARKDOWN_CONFIG_FILE: .github/linters/.markdown-lint.yml
+          PYTHONPATH: "/github/workspace:/github/workflow/.venv/lib/python${{ steps.get-python-version.outputs.python-version }}/site-packages"
+          PYTHON_MYPY_CONFIG_FILE: pyproject.toml
+          PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_PYTHON_BLACK: false
+          VALIDATE_PYTHON_FLAKE8: false
+          VALIDATE_PYTHON_PYLINT: false
           VALIDATE_JSCPD: false
+          YAML_CONFIG_FILE: .github/linters/.yaml-lint.yml

@@ -19,47 +19,73 @@ by its terms.
 
 ### Cookiecutter
 
-This project is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) template for quickly spinning up iOS apps.
+This project is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/)
+template for quickly spinning up iOS apps.
 
-Cookiecutter is a templating tool written in Python that uses a special `{{ variable_name }}` syntax to automatically replace variables in template files when run. In this template, the main files involved are:
+Cookiecutter is a templating tool written in Python that uses a special `{{
+variable_name }}` syntax to automatically replace variables in template files
+when run. In this template, the main files involved are:
 
-* `cookiecutter.json` - A configuration file that contains the variables that the user is prompted to input when generating the template, along with their default values.
-* `{{ cookiecutter.project_root }}` - A directory containing the source files for the iOS project template.
-* `hooks` - A directory containing the pre- and post-run hooks that are executed before and after the template is generated.
+- `cookiecutter.json` - A configuration file that contains the variables that
+  the user is prompted to input when generating the template, along with their
+  default values.
+- `{{ cookiecutter.project_root }}` - A directory containing the source files
+  for the iOS project template.
+- `hooks` - A directory containing the pre- and post-run hooks that are executed
+  before and after the template is generated.
 
-For more information, see the [Cookiecutter documentation](https://cookiecutter.readthedocs.io/en/stable/overview.html).
+For more information, see the [Cookiecutter
+documentation](https://cookiecutter.readthedocs.io/en/stable/overview.html).
 
 ### XcodeGen
 
-In addition to Cookiecutter, [XcodeGen](https://github.com/yonaskolb/XcodeGen) is used to generate the final Xcode project.
+In addition to Cookiecutter, [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+is used to generate the final Xcode project.
 
-This differs from some other iOS Cookiecutter templates where the Xcode project file is manually marked up with Cookiecutter `{{ variable_name }}` replacements. Having these raw Cookiecutter variables inside of the `xcodeproj` prevents Xcode from opening the file directly, which means you're on the hook to make all of the edits to the `xcodeproj` file manually as you continue to build out your template by adding files, adjusting build settings, etc.
+This differs from some other iOS Cookiecutter templates where the Xcode project
+file is manually marked up with Cookiecutter `{{ variable_name }}` replacements.
+Having these raw Cookiecutter variables inside of the `xcodeproj` prevents Xcode
+from opening the file directly, which means you're on the hook to make all of
+the edits to the `xcodeproj` file manually as you continue to build out your
+template by adding files, adjusting build settings, etc.
 
-By using XcodeGen, Cookiecutter first runs its replacements inside of the `project.yml` file, which is then used to generate a fresh Xcode project as part of a post-run step. From there, the `project.yml` file can be discarded or kept, depending on if there is a desire to continue using XcodeGen on an ongoing basis in the generated project.
+By using XcodeGen, Cookiecutter first runs its replacements inside of the
+`project.yml` file, which is then used to generate a fresh Xcode project as part
+of a post-run step. From there, the `project.yml` file can be discarded or kept,
+depending on if there is a desire to continue using XcodeGen on an ongoing basis
+in the generated project.
 
 ## Making Code Changes
 
-In order to customize or make changes to the project template, you'll first need to set up your development environment and then install the project's dependencies.
+In order to customize or make changes to the project template, you'll first need
+to set up your development environment and then install the project's
+dependencies.
 
 ### Development Environment Setup
 
 #### Homebrew
 
-This guide assumes that you already have [Homebrew](https://brew.sh) installed. If you aren't using Homebrew, you will need adjust the setup steps accordingly.
+This guide assumes that you already have [Homebrew](https://brew.sh) installed.
+If you aren't using Homebrew, you will need adjust the setup steps accordingly.
 
 #### Python
 
-If you already have Python and `pipenv` installed, skip ahead to [Installing Project Dependencies](#installing-project-dependencies). Otherwise, follow the instructions below to get your Python environment set up.
+If you already have Python and `pipenv` installed, skip ahead to [Installing
+Project Dependencies](#installing-project-dependencies). Otherwise, follow the
+instructions below to get your Python environment set up.
 
 ##### pyenv
 
-In order to avoid using the system Python, use Homebrew to install [pyenv](https://github.com/pyenv/pyenv) for Python version management:
+In order to avoid using the system Python, use Homebrew to install
+[pyenv](https://github.com/pyenv/pyenv) for Python version management:
 
 ```Shell
 brew install pyenv
 ```
 
-Complete the `pyenv` [post-install steps](https://github.com/pyenv/pyenv?tab=readme-ov-file#set-up-your-shell-environment-for-pyenv) according to your Shell type (example below for `zsh`):
+Complete the `pyenv` [post-install
+steps](https://github.com/pyenv/pyenv?tab=readme-ov-file#set-up-your-shell-environment-for-pyenv)
+according to your Shell type (example below for `zsh`):
 
 ```Shell
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
@@ -79,7 +105,8 @@ If you haven't already, navigate to the project directory:
 cd cookiecutter-ios-swiftui
 ```
 
-Then, use `pyenv` to install the version of Python in use by the project (i.e. `.python-version` file):
+Then, use `pyenv` to install the version of Python in use by the project (i.e.
+`.python-version` file):
 
 ```Shell
 pyenv install
@@ -95,7 +122,8 @@ pip install pipenv
 
 ### Installing Project Dependencies
 
-The project has both Python (e.g. Cookiecutter) and non-Python (e.g. XcodeGen) project dependencies that will need to be installed.
+The project has both Python (e.g. Cookiecutter) and non-Python (e.g. XcodeGen)
+project dependencies that will need to be installed.
 
 #### Python Project Dependencies
 
@@ -107,7 +135,9 @@ pipenv install --dev
 
 #### Non-Python Project Dependencies
 
-The only non-Python project dependency is [XcodeGen](https://github.com/yonaskolb/XcodeGen) so that a final Xcode project can be generated. Install it using Homebrew:
+The only non-Python project dependency is
+[XcodeGen](https://github.com/yonaskolb/XcodeGen) so that a final Xcode project
+can be generated. Install it using Homebrew:
 
 ```Shell
 brew install xcodegen
@@ -115,37 +145,60 @@ brew install xcodegen
 
 ### Making Changes to the iOS Template
 
-Make updates to the template files in the `{{ cookiecutter.project_root }}` directory as necessary.
+Make updates to the template files in the `{{ cookiecutter.project_root }}`
+directory as necessary.
 
-After making changes, regenerate the project locally by running Cookiecutter against the repository directory, applying the `--overwrite-if-exists` flag to automatically overwrite the previous output and optionally the `--no-input` flag to skip needing to provide user input:
+After making changes, regenerate the project locally by running Cookiecutter
+against the repository directory, applying the `--overwrite-if-exists` flag to
+automatically overwrite the previous output and optionally the `--no-input` flag
+to skip needing to provide user input:
 
 ```Shell
 pipenv run cookiecutter . --overwrite-if-exists --no-input
 ```
 
-Note that the `pipenv run` command is used to ensure that the project's `cookiecutter` dependency from inside the Python virtual environment is used. See below for more information about Python virtual environments using `pipenv`.
+Note that the `pipenv run` command is used to ensure that the project's
+`cookiecutter` dependency from inside the Python virtual environment is used.
+See below for more information about Python virtual environments using `pipenv`.
 
 #### Python Virtual Environments
 
-From here on, you'll want to prefix any commands that require the project's dependencies with `pipenv run` so that the project's dependencies in the virtual environment are used (e.g. invoking `cookiecutter` to generate the template or `pytest` to run the tests).
+From here on, you'll want to prefix any commands that require the project's
+dependencies with `pipenv run` so that the project's dependencies in the virtual
+environment are used (e.g. invoking `cookiecutter` to generate the template or
+`pytest` to run the tests).
 
-Alternatively, you can also manually enter the virtual environment before invoking project dependencies:
+Alternatively, you can also manually enter the virtual environment before
+invoking project dependencies:
 
 ```Shell
 pipenv shell
 ```
 
-Once the virtual environment is active, you will see that your terminal output is prefixed with the name of the virtual environment (e.g. `(cookiecutter-ios-swiftui)`). From here, you can run project dependencies like `cookiecutter` directly, without needing to prefix the command with `pipenv run`.
+Once the virtual environment is active, you will see that your terminal output
+is prefixed with the name of the virtual environment (e.g.
+`(cookiecutter-ios-swiftui)`). From here, you can run project dependencies like
+`cookiecutter` directly, without needing to prefix the command with `pipenv
+run`.
 
-As an aside, since you've likely already installed Cookiecutter globally on your system using Homebrew, you technically don't _need_ to enter the virtual environment to run the `cookiecutter` command to generate the template. However, as a best practice, it's still recommended to make sure to run the `cookiecutter` command from within the virtual environment, either prefixing the command with `pipenv run` or manually entering the virtual environment with `pipenv shell`.
+As an aside, since you've likely already installed Cookiecutter globally on your
+system using Homebrew, you technically don't _need_ to enter the virtual
+environment to run the `cookiecutter` command to generate the template. However,
+as a best practice, it's still recommended to make sure to run the
+`cookiecutter` command from within the virtual environment, either prefixing the
+command with `pipenv run` or manually entering the virtual environment with
+`pipenv shell`.
 
-In order to return to your shell's main environment, exit the virtual environment:
+In order to return to your shell's main environment, exit the virtual
+environment:
 
 ```Shell
 exit
 ```
 
-If you ever need to remove the virtual environment so that it can be recreated using the `pip install --dev` command, you can do so using the following command:
+If you ever need to remove the virtual environment so that it can be recreated
+using the `pip install --dev` command, you can do so using the following
+command:
 
 ```Shell
 pipenv --rm
@@ -153,15 +206,81 @@ pipenv --rm
 
 ### Running Tests
 
-This project uses [pytest](https://github.com/pytest-dev/pytest) to unit test the template generation process. Run the tests by entering the virtual environment and running `pytest`, or by using `pipenv run`:
+This project uses [pytest](https://github.com/pytest-dev/pytest) to unit test
+the template generation process. Run the tests by entering the virtual
+environment and running `pytest`, or by using `pipenv run`:
 
 ```Shell
 pipenv run pytest
 ```
 
+For convenience, you can also run the tests by executing the `run-tests.sh`
+script:
+
+```Shell
+./run-tests.sh
+```
+
+### Linting
+
+This project uses [ruff](https://github.com/astral-sh/ruff) for linting and
+formatting. Run the linter by entering the virtual environment and running `ruff
+--fix` and `ruff format`, or by using `pipenv run`:
+
+```Shell
+pipenv run ruff --fix
+pipenv run ruff format
+```
+
+For convenience, you can also run the linter by executing the `lint.sh` script:
+
+```Shell
+./lint.sh
+```
+
+#### Additional Linters
+
+There are some additional linters that are run via the [super-linter action](https://github.com/super-linter/super-linter)
+in the CI [Lint workflow](.github/workflows/linter.yml), which can be helpful
+to run locally.
+
+##### markdownlint
+
+Running [markdownlint](https://github.com/DavidAnson/markdownlint) locally:
+
+1. Install markdownlint (e.g. using Homebrew):
+
+    ```Shell
+    brew install markdownlint-cli
+    ```
+
+2. Run markdownlint against the Markdown files in the repository:
+
+    ```Shell
+    markdownlint --config .github/linters/.markdown-lint.yml --fix .
+    ```
+
+##### yamllint
+
+Running [yamllint](https://github.com/adrienverge/yamllint) locally:
+
+1. Install yamllint (e.g. using Homebrew):
+
+    ```Shell
+    brew install yamllint
+    ```
+
+2. Run yamllint against the YAML files in the repository:
+
+    ```Shell
+    yamllint --config-file .github/linters/.yaml-lint.yml .
+    ```
+
 ### Debugging
 
-When running tests, use the `-s` or `--capture=no` flag to disable output capture and see the output of the tests, which will make any `print()` statements in your tests visible:
+When running tests, use the `-s` or `--capture=no` flag to disable output
+capture and see the output of the tests, which will make any `print()`
+statements in your tests visible:
 
 ```Shell
 pipenv run pytest -s
@@ -171,11 +290,11 @@ pipenv run pytest -s
 
 1. [Fork][fork] and clone the repository
 2. Configure and install the dependencies: `pipenv install --dev`
-3. Make sure the tests pass on your machine: `pipenv run pytest`
+3. Make sure the tests pass on your machine: `./run-tests.sh`
 4. Create a new branch: `git checkout -b my-branch-name`
 5. Make your change, add tests, and make sure the tests still pass
 6. Do one final check to ensure all tests, linter, and compilation steps pass:
-   `TBD`
+   `./run-tests.sh && ./lint.sh`
 7. Push to your fork and [submit a pull request][pr]
 8. Pat your self on the back and wait for your pull request to be reviewed and
    merged.
@@ -183,13 +302,13 @@ pipenv run pytest -s
 Here are a few things you can do that will increase the likelihood of your pull
 request being accepted:
 
-- Follow the style guide style by running the linter `TBD`.
+- Follow the style guide style by running the linter `./lint.sh`.
 - Write tests.
 - Keep your change as focused as possible. If there are multiple changes you
   would like to make that are not dependent upon each other, consider submitting
   them as separate pull requests.
-- Write a
-  [good commit message](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
+- Write a [good commit
+  message](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
 
 ## Creating a Release
 
@@ -198,8 +317,8 @@ the steps below to create and publish a new release.
 
 ### Versioning
 
-For versioning, we are following the
-[recommended versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
+For versioning, we are following the [recommended versioning
+documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
 available in GitHub's [actions/toolkit](https://github.com/actions/toolkit)
 repository.
 
@@ -214,8 +333,10 @@ Perform the following steps to create a manual release:
 1. Make sure all desired changes have been pushed to the `main` branch.
 2. Create a `release/*` branch off of `main` (e.g. `release/v1.0.1`).
 3. Update the `version` in `TBD` to the desired version.
-4. Run `pipenv install --dev` to make sure the `Pipfile.lock` file is up-to-date.
-5. Run `TBD` one last time to make sure all tests, linters, etc. pass.
+4. Run `pipenv install --dev` to make sure the `Pipfile.lock` file is
+   up-to-date.
+5. Run `./run-tests.sh && ./lint.sh` one last time to make sure all tests,
+   linters, etc. pass.
 6. Create a pull request from the `release/*` branch to `main`.
 7. Once the pull request is merged, create a new release targeted on `main` in
    the GitHub UI. Make sure to set it to create the corresponding tag on publish
@@ -234,7 +355,8 @@ git push origin v1 --force
 
 ## Resources
 
-- [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/)
+- [How to Contribute to Open
+  Source](https://opensource.guide/how-to-contribute/)
 - [Using Pull Requests](https://help.github.com/articles/about-pull-requests/)
 - [GitHub Help](https://help.github.com)
 - [Cookiecutter Documentation](https://cookiecutter.readthedocs.io/en/latest/)
