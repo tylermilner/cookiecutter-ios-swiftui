@@ -55,7 +55,7 @@ jobs:
       # Python folder name when setting PYTHONPATH for super-linter
       - name: Get Python version from .python-version file
         id: get-python-version
-        run: echo "python-version=$(cat .python-version | cut -d '.' -f 1,2)" >> "$GITHUB_OUTPUT"
+        run: echo "python-version=$(cut -d '.' -f 1,2 .python-version)" >> "$GITHUB_OUTPUT"
 
       - name: Lint Codebase
         id: super-linter
