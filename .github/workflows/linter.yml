@@ -17,9 +17,6 @@ jobs:
   lint:
     name: Lint Codebase
     runs-on: ubuntu-latest
-    env:
-      # Install in project so that we can move the .venv directory later
-      PIPENV_VENV_IN_PROJECT: true
 
     steps:
       - name: Checkout
@@ -44,12 +41,16 @@ jobs:
       - name: Install project dependencies
         run: pipenv install --deploy --dev
 
-      # Move python dependencies to a location that the super-linter will be
+      - name: Get virtual environment path
+        id: get-venv-path
+        run: echo "venv-path=$(pipenv --venv)" >> "$GITHUB_OUTPUT"
+
+      # Copy python dependencies to a location that the super-linter will be
       # able to access when running inside its Docker container
-      # /home/runner/work/_temp/_github_workflow will map to /github/workflow
+      # '/home/runner/work/_temp/_github_workflow' maps to '/github/workflow'
       # in the Docker container
       - name: Move python dependencies
-        run: mv .venv /home/runner/work/_temp/_github_workflow
+        run: cp -r "${{ steps.get-venv-path.outputs.venv-path }}" /home/runner/work/_temp/_github_workflow/.venv
 
       # Extract MAJOR.MINOR version from .python-version file to be used in
       # Python folder name when setting PYTHONPATH for super-linter
