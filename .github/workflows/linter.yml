@@ -42,7 +42,7 @@ jobs:
           pip install pipenv
 
       - name: Install project dependencies
-        run: pipenv install --deploy --dev        
+        run: pipenv install --deploy --dev
 
       # Move python dependencies to a location that the super-linter will be
       # able to access when running inside its Docker container
@@ -55,7 +55,7 @@ jobs:
       # Python folder name when setting PYTHONPATH for super-linter
       - name: Get Python version from .python-version file
         id: get-python-version
-        run: echo "python-version=$(cut -d '.' -f 1,2 .python-version)" >> "$GITHUB_OUTPUT"
+        run: echo "python-version=$(cut -d '.' -f 1,2 .python-version)" >> "$GITHUB_OUTPUT" # yamllint disable-line rule:line-length
 
       - name: Lint Codebase
         id: super-linter
@@ -65,7 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .  # Set linter rules directory to repo root
           MARKDOWN_CONFIG_FILE: .github/linters/.markdown-lint.yml
-          PYTHONPATH: "/github/workspace:/github/workflow/.venv/lib/python${{ steps.get-python-version.outputs.python-version }}/site-packages"
+          PYTHONPATH: "/github/workspace:/github/workflow/.venv/lib/python${{ steps.get-python-version.outputs.python-version }}/site-packages" # yamllint disable-line rule:line-length
           PYTHON_MYPY_CONFIG_FILE: pyproject.toml
           PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           VALIDATE_ALL_CODEBASE: true
