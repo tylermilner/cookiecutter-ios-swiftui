@@ -17,6 +17,9 @@ jobs:
   lint:
     name: Lint Codebase
     runs-on: ubuntu-latest
+    env:
+      # Install in project so that we can move the .venv directory later
+      PIPENV_VENV_IN_PROJECT: true
 
     steps:
       - name: Checkout
@@ -39,10 +42,7 @@ jobs:
           pip install pipenv
 
       - name: Install project dependencies
-        run: pipenv install --deploy --dev
-        env:
-          # Install in project so that we can move the .venv directory later
-          PIPENV_VENV_IN_PROJECT: true
+        run: pipenv install --deploy --dev        
 
       # Move python dependencies to a location that the super-linter will be
       # able to access when running inside its Docker container
