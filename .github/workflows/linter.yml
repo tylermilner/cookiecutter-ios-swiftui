@@ -49,7 +49,7 @@ jobs:
       # able to access when running inside its Docker container
       # '/home/runner/work/_temp/_github_workflow' maps to '/github/workflow'
       # in the Docker container
-      - name: Move python dependencies
+      - name: Copy python dependencies
         run: cp -r "${{ steps.get-venv-path.outputs.venv-path }}" /home/runner/work/_temp/_github_workflow/.venv
 
       # Extract MAJOR.MINOR version from .python-version file to be used in
