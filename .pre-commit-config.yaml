@@ -11,3 +11,9 @@ repos:
     hooks:
       - id: yamllint
         args: [--strict, --config-file=.github/linters/.yaml-lint.yml]
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
+    hooks:
+      - id: markdownlint
+        args: [--config, .github/linters/.markdown-lint.yml, --fix]
