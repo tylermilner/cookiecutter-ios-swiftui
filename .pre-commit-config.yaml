@@ -6,6 +6,16 @@ repos:
         args: [--fix]
       - id: ruff-format
 
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        args: [--strict]
+        additional_dependencies:
+          - pytest
+          - pytest-cookies
+          - types-PyYAML
+
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.35.1
     hooks:
@@ -17,13 +27,3 @@ repos:
     hooks:
       - id: markdownlint
         args: [--config, .github/linters/.markdown-lint.yml, --fix]
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
-    hooks:
-      - id: mypy
-        args: [--strict]
-        additional_dependencies:
-          - pytest
-          - pytest-cookies
-          - types-PyYAML
