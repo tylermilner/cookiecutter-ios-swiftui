@@ -276,6 +276,48 @@ Running [yamllint](https://github.com/adrienverge/yamllint) locally:
     yamllint --config-file .github/linters/.yaml-lint.yml .
     ```
 
+#### Pre-Commit Hooks
+
+A `.pre-commit-config.yaml` has been setup to run the linters as [pre-commit](https://pre-commit.com)
+hooks. To install the pre-commit hooks, run the following command:
+
+```Shell
+pipenv run pre-commit install
+```
+
+Run the pre-commit hooks manually to verify everything is working:
+
+```Shell
+pipenv run pre-commit run --all-files
+```
+
+##### Adding Additional Pre-Commit Hooks
+
+Add additional pre-commit hooks to `.pre-commit-config.yaml` and then run
+`pre-commit install` to install them:
+
+```Shell
+pipenv run pre-commit install
+```
+
+Once installed, verify the new hooks are working as expected by running them
+against all files:
+
+```Shell
+pipenv run pre-commit run --all-files
+```
+
+##### Updating Pre-Commit Hooks
+
+Since the pre-commit hooks are provided by external repositories, they don't
+automatically update with other development dependencies like `ruff` or `mypy`.
+To quickly update the pre-commit hooks to their latest versions, run the
+following command:
+
+```Shell
+pipenv run pre-commit autoupdate
+```
+
 ### Debugging
 
 When running tests, use the `-s` or `--capture=no` flag to disable output
