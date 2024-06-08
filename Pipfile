@@ -7,13 +7,13 @@ name = "pypi"
 # No non-dev packages currently
 
 [dev-packages]
-cookiecutter = "==2.*"
-pytest = "==8.*"
-pytest-cookies = "==0.7.*"
-pyyaml = "==6.*"
-types-PyYAML = "==6.*"
-ruff = "==0.4.*"
-mypy = "==1.10.*"
+cookiecutter = "*"
+pytest = "*"
+pytest-cookies = "*"
+pyyaml = "*"
+types-PyYAML = "*"
+ruff = "*"
+mypy = "*"
 pre-commit = "*"
 
 [requires]
