@@ -312,16 +312,16 @@ def test_initialize_git_repo(cookies: Cookies) -> None:
     assert Path.is_dir(Path(project_path) / ".git")
 
 
-def test_run_tests_script(baked_cookies: BakeResult) -> None:
-    """Test that the run-tests script is created correctly."""
+def test_fastfile(baked_cookies: BakeResult) -> None:
+    """Test that the Fastfile is created correctly."""
     # Act
     project_path = baked_cookies.project_path
 
     # Assert
-    run_tests_script_path = Path(project_path) / "run-tests.sh"
-    assert Path.is_file(run_tests_script_path)
+    fastfile_path = Path(project_path) / "fastlane/Fastfile"
+    assert Path.is_file(fastfile_path)
 
-    with Path.open(run_tests_script_path) as file:
-        run_tests_script = file.read()
+    with Path.open(fastfile_path) as file:
+        fastfile = file.read()
 
-        assert f"SCHEME='{APP_TARGET_NAME}'" in run_tests_script
+        assert f'run_tests(scheme: "{APP_TARGET_NAME}")' in fastfile
