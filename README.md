@@ -35,9 +35,7 @@ installed in order to properly generate a project using this template.
 ### Generated Example Project
 
 A generated version of this template that demonstrates the final project
-structure can be found at:
-
-- [ ] TODO - Add link to generated output version of the template
+structure can be found at [tylermilner/cookiecutter-ios-swiftui-output](https://github.com/tylermilner/cookiecutter-ios-swiftui-output).
 
 #### Resulting Directory Structure
 
