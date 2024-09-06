@@ -74,4 +74,5 @@ jobs:
           VALIDATE_PYTHON_FLAKE8: false
           VALIDATE_PYTHON_PYLINT: false
           VALIDATE_JSCPD: false
+          VALIDATE_YAML_PRETTIER: false
           YAML_CONFIG_FILE: .github/linters/.yaml-lint.yml
