@@ -65,7 +65,6 @@ jobs:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .  # Set linter rules directory to repo root
-          LOG_LEVEL: DEBUG
           MARKDOWN_CONFIG_FILE: .github/linters/.markdown-lint.yml
           PYTHONPATH: "/github/workspace:/github/workflow/.venv/lib/python${{ steps.get-python-version.outputs.python-version }}/site-packages"  # yamllint disable-line rule:line-length
           PYTHON_MYPY_CONFIG_FILE: pyproject.toml
