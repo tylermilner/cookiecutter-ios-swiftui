@@ -22,7 +22,7 @@ APP_UITESTS_TARGET_NAME = "DemoAppUITests"
 # - Test Fixtures
 
 
-@pytest.fixture()
+@pytest.fixture
 def baked_cookies(cookies: Cookies) -> BakeResult:
     """Generate a project template with defaults appropriate for testing, using the
     'cookies' fixture provided by pytest-cookies.
