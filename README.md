@@ -24,7 +24,7 @@ installed in order to properly generate a project using this template.
     brew install xcodegen
     ```
 
-3. Run Cookiecutter against this repo:
+3. Run Cookiecutter against this repository:
 
     ```Shell
     cookiecutter gh:tylermilner/cookiecutter-ios-swiftui
@@ -39,7 +39,7 @@ structure can be found at [tylermilner/cookiecutter-ios-swiftui-output](https://
 
 #### Resulting Directory Structure
 
-- [ ] TODO - document directory structure (see [this
+- [ ] Todo - document directory structure (see [this
   example](https://github.com/drivendata/cookiecutter-data-science#the-resulting-directory-structure))
 
 ## License
