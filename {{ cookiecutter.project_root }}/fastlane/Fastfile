@@ -16,8 +16,24 @@
 default_platform(:ios)
 
 platform :ios do
+  # Variables available to all lanes
+  build_directory = ENV["BUILD_DIRECTORY"] ? ENV["BUILD_DIRECTORY"] : ".build" # Defaults to ".build" directory for build artifacts
+  derived_data_path = "#{build_directory}/DerivedData"
+  default_test_device = "{{ cookiecutter.simulator_name }}"
+
   desc "Run tests"
-  lane :test do
-    run_tests(scheme: "{{ cookiecutter.__scheme }}")
+  lane :test do |options|
+    # Check for test device override
+    device = options[:device] || default_test_device
+
+    # Do clean build and force quit & pre-launch simulator to increase UI test reliability when run on CI
+    run_tests(
+      derived_data_path: derived_data_path,
+      clean: true,
+      force_quit_simulator: true,
+      prelaunch_simulator: true,
+      device: device,
+      ensure_devices_found: true
+    )
   end
 end

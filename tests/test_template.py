@@ -284,11 +284,6 @@ def test_deployment_target_replaced(baked_cookies: BakeResult) -> None:
         ios_deployment_target = project_yml["options"]["deploymentTarget"]["iOS"]
         assert ios_deployment_target == expected_deployment_target
 
-    # Verify run-tests.sh contents
-    with Path.open(Path(project_path) / "run-tests.sh") as file:
-        run_tests_sh = file.read()
-        assert f"OS={expected_deployment_target}" in run_tests_sh
-
 
 # Test simulator name
 def test_simulator_name_replaced(baked_cookies: BakeResult) -> None:
@@ -300,10 +295,10 @@ def test_simulator_name_replaced(baked_cookies: BakeResult) -> None:
     project_path = baked_cookies.project_path
 
     # Assert
-    # Verify run-tests.sh contents
-    with Path.open(Path(project_path) / "run-tests.sh") as file:
-        run_tests_sh = file.read()
-        assert f"name={expected_simulator_name}" in run_tests_sh
+    # Verify Fastfile contents
+    with Path.open(Path(project_path) / "fastlane/Fastfile") as file:
+        fastfile = file.read()
+        assert f'default_test_device = "{expected_simulator_name}"' in fastfile
 
 
 def test_full_name_replaced(baked_cookies: BakeResult) -> None:
@@ -353,18 +348,3 @@ def test_initialize_git_repo(cookies: Cookies) -> None:
     # Assert
     project_path = result.project_path
     assert Path.is_dir(Path(project_path) / ".git")
-
-
-def test_fastfile(baked_cookies: BakeResult) -> None:
-    """Test that the Fastfile is created correctly."""
-    # Act
-    project_path = baked_cookies.project_path
-
-    # Assert
-    fastfile_path = Path(project_path) / "fastlane/Fastfile"
-    assert Path.is_file(fastfile_path)
-
-    with Path.open(fastfile_path) as file:
-        fastfile = file.read()
-
-        assert f'run_tests(scheme: "{APP_TARGET_NAME}")' in fastfile
