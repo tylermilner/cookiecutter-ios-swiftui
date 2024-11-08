@@ -259,13 +259,6 @@ environment and running `pytest`, or by using `pipenv run`:
 pipenv run pytest
 ```
 
-For convenience, you can also run the tests by executing the `run-tests.sh`
-script:
-
-```Shell
-./run-tests.sh
-```
-
 #### Linting
 
 This project uses [ruff](https://github.com/astral-sh/ruff) for linting and
@@ -275,12 +268,6 @@ formatting. Run the linter by entering the virtual environment and running `ruff
 ```Shell
 pipenv run ruff --fix
 pipenv run ruff format
-```
-
-For convenience, you can also run the linter by executing the `lint.sh` script:
-
-```Shell
-./lint.sh
 ```
 
 ##### Additional Linters
@@ -377,11 +364,11 @@ pipenv run pytest -s
 
 1. [Fork][fork] and clone the repository
 2. Configure and install the dependencies: `pipenv install --dev`
-3. Make sure the tests pass on your machine: `./run-tests.sh`
+3. Make sure the tests pass on your machine: `make test`
 4. Create a new branch: `git checkout -b my-branch-name`
 5. Make your change, add tests, and make sure the tests still pass
 6. Do one final check to ensure all tests, linter, and compilation steps pass:
-   `./run-tests.sh && ./lint.sh`
+   `make test && make lint`
 7. Push to your fork and [submit a pull request][pr]
 8. Pat your self on the back and wait for your pull request to be reviewed and
    merged.
@@ -389,7 +376,7 @@ pipenv run pytest -s
 Here are a few things you can do that will increase the likelihood of your pull
 request being accepted:
 
-- Follow the style guide style by running the linter `./lint.sh`.
+- Follow the style guide style by running the linter `make lint`.
 - Write tests.
 - Keep your change as focused as possible. If there are multiple changes you
   would like to make that are not dependent upon each other, consider submitting
@@ -422,7 +409,7 @@ Perform the following steps to create a manual release:
 3. Update the `version` in `TBD` to the desired version.
 4. Run `pipenv install --dev` to make sure the `Pipfile.lock` file is
    up-to-date.
-5. Run `./run-tests.sh && ./lint.sh` one last time to make sure all tests,
+5. Run `make test && make lint` one last time to make sure all tests,
    linters, etc. pass.
 6. Create a pull request from the `release/*` branch to `main`.
 7. Once the pull request is merged, create a new release targeted on `main` in

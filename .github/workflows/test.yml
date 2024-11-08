@@ -54,7 +54,7 @@ jobs:
         run: pipenv run pytest
 
       - name: Generate template from defaults
-        run: ./generate-default-project.sh
+        run: make generate
 
       - name: Upload generated template
         uses: actions/upload-artifact@v4
@@ -62,5 +62,5 @@ jobs:
         with:
           # Match name used in deploy.yml download artifact step
           name: template-output
-          # Match path used in generate-default-project.sh
+          # Match path used in `make generate`
           path: my-app
