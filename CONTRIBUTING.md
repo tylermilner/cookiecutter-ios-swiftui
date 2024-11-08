@@ -61,20 +61,65 @@ In order to customize or make changes to the project template, you'll first need
 to set up your development environment and then install the project's
 dependencies.
 
-### Development Environment Setup
+### Quick Start
 
-#### Homebrew
+Assuming you have Homebrew and `pyenv` installed, you can quickly get started using
+`make` and the targets defined in the `Makefile`. If you don't have Homebrew and
+`pyenv` installed, see the [Manual Steps](#manual-steps) section below.
+
+1. Setup the Python environment:
+
+    ```Shell
+    make setup
+    ```
+
+2. Install the project's dependencies:
+
+    ```Shell
+    make install
+    ```
+
+3. Make changes to the template files in the `{{ cookiecutter.project_root }}` directory,
+then regenerate the project:
+
+    ```Shell
+    make generate
+    ```
+
+    or
+
+    ```Shell
+    make generate-with-inputs
+    ```
+
+4. Add or update the tests, then run them:
+
+    ```Shell
+    make test
+    ```
+
+5. Run the linters and formatters:
+
+    ```Shell
+    make lint
+    ```
+
+### Manual Steps
+
+#### Development Environment Setup
+
+##### Homebrew
 
 This guide assumes that you already have [Homebrew](https://brew.sh) installed.
 If you aren't using Homebrew, you will need adjust the setup steps accordingly.
 
-#### Python
+##### Python
 
 If you already have Python and `pipenv` installed, skip ahead to [Installing
 Project Dependencies](#installing-project-dependencies). Otherwise, follow the
 instructions below to get your Python environment set up.
 
-##### pyenv
+###### pyenv
 
 In order to avoid using the system Python, use Homebrew to install
 [pyenv](https://github.com/pyenv/pyenv) for Python version management:
@@ -112,7 +157,7 @@ Then, use `pyenv` to install the version of Python in use by the project (i.e.
 pyenv install
 ```
 
-##### Pipenv
+###### Pipenv
 
 Once Python is installed, install [pipenv](https://pipenv.pypa.io/en/latest/):
 
@@ -120,12 +165,12 @@ Once Python is installed, install [pipenv](https://pipenv.pypa.io/en/latest/):
 pip install pipenv
 ```
 
-### Installing Project Dependencies
+#### Installing Project Dependencies
 
 The project has both Python (e.g. Cookiecutter) and non-Python (e.g. XcodeGen)
 project dependencies that will need to be installed.
 
-#### Python Project Dependencies
+##### Python Project Dependencies
 
 Install the project's Python-based development dependencies using `pipenv`:
 
@@ -133,7 +178,7 @@ Install the project's Python-based development dependencies using `pipenv`:
 pipenv install --dev
 ```
 
-#### Non-Python Project Dependencies
+##### Non-Python Project Dependencies
 
 The only non-Python project dependency is
 [XcodeGen](https://github.com/yonaskolb/XcodeGen) so that a final Xcode project
@@ -143,7 +188,7 @@ can be generated. Install it using Homebrew:
 brew install xcodegen
 ```
 
-### Making Changes to the iOS Template
+#### Making Changes to the iOS Template
 
 Make updates to the template files in the `{{ cookiecutter.project_root }}`
 directory as necessary.
@@ -161,7 +206,7 @@ Note that the `pipenv run` command is used to ensure that the project's
 `cookiecutter` dependency from inside the Python virtual environment is used.
 See below for more information about Python virtual environments using `pipenv`.
 
-#### Python Virtual Environments
+##### Python Virtual Environments
 
 From here on, you'll want to prefix any commands that require the project's
 dependencies with `pipenv run` so that the project's dependencies in the virtual
@@ -204,7 +249,7 @@ command:
 pipenv --rm
 ```
 
-### Running Tests
+#### Running Tests
 
 This project uses [pytest](https://github.com/pytest-dev/pytest) to unit test
 the template generation process. Run the tests by entering the virtual
@@ -214,14 +259,7 @@ environment and running `pytest`, or by using `pipenv run`:
 pipenv run pytest
 ```
 
-For convenience, you can also run the tests by executing the `run-tests.sh`
-script:
-
-```Shell
-./run-tests.sh
-```
-
-### Linting
+#### Linting
 
 This project uses [ruff](https://github.com/astral-sh/ruff) for linting and
 formatting. Run the linter by entering the virtual environment and running `ruff
@@ -232,19 +270,13 @@ pipenv run ruff --fix
 pipenv run ruff format
 ```
 
-For convenience, you can also run the linter by executing the `lint.sh` script:
-
-```Shell
-./lint.sh
-```
-
-#### Additional Linters
+##### Additional Linters
 
 There are some additional linters that are run via the [super-linter action](https://github.com/super-linter/super-linter)
 in the CI [Lint workflow](.github/workflows/linter.yml), which can be helpful
 to run locally.
 
-##### markdownlint
+###### markdownlint
 
 Running [markdownlint](https://github.com/DavidAnson/markdownlint) locally:
 
@@ -260,7 +292,7 @@ Running [markdownlint](https://github.com/DavidAnson/markdownlint) locally:
     markdownlint --config .github/linters/.markdown-lint.yml --fix .
     ```
 
-##### yamllint
+###### yamllint
 
 Running [yamllint](https://github.com/adrienverge/yamllint) locally:
 
@@ -276,7 +308,7 @@ Running [yamllint](https://github.com/adrienverge/yamllint) locally:
     yamllint --config-file .github/linters/.yaml-lint.yml .
     ```
 
-#### Pre-Commit Hooks
+##### Pre-Commit Hooks
 
 A `.pre-commit-config.yaml` has been setup to run the linters as [pre-commit](https://pre-commit.com)
 hooks. To install the pre-commit hooks, run the following command:
@@ -291,7 +323,7 @@ Run the pre-commit hooks manually to verify everything is working:
 pipenv run pre-commit run --all-files
 ```
 
-##### Adding Additional Pre-Commit Hooks
+###### Adding Additional Pre-Commit Hooks
 
 Add additional pre-commit hooks to `.pre-commit-config.yaml` and then run
 `pre-commit install` to install them:
@@ -307,7 +339,7 @@ against all files:
 pipenv run pre-commit run --all-files
 ```
 
-##### Updating Pre-Commit Hooks
+###### Updating Pre-Commit Hooks
 
 Since the pre-commit hooks are provided by external repositories, they don't
 automatically update with other development dependencies like `ruff` or `mypy`.
@@ -332,11 +364,11 @@ pipenv run pytest -s
 
 1. [Fork][fork] and clone the repository
 2. Configure and install the dependencies: `pipenv install --dev`
-3. Make sure the tests pass on your machine: `./run-tests.sh`
+3. Make sure the tests pass on your machine: `make test`
 4. Create a new branch: `git checkout -b my-branch-name`
 5. Make your change, add tests, and make sure the tests still pass
 6. Do one final check to ensure all tests, linter, and compilation steps pass:
-   `./run-tests.sh && ./lint.sh`
+   `make test && make lint`
 7. Push to your fork and [submit a pull request][pr]
 8. Pat your self on the back and wait for your pull request to be reviewed and
    merged.
@@ -344,7 +376,7 @@ pipenv run pytest -s
 Here are a few things you can do that will increase the likelihood of your pull
 request being accepted:
 
-- Follow the style guide style by running the linter `./lint.sh`.
+- Follow the style guide style by running the linter `make lint`.
 - Write tests.
 - Keep your change as focused as possible. If there are multiple changes you
   would like to make that are not dependent upon each other, consider submitting
@@ -377,7 +409,7 @@ Perform the following steps to create a manual release:
 3. Update the `version` in `TBD` to the desired version.
 4. Run `pipenv install --dev` to make sure the `Pipfile.lock` file is
    up-to-date.
-5. Run `./run-tests.sh && ./lint.sh` one last time to make sure all tests,
+5. Run `make test && make lint` one last time to make sure all tests,
    linters, etc. pass.
 6. Create a pull request from the `release/*` branch to `main`.
 7. Once the pull request is merged, create a new release targeted on `main` in
