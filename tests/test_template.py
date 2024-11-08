@@ -22,7 +22,7 @@ APP_UITESTS_TARGET_NAME = "DemoAppUITests"
 # - Test Fixtures
 
 
-@pytest.fixture()
+@pytest.fixture
 def baked_cookies(cookies: Cookies) -> BakeResult:
     """Generate a project template with defaults appropriate for testing, using the
     'cookies' fixture provided by pytest-cookies.
@@ -47,7 +47,9 @@ def test_default_configuration(cookies: Cookies) -> None:
     """Test the default values in the cookiecutter.json file."""
     # Arrange
     # Today's date in format M/D/YY
-    date = datetime.now().strftime("%-m/%-d/%y")  # noqa: DTZ005 - ignore "datetime.now() called without a `tz`` argument" warning
+    date = datetime.now().strftime(  # noqa: DTZ005 - ignore "datetime.now() called without a `tz`` argument" warning
+        "%-m/%-d/%y"
+    )
 
     # Act
     result = cookies.bake(extra_context={"open_xcode_project": False})
