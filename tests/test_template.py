@@ -65,6 +65,8 @@ def test_default_configuration(cookies: Cookies) -> None:
     assert context["organization_name"] == "Example"
     assert context["__organization_name_no_spaces_lowercase"] == "example"
     assert context["bundle_identifier"] == "com.example.myapp"
+    assert context["deployment_target"] == "18.1"
+    assert context["simulator_name"] == "iPhone 16"
     assert context["full_name"] == "First Last"
     assert context["date"] == date
     assert not context[
@@ -263,6 +265,45 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
             f"com.example.{bundle_identifier_suffix}"
             in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
         )
+
+
+# Test deployment target
+def test_deployment_target_replaced(baked_cookies: BakeResult) -> None:
+    """Test that deployment_target is replaced correctly in all necessary files."""
+    # Arrange
+    expected_deployment_target = "18.1"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify project.yml contents
+    with Path.open(Path(project_path) / "project.yml") as file:
+        project_yml = yaml_safe_load(file)
+
+        ios_deployment_target = project_yml["options"]["deploymentTarget"]["iOS"]
+        assert ios_deployment_target == expected_deployment_target
+
+    # Verify run-tests.sh contents
+    with Path.open(Path(project_path) / "run-tests.sh") as file:
+        run_tests_sh = file.read()
+        assert f"OS={expected_deployment_target}" in run_tests_sh
+
+
+# Test simulator name
+def test_simulator_name_replaced(baked_cookies: BakeResult) -> None:
+    """Test that simulator_name is replaced correctly in all necessary files."""
+    # Arrange
+    expected_simulator_name = "iPhone 16"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify run-tests.sh contents
+    with Path.open(Path(project_path) / "run-tests.sh") as file:
+        run_tests_sh = file.read()
+        assert f"name={expected_simulator_name}" in run_tests_sh
 
 
 def test_full_name_replaced(baked_cookies: BakeResult) -> None:
