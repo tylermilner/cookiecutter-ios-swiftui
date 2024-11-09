@@ -25,8 +25,13 @@ end
 
 platform :ios do
   # Variables available to all lanes
+  ci_build_number = ENV["BUILD_NUMBER"] ? ENV["BUILD_NUMBER"] : "1" # Defaults to build number "1"
   build_directory = ENV["BUILD_DIRECTORY"] ? ENV["BUILD_DIRECTORY"] : ".build" # Defaults to ".build" directory for build artifacts
   derived_data_path = "#{build_directory}/DerivedData"
+  scheme = "{{ cookiecutter.__scheme }}"
+  target = "{{ cookiecutter.target_name }}"
+  qa_build_type = "adhoc"
+  qa_build_configuration = "QA"
   default_test_device = "{{ cookiecutter.simulator_name }}"
 
   desc "Run tests"

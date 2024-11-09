@@ -208,6 +208,12 @@ def test_target_name_replaced(baked_cookies: BakeResult) -> None:
             in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
         )
 
+    # Verify Fastfile contents
+    with Path.open(Path(project_path) / "fastlane/Fastfile") as file:
+        fastfile = file.read()
+        assert f'scheme = "{APP_TARGET_NAME}"' in fastfile
+        assert f'target = "{APP_TARGET_NAME}"' in fastfile
+
     # Verify target name header comment in Swift source files for each target
     targets = [APP_TARGET_NAME, APP_TESTS_TARGET_NAME, APP_UITESTS_TARGET_NAME]
     for target in targets:
