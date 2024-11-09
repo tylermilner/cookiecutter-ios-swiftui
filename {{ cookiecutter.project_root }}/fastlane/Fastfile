@@ -13,7 +13,15 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+# Fix "xcodebuild -showBuildSettings timed out" error when running on slow machines
+ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
+
 default_platform(:ios)
+
+before_all do |lane, options|
+  # Make sure fastlane is being executing using 'bundle exec' prefix
+  ensure_bundle_exec()
+end
 
 platform :ios do
   # Variables available to all lanes
