@@ -48,8 +48,28 @@ structure can be found at [tylermilner/cookiecutter-ios-swiftui-output](https://
 
 ### Resulting Directory Structure
 
-- [ ] Todo - document directory structure (see [this
-  example](https://github.com/drivendata/cookiecutter-data-science#the-resulting-directory-structure))
+The directory structure of your new project will look something like this (depending
+on the settings that you choose):
+
+```text
+├── .github
+│   └── workflows                                      <- GitHub Actions workflows for CI/CD
+│       └── test.yml                                   <- GitHub Actions workflow for running tests
+├── .gitignore                                         <- Standard iOS/Swift gitignore file
+├── {{ cookiecutter.target_name }}                     <- The main app target directory
+│   ├── Assets.xcassets                                <- Asset catalog
+│   ├── ContentView.swift                              <- Main SwiftUI view
+│   ├── {{ cookiecutter.target_name }}App.swift        <- Main app entry point
+│   └── Preview Content
+│       └── Preview Assets.xcassets                    <- Preview asset catalog
+├── {{ cookiecutter.target_name }}.xcodeproj           <- Xcode project file
+├── {{ cookiecutter.target_name }}Tests                <- Main app target tests directory
+│   └── {{ cookiecutter.target_name }}Tests.swift      <- Main app target tests file
+├── {{ cookiecutter.target_name }}UITests              <- Main app target UI tests directory
+│   └── {{ cookiecutter.target_name }}UITests.swift    <- Main app target UI tests file
+├── README.md                                          <- The top-level README for the project.
+└── run-tests.sh                                       <- Convenience script for running tests locally
+```
 
 ## Customizing the Template
 
