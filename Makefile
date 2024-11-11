@@ -1,6 +1,7 @@
 # Default values
 OUTPUT_DIR := .
 COOKIECUTTER := pipenv run cookiecutter
+# Should match 'project_root' in cookiecutter.json
 DEFAULT_PROJECT_FOLDER := my-app
 
 # Generate a new project using default values and overwrite if exists
