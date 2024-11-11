@@ -71,7 +71,7 @@ def test_default_configuration(cookies: Cookies) -> None:
     assert context["date"] == date
     assert not context[
         "open_xcode_project"
-    ]  # False because of the extra_context override
+    ]  # False because of the extra_context override when calling cookies.bake() above
     assert context["remove_xcodegen_yml"]
     assert context["initialize_git_repo"]
 
@@ -325,7 +325,13 @@ def test_date_replaced(cookies: Cookies) -> None:
     date = "1/1/24"
 
     # Act
-    result = cookies.bake(extra_context={"open_xcode_project": False, "date": date})
+    result = cookies.bake(
+        extra_context={
+            "open_xcode_project": False,
+            "date": date,
+            "initialize_git_repo": False,
+        }
+    )
 
     # Assert
     project_path = result.project_path
@@ -336,7 +342,11 @@ def test_remove_xcodegen_yml(cookies: Cookies) -> None:
     """Test that the XcodeGen YML file is removed correctly."""
     # Act
     result = cookies.bake(
-        extra_context={"open_xcode_project": False, "remove_xcodegen_yml": True},
+        extra_context={
+            "open_xcode_project": False,
+            "remove_xcodegen_yml": True,
+            "initialize_git_repo": False,
+        },
     )
 
     # Assert
