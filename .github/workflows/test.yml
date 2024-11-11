@@ -78,4 +78,4 @@ jobs:
           name: template-output
 
       - name: List files
-        run: la -la
+        run: ls -la
