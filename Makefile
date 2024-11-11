@@ -8,7 +8,7 @@ DEFAULT_PROJECT_FOLDER := my-app
 .PHONY: generate
 generate:
 	@echo "Generating project with default values..."
-	$(COOKIECUTTER) $(OUTPUT_DIR) --overwrite-if-exists --no-input initialize_git_repo=False open_xcode_project=False
+	$(COOKIECUTTER) $(OUTPUT_DIR) --overwrite-if-exists --no-input initialize_git_repo=False open_xcode_project=False run_tests=False
 
 # Generate a new project using user-provided values and overwrite if exists
 .PHONY: generate-with-inputs

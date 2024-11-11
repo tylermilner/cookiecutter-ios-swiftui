@@ -33,6 +33,7 @@ def baked_cookies(cookies: Cookies) -> BakeResult:
             "open_xcode_project": False,
             "remove_xcodegen_yml": False,
             "initialize_git_repo": False,
+            "run_tests": False,
         },
     )
     assert result.exit_code == 0
@@ -52,7 +53,9 @@ def test_default_configuration(cookies: Cookies) -> None:
     )
 
     # Act
-    result = cookies.bake(extra_context={"open_xcode_project": False})
+    result = cookies.bake(
+        extra_context={"open_xcode_project": False, "run_tests": False}
+    )
 
     # Assert
     context = result.context
@@ -74,6 +77,9 @@ def test_default_configuration(cookies: Cookies) -> None:
     ]  # False because of the extra_context override when calling cookies.bake() above
     assert context["remove_xcodegen_yml"]
     assert context["initialize_git_repo"]
+    assert not context[
+        "run_tests"
+    ]  # False because of the extra_context override when calling cookies.bake() above
 
 
 def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
@@ -327,9 +333,10 @@ def test_date_replaced(cookies: Cookies) -> None:
     # Act
     result = cookies.bake(
         extra_context={
-            "open_xcode_project": False,
             "date": date,
+            "open_xcode_project": False,
             "initialize_git_repo": False,
+            "run_tests": False,
         }
     )
 
@@ -343,9 +350,10 @@ def test_remove_xcodegen_yml(cookies: Cookies) -> None:
     # Act
     result = cookies.bake(
         extra_context={
-            "open_xcode_project": False,
             "remove_xcodegen_yml": True,
+            "open_xcode_project": False,
             "initialize_git_repo": False,
+            "run_tests": False,
         },
     )
 
@@ -358,7 +366,11 @@ def test_initialize_git_repo(cookies: Cookies) -> None:
     """Test that the Git repository is initialized correctly."""
     # Act
     result = cookies.bake(
-        extra_context={"open_xcode_project": False, "initialize_git_repo": True},
+        extra_context={
+            "initialize_git_repo": True,
+            "open_xcode_project": False,
+            "run_tests": False,
+        }
     )
 
     # Assert
