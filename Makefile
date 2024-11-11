@@ -1,6 +1,7 @@
 # Default values
 OUTPUT_DIR := .
 COOKIECUTTER := pipenv run cookiecutter
+DEFAULT_PROJECT_FOLDER := my-app
 
 # Generate a new project using default values and overwrite if exists
 .PHONY: generate
@@ -13,6 +14,16 @@ generate:
 generate-with-inputs:
 	@echo "Generating project with user-provided values..."
 	$(COOKIECUTTER) $(OUTPUT_DIR) --overwrite-if-exists
+
+# Clean up generated project
+.PHONY: clean
+clean:
+	@if [ -d "$(DEFAULT_PROJECT_FOLDER)" ]; then \
+		echo "Cleaning up generated project..."; \
+		rm -rf $(DEFAULT_PROJECT_FOLDER); \
+	else \
+		echo "Clean failed. '$(DEFAULT_PROJECT_FOLDER)' directory not found."; \
+	fi
 
 # Setup Python environment (assumes Homebrew and pyenv is installed)
 .PHONY: setup
