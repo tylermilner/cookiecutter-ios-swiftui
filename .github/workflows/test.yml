@@ -70,8 +70,6 @@ jobs:
     runs-on: macos-15
     needs: test
     steps:
-      - uses: actions/checkout@v4
-
       - name: Download generated template
         uses: actions/download-artifact@v4
         with:
