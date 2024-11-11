@@ -20,7 +20,7 @@ concurrency:
 jobs:
   test:
     name: Test
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
@@ -64,3 +64,18 @@ jobs:
           name: template-output
           # Match path used in `make generate`
           path: my-app
+
+  test-generated-template:
+    name: Test Generated Template
+    runs-on: macos-15
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download generated template
+        uses: actions/download-artifact@v4
+        with:
+          name: template-output
+
+      - name: List files
+        run: la -la
