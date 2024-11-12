@@ -77,3 +77,9 @@ jobs:
 
       - name: List files
         run: ls -la
+
+      - name: Install project dependencies
+        run: bundle install
+
+      - name: Run tests
+        run: ./run-tests.sh
