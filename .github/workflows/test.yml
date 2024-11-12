@@ -82,4 +82,4 @@ jobs:
         run: bundle install
 
       - name: Run tests
-        run: ./run-tests.sh
+        run: bash run-tests.sh
