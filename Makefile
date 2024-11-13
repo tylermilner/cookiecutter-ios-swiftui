@@ -44,6 +44,16 @@ install:
 	@echo "Installing pre-commit hooks..."
 	pipenv run pre-commit install
 
+# Uninstall project dependencies
+.PHONY: uninstall
+uninstall:
+	@echo "Uninstalling pre-commit hooks..."
+	pipenv run pre-commit uninstall
+	@echo "Clearing pre-commit cache..."
+	pipenv run pre-commit clean
+	@echo "Uninstalling project dependencies..."
+	pipenv --rm
+
 # Run linters and formatters
 .PHONY: lint
 lint:
