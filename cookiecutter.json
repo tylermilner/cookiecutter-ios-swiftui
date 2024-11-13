@@ -15,7 +15,7 @@
     "open_xcode_project": true,
     "remove_xcodegen_yml": true,
     "initialize_git_repo": true,
-    "run_tests": true,
+    "run_tests": false,
     "_copy_without_render": [
         ".github/workflows/test.yml"
     ]

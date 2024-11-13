@@ -80,9 +80,7 @@ def test_default_configuration() -> None:
     assert context["open_xcode_project"]
     assert context["remove_xcodegen_yml"]
     assert context["initialize_git_repo"]
-    assert not context[
-        "run_tests"
-    ]  # False because of the extra_context override when calling cookies.bake() above
+    assert not context["run_tests"]
 
 
 def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
