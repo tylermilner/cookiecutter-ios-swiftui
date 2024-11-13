@@ -75,6 +75,9 @@ jobs:
         with:
           name: template-output
 
+      - name: List downloaded files
+        run: ls -la
+
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.1.app
 
