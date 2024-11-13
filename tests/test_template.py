@@ -22,12 +22,14 @@ APP_UITESTS_TARGET_NAME = "DemoAppUITests"
 # - Test Fixtures
 
 
-@pytest.fixture
-def baked_cookies(cookies: Cookies) -> BakeResult:
+# Scope the cookies fixture to the session so that the project template is only
+# generated once for all tests that need to assert on a default generated template.
+@pytest.fixture(scope="session")
+def baked_cookies(cookies_session: Cookies) -> BakeResult:
     """Generate a project template with defaults appropriate for testing, using the
     'cookies' fixture provided by pytest-cookies.
     """
-    result = cookies.bake(
+    result = cookies_session.bake(
         extra_context={
             "project_name": PROJECT_NAME,
             "open_xcode_project": False,
