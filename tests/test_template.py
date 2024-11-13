@@ -6,6 +6,8 @@ from pathlib import Path
 from re import match
 
 import pytest
+from cookiecutter.generate import generate_context  # type: ignore[import-untyped]
+from cookiecutter.prompt import prompt_for_config  # type: ignore[import-untyped]
 from pytest_cookies.plugin import Cookies  # type: ignore[import-untyped]
 from pytest_cookies.plugin import Result as BakeResult
 from yaml import safe_load as yaml_safe_load
@@ -45,20 +47,23 @@ def baked_cookies(cookies_session: Cookies) -> BakeResult:
 # - Test Cases
 
 
-def test_default_configuration(cookies: Cookies) -> None:
+def test_default_configuration() -> None:
     """Test the default values in the cookiecutter.json file."""
     # Arrange
+    cookiecutter_json_path = Path(__file__).parent.parent / "cookiecutter.json"
+
     # Today's date in format M/D/YY
-    date = datetime.now().strftime(  # noqa: DTZ005 - ignore "datetime.now() called without a `tz`` argument" warning
+    date = datetime.now().strftime(  # noqa: DTZ005 - ignore "datetime.now() called without a `tz` argument" warning
         "%-m/%-d/%y"
     )
 
     # Act
-    result = cookies.bake(extra_context={"open_xcode_project": False})
+    context = prompt_for_config(
+        generate_context(context_file=str(cookiecutter_json_path)),
+        no_input=True,
+    )
 
     # Assert
-    context = result.context
-
     assert context["project_name"] == "My App"
     assert context["__project_name_no_spaces"] == "MyApp"
     assert context["__project_name_no_spaces_lowercase"] == "myapp"
@@ -69,9 +74,7 @@ def test_default_configuration(cookies: Cookies) -> None:
     assert context["bundle_identifier"] == "com.example.myapp"
     assert context["full_name"] == "First Last"
     assert context["date"] == date
-    assert not context[
-        "open_xcode_project"
-    ]  # False because of the extra_context override
+    assert context["open_xcode_project"]
     assert context["remove_xcodegen_yml"]
     assert context["initialize_git_repo"]
 
