@@ -52,7 +52,12 @@ uninstall:
 	@echo "Clearing pre-commit cache..."
 	pipenv run pre-commit clean
 	@echo "Uninstalling project dependencies..."
-	pipenv --rm
+	@if [ -d "$(shell PIPENV_VERBOSITY=-1 pipenv --venv)" ]; then \
+		echo "Removing virtual environment..."; \
+		rm -rf $(shell PIPENV_VERBOSITY=-1 pipenv --venv); \
+	else \
+		echo "Uninstall project dependencies failed. Virtual environment not found."; \
+	fi
 
 # Run linters and formatters
 .PHONY: lint
