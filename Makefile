@@ -26,13 +26,15 @@ clean:
 		echo "Clean failed. '$(DEFAULT_PROJECT_FOLDER)' directory not found."; \
 	fi
 
-# Setup Python environment (assumes Homebrew and pyenv is installed)
+# Setup development environment (assumes Homebrew and pyenv is installed)
 .PHONY: setup
 setup:
 	@echo "Installing Python version..."
 	pyenv install
 	@echo "Installing pipenv..."
 	pip install pipenv
+	@echo "Installing XcodeGen..."
+	brew install xcodegen
 
 # Install project dependencies
 .PHONY: install
@@ -41,8 +43,21 @@ install:
 	pipenv install --dev
 	@echo "Installing pre-commit hooks..."
 	pipenv run pre-commit install
-	@echo "Installing XcodeGen..."
-	brew install xcodegen
+
+# Uninstall project dependencies
+.PHONY: uninstall
+uninstall:
+	@echo "Uninstalling pre-commit hooks..."
+	pipenv run pre-commit uninstall
+	@echo "Clearing pre-commit cache..."
+	pipenv run pre-commit clean
+	@echo "Uninstalling project dependencies..."
+	@if [ -d "$(shell PIPENV_VERBOSITY=-1 pipenv --venv)" ]; then \
+		echo "Removing virtual environment..."; \
+		rm -rf $(shell PIPENV_VERBOSITY=-1 pipenv --venv); \
+	else \
+		echo "Uninstall project dependencies failed. Virtual environment not found."; \
+	fi
 
 # Run linters and formatters
 .PHONY: lint
