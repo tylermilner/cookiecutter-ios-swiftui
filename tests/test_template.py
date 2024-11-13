@@ -99,6 +99,7 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     expected_file_paths = [
         ".github/workflows/test.yml",
         ".gitignore",
+        ".ruby-version",
         "fastlane/Appfile",
         "fastlane/Fastfile",
         "Gemfile",
