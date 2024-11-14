@@ -8,6 +8,8 @@ on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 env:
+  # Match path used in `make generate` command
+  TEMPLATE_OUTPUT_DIR: my-app
   # Match name used in test.yml upload artifact step
   TEMPLATE_OUTPUT_ARTIFACT_NAME: template-output
 
@@ -90,7 +92,12 @@ jobs:
       - name: Extract downloaded artifact
         run: |
           tar -xzvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz
+          mv ${{ env.TEMPLATE_OUTPUT_DIR }}/* .
+
+      - name: Clean up extracted artifact
+        run: |
           rm ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz
+          rm -rf ${{ env.TEMPLATE_OUTPUT_DIR }}
 
       - name: List extracted files
         run: ls -la
