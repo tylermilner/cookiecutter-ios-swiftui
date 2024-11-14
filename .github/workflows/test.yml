@@ -68,7 +68,7 @@ jobs:
       # yamllint disable rule:line-length
       # Tar files before upload to preserve file permissions
       - name: Tar files
-        run: tar -czvf ${{ env.TEMPLATE_OUTPUT_DIR}}.tar.gz ${{ env.TEMPLATE_OUTPUT_DIR}}
+        run: tar -czvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME}}.tar.gz ${{ env.TEMPLATE_OUTPUT_DIR}}
       # yamllint enable rule:line-length
 
       - name: Upload generated template
@@ -76,4 +76,4 @@ jobs:
         id: upload-generated-template
         with:
           name: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}
-          path: ${{ env.TEMPLATE_OUTPUT_DIR}}.tar.gz
+          path: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME}}.tar.gz
