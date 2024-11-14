@@ -7,6 +7,10 @@ on:  # yamllint disable-line rule:truthy
     types: [completed]
   workflow_dispatch:
 
+env:
+  # Match name used in test.yml upload artifact step
+  TEMPLATE_OUTPUT_ARTIFACT_NAME: template-output
+
 permissions:
   contents: read
 
@@ -77,13 +81,18 @@ jobs:
       - name: Download artifact from "Test" workflow
         uses: actions/download-artifact@v4
         with:
-          # Match name used in test.yml upload artifact step
-          name: template-output
+          name: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: ${{ steps.get-run-id.outputs.run-id }}
 
-      - name: Show downloaded files
+      - name: List downloaded files
+        run: ls -la
+
+      - name: Extract downloaded artifact
+        run: tar -xzvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz
+
+      - name: List extracted files
         run: ls -la
 
       - name: Setup git config
