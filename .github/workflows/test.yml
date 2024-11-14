@@ -64,6 +64,7 @@ jobs:
           name: template-output
           # Match path used in `make generate`
           path: my-app
+          include-hidden-files: true
 
   test-generated-template:
     name: Test Generated Template
