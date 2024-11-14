@@ -92,7 +92,7 @@ jobs:
       - name: Extract downloaded artifact
         run: |
           tar -xzvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz
-          mv ${{ env.TEMPLATE_OUTPUT_DIR }}/* .
+          mv -f ${{ env.TEMPLATE_OUTPUT_DIR }}/* .
 
       - name: Clean up extracted artifact
         run: |
