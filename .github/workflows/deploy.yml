@@ -3,7 +3,7 @@ name: Deploy
 on:  # yamllint disable-line rule:truthy
   workflow_run:
     workflows: [Test]
-    branches: [main]
+    branches: [feature/preserve-artifact-permissions]
     types: [completed]
   workflow_dispatch:
 
@@ -55,8 +55,6 @@ jobs:
   deploy-generated-template:
     name: Deploy generated template
     runs-on: ubuntu-22.04
-    needs: [check-for-changes]
-    if: ${{ needs.check-for-changes.outputs.template-files-changed == 'true' }}
     steps:
       - name: Checkout output repository
         uses: actions/checkout@v4
@@ -106,5 +104,5 @@ jobs:
           export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref}}@${{ github.sha }}"
           git add .
           git commit -m "$COMMIT_MESSAGE"
-          git push
+          git status
       # yamllint enable rule:line-length
