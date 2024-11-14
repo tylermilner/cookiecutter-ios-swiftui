@@ -9,6 +9,10 @@ on:  # yamllint disable-line rule:truthy
       - main
   workflow_dispatch:
 
+env:
+  # Match path used in `make generate` command
+  GENERATED_TEMPLATE_DIR: my-app
+
 permissions:
   contents: read
 
@@ -56,14 +60,16 @@ jobs:
       - name: Generate template from defaults
         run: make generate
 
+      - name: List generated files
+        run: ls -la ${{ env.GENERATED_TEMPLATE_DIR}}
+
       - name: Upload generated template
         uses: actions/upload-artifact@v4
         id: upload-generated-template
         with:
           # Match name used in deploy.yml download artifact step
           name: template-output
-          # Match path used in `make generate`
-          path: my-app
+          path: ${{ env.GENERATED_TEMPLATE_DIR}}
           include-hidden-files: true
 
   test-generated-template:
@@ -79,7 +85,7 @@ jobs:
       - name: List downloaded files
         run: ls -la
 
-      - name: Select Xcode version
+      - name: Set Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.1.app
 
       - name: Set up ruby environment
