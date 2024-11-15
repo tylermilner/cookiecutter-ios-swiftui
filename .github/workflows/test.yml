@@ -86,9 +86,17 @@ jobs:
       - name: Download generated template
         uses: actions/download-artifact@v4
         with:
-          name: template-output
+          name: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}
 
       - name: List downloaded files
+        run: ls -la
+
+      # yamllint disable rule:line-length
+      - name: Extract downloaded files
+        run: tar -xzvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz --strip-components=1
+      # yamllint enable rule:line-length
+
+      - name: List extracted files
         run: ls -la
 
       - name: Set Xcode version
@@ -101,4 +109,4 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
-        run: bash run-tests.sh
+        run: ./run-tests.sh
