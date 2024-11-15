@@ -63,6 +63,7 @@ jobs:
         uses: super-linter/super-linter@slim-latest
         env:
           DEFAULT_BRANCH: main
+          GITHUB_ACTIONS_CONFIG_FILE: .github/linters/actionlint.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .  # Set linter rules directory to repo root
           MARKDOWN_CONFIG_FILE: .github/linters/.markdown-lint.yml

@@ -1,0 +1,6 @@
+paths:
+  .github/workflows/linter.yml:
+    # super-linter v7.1 doesn't include latest actionlint that supports
+    # macos-15 label
+    ignore:
+      - label "macos-15" is unknown\. available labels are
