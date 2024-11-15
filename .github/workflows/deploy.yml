@@ -7,6 +7,10 @@ on:  # yamllint disable-line rule:truthy
     types: [completed]
   workflow_dispatch:
 
+env:
+  # Match name used in test.yml upload artifact step
+  TEMPLATE_OUTPUT_ARTIFACT_NAME: template-output
+
 permissions:
   contents: read
 
@@ -61,6 +65,9 @@ jobs:
           ref: 'main'
           token: ${{ secrets.TEMPLATE_OUTPUT_REPO_TOKEN }}
 
+      - name: Remove existing files except for .git directory
+        run: find . -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} \;
+
       # yamllint disable rule:line-length
       - name: Get run ID of "Test" workflow
         id: get-run-id
@@ -77,13 +84,23 @@ jobs:
       - name: Download artifact from "Test" workflow
         uses: actions/download-artifact@v4
         with:
-          # Match name used in test.yml upload artifact step
-          name: template-output
+          name: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: ${{ steps.get-run-id.outputs.run-id }}
 
-      - name: Show downloaded files
+      - name: List files
+        run: ls -la
+
+      # yamllint disable rule:line-length
+      - name: Extract downloaded artifact
+        run: tar -xzvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz --strip-components=1
+      # yamllint enable rule:line-length
+
+      - name: Clean up extracted artifact
+        run: rm ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz
+
+      - name: List files
         run: ls -la
 
       - name: Setup git config
