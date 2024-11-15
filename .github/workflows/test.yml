@@ -11,7 +11,9 @@ on:  # yamllint disable-line rule:truthy
 
 env:
   # Match path used in `make generate` command
-  GENERATED_TEMPLATE_DIR: my-app
+  TEMPLATE_OUTPUT_DIR: my-app
+  # Match name used in deploy.yml download artifact step
+  TEMPLATE_OUTPUT_ARTIFACT_NAME: template-output
 
 permissions:
   contents: read
@@ -61,16 +63,20 @@ jobs:
         run: make generate
 
       - name: List generated files
-        run: ls -la ${{ env.GENERATED_TEMPLATE_DIR}}
+        run: ls -la ${{ env.TEMPLATE_OUTPUT_DIR}}
+
+      # yamllint disable rule:line-length
+      # Tar files before upload to preserve file permissions
+      - name: Tar files
+        run: tar -czvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME}}.tar.gz ${{ env.TEMPLATE_OUTPUT_DIR}}
+      # yamllint enable rule:line-length
 
       - name: Upload generated template
         uses: actions/upload-artifact@v4
         id: upload-generated-template
         with:
-          # Match name used in deploy.yml download artifact step
-          name: template-output
-          path: ${{ env.GENERATED_TEMPLATE_DIR}}
-          include-hidden-files: true
+          name: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}
+          path: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME}}.tar.gz
 
   test-generated-template:
     name: Test Generated Template
