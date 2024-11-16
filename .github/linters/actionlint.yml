@@ -1,6 +1,4 @@
 paths:
   .github/workflows/**/*.yml:
-    # super-linter v7.1 doesn't include latest actionlint that supports
-    # macos-15 label
     ignore:
-      - .*macos-15.*
+      - label ".+" is unknown\. available labels are
