@@ -1,4 +1,0 @@
-paths:
-  .github/workflows/**/*.yml:
-    ignore:
-      - label ".+" is unknown\. available labels are
