@@ -37,6 +37,7 @@ def baked_cookies(cookies_session: Cookies) -> BakeResult:
             "open_xcode_project": False,
             "remove_xcodegen_yml": False,
             "initialize_git_repo": False,
+            "run_tests": False,
         },
     )
     assert result.exit_code == 0
@@ -72,11 +73,14 @@ def test_default_configuration() -> None:
     assert context["organization_name"] == "Example"
     assert context["__organization_name_no_spaces_lowercase"] == "example"
     assert context["bundle_identifier"] == "com.example.myapp"
+    assert context["deployment_target"] == "18.1"
+    assert context["simulator_name"] == "iPhone 16"
     assert context["full_name"] == "First Last"
     assert context["date"] == date
     assert context["open_xcode_project"]
     assert context["remove_xcodegen_yml"]
     assert context["initialize_git_repo"]
+    assert not context["run_tests"]
 
 
 def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
@@ -95,6 +99,11 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     expected_file_paths = [
         ".github/workflows/test.yml",
         ".gitignore",
+        ".ruby-version",
+        "fastlane/Appfile",
+        "fastlane/Fastfile",
+        "Gemfile",
+        "Gemfile.lock",
         "run-tests.sh",
         f"{APP_TARGET_NAME}/Assets.xcassets/AccentColor.colorset/Contents.json",
         f"{APP_TARGET_NAME}/Assets.xcassets/AppIcon.appiconset/Contents.json",
@@ -207,6 +216,12 @@ def test_target_name_replaced(baked_cookies: BakeResult) -> None:
             in app_uitests_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
         )
 
+    # Verify Fastfile contents
+    with Path.open(Path(project_path) / "fastlane/Fastfile") as file:
+        fastfile = file.read()
+        assert f'scheme = "{APP_TARGET_NAME}"' in fastfile
+        assert f'target = "{APP_TARGET_NAME}"' in fastfile
+
     # Verify target name header comment in Swift source files for each target
     targets = [APP_TARGET_NAME, APP_TESTS_TARGET_NAME, APP_UITESTS_TARGET_NAME]
     for target in targets:
@@ -266,6 +281,40 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
         )
 
 
+# Test deployment target
+def test_deployment_target_replaced(baked_cookies: BakeResult) -> None:
+    """Test that deployment_target is replaced correctly in all necessary files."""
+    # Arrange
+    expected_deployment_target = "18.1"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify project.yml contents
+    with Path.open(Path(project_path) / "project.yml") as file:
+        project_yml = yaml_safe_load(file)
+
+        ios_deployment_target = project_yml["options"]["deploymentTarget"]["iOS"]
+        assert ios_deployment_target == expected_deployment_target
+
+
+# Test simulator name
+def test_simulator_name_replaced(baked_cookies: BakeResult) -> None:
+    """Test that simulator_name is replaced correctly in all necessary files."""
+    # Arrange
+    expected_simulator_name = "iPhone 16"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify Fastfile contents
+    with Path.open(Path(project_path) / "fastlane/Fastfile") as file:
+        fastfile = file.read()
+        assert f'default_test_device = "{expected_simulator_name}"' in fastfile
+
+
 def test_full_name_replaced(baked_cookies: BakeResult) -> None:
     """Test that full_name is replaced correctly in all necessary files."""
     # Arrange
@@ -284,7 +333,14 @@ def test_date_replaced(cookies: Cookies) -> None:
     date = "1/1/24"
 
     # Act
-    result = cookies.bake(extra_context={"open_xcode_project": False, "date": date})
+    result = cookies.bake(
+        extra_context={
+            "date": date,
+            "open_xcode_project": False,
+            "initialize_git_repo": False,
+            "run_tests": False,
+        }
+    )
 
     # Assert
     project_path = result.project_path
@@ -295,7 +351,12 @@ def test_remove_xcodegen_yml(cookies: Cookies) -> None:
     """Test that the XcodeGen YML file is removed correctly."""
     # Act
     result = cookies.bake(
-        extra_context={"open_xcode_project": False, "remove_xcodegen_yml": True},
+        extra_context={
+            "remove_xcodegen_yml": True,
+            "open_xcode_project": False,
+            "initialize_git_repo": False,
+            "run_tests": False,
+        },
     )
 
     # Assert
@@ -307,24 +368,13 @@ def test_initialize_git_repo(cookies: Cookies) -> None:
     """Test that the Git repository is initialized correctly."""
     # Act
     result = cookies.bake(
-        extra_context={"open_xcode_project": False, "initialize_git_repo": True},
+        extra_context={
+            "initialize_git_repo": True,
+            "open_xcode_project": False,
+            "run_tests": False,
+        }
     )
 
     # Assert
     project_path = result.project_path
     assert Path.is_dir(Path(project_path) / ".git")
-
-
-def test_run_tests_script(baked_cookies: BakeResult) -> None:
-    """Test that the run-tests script is created correctly."""
-    # Act
-    project_path = baked_cookies.project_path
-
-    # Assert
-    run_tests_script_path = Path(project_path) / "run-tests.sh"
-    assert Path.is_file(run_tests_script_path)
-
-    with Path.open(run_tests_script_path) as file:
-        run_tests_script = file.read()
-
-        assert f"SCHEME='{APP_TARGET_NAME}'" in run_tests_script

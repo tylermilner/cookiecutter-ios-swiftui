@@ -4,14 +4,18 @@
     "__project_name_no_spaces_lowercase": "{{ cookiecutter.__project_name_no_spaces.lower() }}",
     "project_root": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
     "target_name": "{{ cookiecutter.__project_name_no_spaces }}",
+    "__scheme": "{{ cookiecutter.target_name }}",
     "organization_name": "Example",
     "__organization_name_no_spaces_lowercase": "{{ cookiecutter.organization_name.lower().replace(' ', '') }}",
     "bundle_identifier": "com.{{ cookiecutter.__organization_name_no_spaces_lowercase }}.{{ cookiecutter.__project_name_no_spaces_lowercase }}",
+    "deployment_target": "18.1",
+    "simulator_name": "iPhone 16",
     "full_name": "First Last",
     "date": "{% now 'local', '%-m/%-d/%y' %}",
     "open_xcode_project": true,
     "remove_xcodegen_yml": true,
     "initialize_git_repo": true,
+    "run_tests": false,
     "_copy_without_render": [
         ".github/workflows/test.yml"
     ]

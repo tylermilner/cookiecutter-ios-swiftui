@@ -26,7 +26,7 @@ concurrency:
 jobs:
   test:
     name: Test
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
@@ -77,3 +77,36 @@ jobs:
         with:
           name: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}
           path: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME}}.tar.gz
+
+  test-generated-template:
+    name: Test Generated Template
+    runs-on: macos-15
+    needs: test
+    steps:
+      - name: Download generated template
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}
+
+      - name: List downloaded files
+        run: ls -la
+
+      # yamllint disable rule:line-length
+      - name: Extract downloaded files
+        run: tar -xzvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME }}.tar.gz --strip-components=1
+      # yamllint enable rule:line-length
+
+      - name: List extracted files
+        run: ls -la
+
+      - name: Set Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_16.1.app
+
+      - name: Set up ruby environment
+        uses: ruby/setup-ruby@v1
+        with:
+          # Automatically runs `bundle install` and caches the result
+          bundler-cache: true
+
+      - name: Run tests
+        run: ./run-tests.sh

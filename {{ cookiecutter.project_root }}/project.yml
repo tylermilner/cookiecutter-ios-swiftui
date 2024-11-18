@@ -2,7 +2,7 @@ name: {{ cookiecutter.__project_name_no_spaces }}
 options:
   defaultConfig: "Release"
   deploymentTarget:
-    iOS: "17.2"
+    iOS: "{{ cookiecutter.deployment_target }}"
 settings:
   base:
     ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: "YES"
