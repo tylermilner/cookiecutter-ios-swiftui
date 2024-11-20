@@ -17,6 +17,7 @@
     "initialize_git_repo": true,
     "run_tests": false,
     "_copy_without_render": [
-        ".github/workflows/test.yml"
+        ".github/workflows/test.yml",
+        ".github/workflows/deploy_qa.yml"
     ]
 }
