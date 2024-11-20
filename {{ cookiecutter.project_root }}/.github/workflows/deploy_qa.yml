@@ -1,0 +1,49 @@
+name: Deploy QA Build
+
+on:  # yamllint disable-line rule:truthy
+  workflow_run:
+    workflows: [Test]
+    branches: [develop]  # Only create QA build for commits to develop branch
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  distribute-qa:
+    runs-on: self-hosted
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      # Match build directory in Fastfile
+      BUILD_DIRECTORY: .build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Fetch all history so that we can get the last successful commit
+          fetch-depth: 0
+
+      - name: Set up ruby env
+        uses: ruby/setup-ruby@v1
+        with:
+          # Automatically runs `bundle install` and caches the result
+          bundler-cache: true
+
+      - name: Get last successful commit
+        id: last-successful-commit
+        uses: tylermilner/last-successful-commit-hash-action@v1
+        with:
+          workflow-id: deploy_qa.yml
+          branch: develop
+
+      - name: Generate release notes
+        id: generate-release-notes
+        uses: tylermilner/commit-messages-between-commits-action@v1
+        with:
+          begin-sha: ${{ steps.last-successful-commit.outputs.commit-hash }}
+          commit-messages-file: release-notes.txt
+
+      - name: Display release notes
+        run: |
+          echo "Release notes:"
+          cat release-notes.txt

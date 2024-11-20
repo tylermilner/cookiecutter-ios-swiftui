@@ -98,6 +98,7 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
     # Verify that all expected files exist
     expected_file_paths = [
         ".github/workflows/test.yml",
+        ".github/workflows/deploy_qa.yml",
         ".gitignore",
         ".ruby-version",
         "fastlane/Appfile",
