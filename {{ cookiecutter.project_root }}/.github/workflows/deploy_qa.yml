@@ -5,6 +5,10 @@ on:  # yamllint disable-line rule:truthy
     workflows: [Test]
     branches: [develop]  # Only create QA build for commits to develop branch
     types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   distribute-qa:
