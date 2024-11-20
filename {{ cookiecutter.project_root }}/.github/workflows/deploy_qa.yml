@@ -18,7 +18,7 @@ jobs:
       # Match build directory in Fastfile
       BUILD_DIRECTORY: .build
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # Fetch all history so that we can get the last successful commit
           fetch-depth: 0
