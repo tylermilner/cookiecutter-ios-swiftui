@@ -265,7 +265,7 @@ def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
 def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
     """Test that bundle_identifier is replaced correctly in all necessary files."""
     # Arrange
-    bundle_identifier_suffix = APP_TARGET_NAME.lower()
+    expected_bundle_identifier = "com.example.demoapp"
 
     # Act
     project_path = baked_cookies.project_path
@@ -277,9 +277,14 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
 
         app_target = project_yml["targets"][APP_TARGET_NAME]
         assert (
-            f"com.example.{bundle_identifier_suffix}"
+            expected_bundle_identifier
             in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
         )
+
+    # Verify Appfile contents
+    with Path.open(Path(project_path) / "fastlane/Appfile") as file:
+        appfile = file.read()
+        assert f'app_identifier("{expected_bundle_identifier}")' in appfile
 
 
 # Test deployment target
