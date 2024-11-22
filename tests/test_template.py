@@ -162,6 +162,7 @@ def test_project_name_replaced(baked_cookies: BakeResult) -> None:
     with Path.open(Path(project_path) / "README.md") as file:
         readme = file.read()
         assert f"# {PROJECT_NAME}" in readme
+        assert f"`{APP_TARGET_NAME}.xcodeproj`" in readme
 
 
 def check_swift_files_for_text(
