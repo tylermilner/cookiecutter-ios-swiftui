@@ -40,6 +40,32 @@ A convenience script is also available:
 ./run-tests.sh
 ```
 
+### Initial Project Setup for CI/CD
+
+If you're planning to build upon this repo and you want to utilize the Fastlane
+build automation tools, you'll need to do some initial setup for this project.
+
+First, setup the `.env` file by duplicating the `.env.example` file and renaming
+it to `.env`.
+
+Note that because this `.env` file will contain sensitive information, it is
+included in the `.gitignore` file to prevent it from being committed to the repo.
+
+#### App Store Connect API Key
+
+In order for Fastlane to help with provisioning profiles and certificates, you'll
+need to create an [App Store Connect API key](https://appstoreconnect.apple.com/access/integrations/api):
+
+1. Create an App Store Connect Team API key with "Developer" access. Download the
+key's `.p8` file once generated.
+2. Get the base64 encoded value of the `.p8` file: `cat <key-name>.p8 | base64`.
+3. Update the value of `APP_STORE_CONNECT_API_KEY_KEY` in the `.env` file with the
+base64 encoded value.
+4. Update the value of `APP_STORE_CONNECT_API_KEY_KEY_ID` in the `.env` file with
+the value shown in App Store Connect.
+5. Update the `APP_STORE_CONNECT_API_KEY_ISSUER_ID` variable in the `.env` file
+with the value shown in App Store Connect.
+
 ### Creating a Build
 
 A build can be creating using Xcode or via Fastlane:
