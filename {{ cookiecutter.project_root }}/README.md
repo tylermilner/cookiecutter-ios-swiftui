@@ -45,8 +45,10 @@ A convenience script is also available:
 If you're planning to build upon this repo and you want to utilize the Fastlane
 build automation tools, you'll need to do some initial setup for this project.
 
-First, setup the `.env` file by duplicating the `.env.example` file and renaming
-it to `.env`.
+#### Environment Variables
+
+First, create an `.env` file that will contain the necessary environment variables
+and secrets by duplicating the `.env.example` file and renaming it to `.env`.
 
 Note that because this `.env` file will contain sensitive information, it is
 included in the `.gitignore` file to prevent it from being committed to the repo.
