@@ -6,7 +6,7 @@
 [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template for
 jump-starting modern iOS apps using SwiftUI.
 
-## Work in Progress
+## ⚠️ Work in Progress ⚠️
 
 This project is a work in progress and not yet feature complete. See below for
 current progress:
