@@ -22,7 +22,7 @@ and how to install Ruby (via version manager like `rbenv`) and `bundler`.
 - [ ] TODO: Fill in `git clone` repo URL below.
 
 1. Clone or download this repo - `git clone ...`.
-2. Install build dependencies - `bundle install` and `mint bootstrap`.
+2. Install build dependencies - `bundle install`.
 3. Open `{{ cookiecutter.__project_name_no_spaces }}.xcodeproj` in Xcode.
 4. Click "Run" or press `CMD` + `R` shortcut.
 
