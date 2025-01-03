@@ -178,3 +178,31 @@ for more information).
 A build can be creating using Xcode or via Fastlane:
 
 _TBD_: Document the build creation process.
+
+#### Adding Development Devices
+
+An `add_device` lane has been setup that can be used to easily add a test device
+to the Apple Developer Portal and regenerate the associated provisioning profiles:
+
+1. Make sure the following environment variables are setup in your `.env` file
+or `export`ed to your current shell environment:
+
+    - `MATCH_GIT_URL` - The URL of the certificates repository.
+    - `MATCH_GIT_BASIC_AUTHORIZATION` - The base64 encoded GitHub basic authorization
+    credentials.
+    - `MATCH_PASSWORD` - The passphrase used to encrypt/decrypt the certificates.
+    - `APP_STORE_CONNECT_API_KEY_KEY_ID` - The Key ID value for the App Store Connect
+    API key.
+    - `APP_STORE_CONNECT_API_KEY_ISSUER_ID` - The Issuer ID value for the App Store
+    Connect API key.
+    - `APP_STORE_CONNECT_API_KEY_KEY` - The base64 encoded value of the App Store
+    Connect API key.
+
+2. Run the lane, entering the device's name and UDID when prompted:
+
+    ```shell
+    bundle exec fastlane add_device
+    ```
+
+The test device will then be registered to the dev portal and associated provisioning
+profiles will be updated and pushed to the certificates repository.
