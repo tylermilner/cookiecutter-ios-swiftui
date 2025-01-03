@@ -3,6 +3,10 @@ options:
   defaultConfig: "Release"
   deploymentTarget:
     iOS: "{{ cookiecutter.deployment_target }}"
+configs:
+  Debug: debug
+  QA: release
+  Release: release
 settings:
   base:
     ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: "YES"
@@ -11,7 +15,13 @@ settings:
     GCC_C_LANGUAGE_STANDARD: "gnu17"
     LOCALIZATION_PREFERS_STRING_CATALOGS: "YES"
   configs:
-    release:
+    QA:
+      GCC_PREPROCESSOR_DEFINITIONS: "QA=1"
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: "QA"
+      VALIDATE_PRODUCT: "YES"
+    Release:
+      GCC_PREPROCESSOR_DEFINITIONS: "RELEASE=1"
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: "RELEASE"
       VALIDATE_PRODUCT: "YES"
 targets:
   {{ cookiecutter.target_name }}:
