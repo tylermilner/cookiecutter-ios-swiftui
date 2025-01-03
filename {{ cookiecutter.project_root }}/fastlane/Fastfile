@@ -41,7 +41,7 @@ platform :ios do
     device = options[:device] || default_test_device
 
     # Do clean build and force quit & pre-launch simulator to increase UI test reliability when run on CI
-    run_tests(
+    scan(
       derived_data_path: derived_data_path,
       clean: true,
       force_quit_simulator: true,
