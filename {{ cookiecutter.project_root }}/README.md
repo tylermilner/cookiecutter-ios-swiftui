@@ -40,7 +40,7 @@ like `rbenv`) and `bundler`.
 Tests can be run inside of Xcode using the `CMD` + `U` shortcut or run via Fastlane:
 
 ```shell
-bundle exec fastlane ios test
+bundle exec fastlane test
 ```
 
 A convenience script is also available:
@@ -95,7 +95,7 @@ your Apple Developer account.
 3. Run the `setup_app_id` lane:
 
     ```shell
-    bundle exec fastlane ios setup_app_id
+    bundle exec fastlane setup_app_id
     ```
 
 When prompted, enter the verification code sent to your device to authenticate
@@ -163,7 +163,7 @@ To generate the certificates and provisioning profiles using fastlane `match`,
 use the `setup_certs` lane:
 
 ```shell
-bundle exec fastlane ios setup_certs
+bundle exec fastlane setup_certs
 ```
 
 If prompted, enter your Mac's login keychain password so that `match` can

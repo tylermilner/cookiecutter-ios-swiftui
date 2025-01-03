@@ -1,3 +1,3 @@
 #!/bin/bash
 
-bundle exec fastlane ios test
+bundle exec fastlane test
