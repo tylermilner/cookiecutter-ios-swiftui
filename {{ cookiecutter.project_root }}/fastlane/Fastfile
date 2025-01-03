@@ -25,7 +25,7 @@ end
 
 platform :ios do
   # Variables available to all lanes
-  ci_build_number = ENV["BUILD_NUMBER"] ? ENV["BUILD_NUMBER"] : "1" # Defaults to build number "1"
+  build_number = ENV["BUILD_NUMBER"] ? ENV["BUILD_NUMBER"] : "1" # Defaults to build number "1"
   build_directory = ENV["BUILD_DIRECTORY"] ? ENV["BUILD_DIRECTORY"] : ".build" # Defaults to ".build" directory for build artifacts
   derived_data_path = "#{build_directory}/DerivedData"
   app_name = "{{ cookiecutter.project_name }}"
@@ -49,6 +49,68 @@ platform :ios do
       device: device,
       ensure_devices_found: true
     )
+  end
+
+  desc "Create a QA build"
+  lane :build_qa do
+    # Make sure the required environment variables are present (e.g. in .env file)
+    ensure_env_vars(
+      env_vars: [
+        "MATCH_GIT_URL", # URL to the certificates repository
+        "MATCH_GIT_BASIC_AUTHORIZATION", # Base64 encoded GitHub PAT to access the certificates repository
+        "MATCH_PASSWORD" # Decrypts the certificates and profiles
+      ]
+    )
+
+    UI.message "build directory: #{build_directory}"
+
+    # Create a temporary keychain for match to use when installing signing certificates
+    keychain_name = "fastlane-temp-#{SecureRandom.hex(8)}.keychain-db"
+    keychain_password = SecureRandom.hex(8)
+
+    create_keychain(
+      name: keychain_name,
+      password: keychain_password,
+      default_keychain: false,
+      unlock: true,
+      timeout: 3600 # 1 hour
+    )
+
+    # Catch any errors from this point forward so that the temporary keychain can be cleaned up
+    begin
+      # Run match to install signing certificates and provisioning profiles
+      match(
+        type: qa_build_type,
+        readonly: true,
+        keychain_name: keychain_name,
+        keychain_password: keychain_password
+      )
+
+      # Get the current version number from the project
+      version_number = get_version_number(target: target)
+
+      # Set the build number to the value provided via the environment
+      increment_build_number(
+        build_number: build_number
+      )
+
+      # Build app
+      output_name = "#{scheme}_#{qa_build_configuration}_#{version_number}_#{build_number}"
+      gym(
+        derived_data_path: derived_data_path,
+        configuration: qa_build_configuration,
+        scheme: scheme,
+        clean: true,
+        output_directory: build_directory,
+        output_name: output_name,
+        archive_path: "#{build_directory}/#{output_name}"
+      )
+    ensure
+      # Always clean up the temporary keychain
+      delete_keychain(
+        name: keychain_name
+      )
+    end
   end
 
   desc "Create an App ID on the Apple Developer Portal"
