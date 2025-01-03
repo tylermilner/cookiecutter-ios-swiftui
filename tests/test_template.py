@@ -70,6 +70,7 @@ def test_default_configuration() -> None:
     assert context["__project_name_no_spaces_lowercase"] == "myapp"
     assert context["project_root"] == "my-app"
     assert context["target_name"] == "MyApp"
+    assert context["__scheme"] == "MyApp"
     assert context["organization_name"] == "Example"
     assert context["__organization_name_no_spaces_lowercase"] == "example"
     assert context["bundle_identifier"] == "com.example.myapp"
@@ -77,10 +78,30 @@ def test_default_configuration() -> None:
     assert context["simulator_name"] == "iPhone 16"
     assert context["full_name"] == "First Last"
     assert context["date"] == date
+    assert context["apple_developer_apple_id"] == "user@email.com"
+    assert context["apple_developer_team_id"] == "AAAAAAAAAA"
+    assert context["app_store_connect_api_key_key_id"] == "PASTE_ASC_KEY_ID_HERE"
+    assert context["app_store_connect_api_key_issuer_id"] == "PASTE_ASC_ISSUER_ID_HERE"
+    assert (
+        context["app_store_connect_api_key_key"] == "PASTE_ASC_BASE64_ENCODED_KEY_HERE"
+    )
+    assert (
+        context["fastlane_match_git_repo_url"]
+        == "https://github.com/username/my-app-certs.git"
+    )
+    assert (
+        context["fastlane_match_git_repo_basic_authorization"]
+        == "PASTE_MATCH_GIT_REPO_BASIC_AUTHORIZATION_HERE"
+    )
+    assert context["fastlane_match_git_repo_encryption_passphrase"] == "p4ssw0rd!"  # noqa: S105 - ignore hardcoded password warning
     assert context["open_xcode_project"]
     assert context["remove_xcodegen_yml"]
     assert context["initialize_git_repo"]
     assert not context["run_tests"]
+    assert context["_copy_without_render"] == [
+        ".github/workflows/test.yml",
+        ".github/workflows/deploy_qa.yml",
+    ]
 
 
 def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
@@ -97,12 +118,15 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
 
     # Verify that all expected files exist
     expected_file_paths = [
+        ".env",
+        ".env.example",
         ".github/workflows/test.yml",
         ".github/workflows/deploy_qa.yml",
         ".gitignore",
         ".ruby-version",
         "fastlane/Appfile",
         "fastlane/Fastfile",
+        "fastlane/Matchfile",
         "Gemfile",
         "Gemfile.lock",
         "run-tests.sh",
@@ -162,6 +186,12 @@ def test_project_name_replaced(baked_cookies: BakeResult) -> None:
     with Path.open(Path(project_path) / "README.md") as file:
         readme = file.read()
         assert f"# {PROJECT_NAME}" in readme
+        assert f"`{APP_TARGET_NAME}.xcodeproj`" in readme
+
+    # Verify Fastfile contents
+    with Path.open(Path(project_path) / "fastlane/Fastfile") as file:
+        fastfile = file.read()
+        assert f'app_name = "{PROJECT_NAME}"' in fastfile
 
 
 def check_swift_files_for_text(
@@ -265,7 +295,7 @@ def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
 def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
     """Test that bundle_identifier is replaced correctly in all necessary files."""
     # Arrange
-    bundle_identifier_suffix = APP_TARGET_NAME.lower()
+    expected_bundle_identifier = f"com.example.{APP_TARGET_NAME.lower()}"
 
     # Act
     project_path = baked_cookies.project_path
@@ -277,9 +307,14 @@ def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
 
         app_target = project_yml["targets"][APP_TARGET_NAME]
         assert (
-            f"com.example.{bundle_identifier_suffix}"
+            expected_bundle_identifier
             in app_target["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"]
         )
+
+    # Verify Appfile contents
+    with Path.open(Path(project_path) / "fastlane/Appfile") as file:
+        appfile = file.read()
+        assert f'app_identifier("{expected_bundle_identifier}")' in appfile
 
 
 # Test deployment target
@@ -319,13 +354,15 @@ def test_simulator_name_replaced(baked_cookies: BakeResult) -> None:
 def test_full_name_replaced(baked_cookies: BakeResult) -> None:
     """Test that full_name is replaced correctly in all necessary files."""
     # Arrange
-    full_name = "First Last"
+    expected_full_name = "First Last"
 
     # Act
     project_path = baked_cookies.project_path
 
     # Assert
-    check_swift_files_for_text(project_path, f"//  Created by {full_name} on .*", 4)
+    check_swift_files_for_text(
+        project_path, f"//  Created by {expected_full_name} on .*", 4
+    )
 
 
 def test_date_replaced(cookies: Cookies) -> None:
@@ -346,6 +383,148 @@ def test_date_replaced(cookies: Cookies) -> None:
     # Assert
     project_path = result.project_path
     check_swift_files_for_text(project_path, f"//  Created by .* on {date}", 4)
+
+
+def test_apple_developer_apple_id_replaced(baked_cookies: BakeResult) -> None:
+    """Test that apple_developer_apple_id is replaced correctly in all necessary
+    files.
+    """
+    # Arrange
+    expected_apple_id = "user@email.com"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'FASTLANE_USER="{expected_apple_id}"' in env
+
+
+def test_apple_developer_team_id_replaced(baked_cookies: BakeResult) -> None:
+    """Test that apple_developer_team_id is replaced correctly in all necessary
+    files.
+    """
+    # Arrange
+    expected_team_id = "AAAAAAAAAA"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'FASTLANE_TEAM_ID="{expected_team_id}"' in env
+
+
+def test_app_store_connect_api_key_key_id_replaced(baked_cookies: BakeResult) -> None:
+    """Test that app_store_connect_api_key_key_id is replaced correctly in all
+    necessary files.
+    """
+    # Arrange
+    expected_key_id = "PASTE_ASC_KEY_ID_HERE"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'APP_STORE_CONNECT_API_KEY_KEY_ID="{expected_key_id}"' in env
+
+
+def test_app_store_connect_api_key_issuer_id_replaced(
+    baked_cookies: BakeResult,
+) -> None:
+    """Test that app_store_connect_api_key_issuer_id is replaced correctly in all
+    necessary files.
+    """
+    # Arrange
+    expected_issuer_id = "PASTE_ASC_ISSUER_ID_HERE"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'APP_STORE_CONNECT_API_KEY_ISSUER_ID="{expected_issuer_id}"' in env
+
+
+def test_app_store_connect_api_key_key_replaced(baked_cookies: BakeResult) -> None:
+    """Test that app_store_connect_api_key_key is replaced correctly in all necessary
+    files.
+    """
+    # Arrange
+    expected_key = "PASTE_ASC_BASE64_ENCODED_KEY_HERE"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'APP_STORE_CONNECT_API_KEY_KEY="{expected_key}"' in env
+
+
+def test_fastlane_match_git_repo_url_replaced(baked_cookies: BakeResult) -> None:
+    """Test that fastlane_match_git_repo_url is replaced correctly in all necessary
+    files.
+    """
+    # Arrange
+    expected_git_repo_url = f"https://github.com/username/{PROJECT_PATH}-certs.git"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'MATCH_GIT_URL="{expected_git_repo_url}"' in env
+
+
+def test_fastlane_match_git_repo_basic_authorization_replaced(
+    baked_cookies: BakeResult,
+) -> None:
+    """Test that fastlane_match_git_repo_basic_authorization is replaced correctly
+    in all necessary files.
+    """
+    # Arrange
+    expected_basic_authorization = "PASTE_MATCH_GIT_REPO_BASIC_AUTHORIZATION_HERE"
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'MATCH_GIT_BASIC_AUTHORIZATION="{expected_basic_authorization}"' in env
+
+
+def test_fastlane_match_git_repo_encryption_passphrase_replaced(
+    baked_cookies: BakeResult,
+) -> None:
+    """Test that fastlane_match_git_repo_encryption_passphrase is replaced correctly
+    in all necessary files.
+    """
+    # Arrange
+    expected_encryption_passphrase = "p4ssw0rd!"  # noqa: S105 - ignore hardcoded password warning
+
+    # Act
+    project_path = baked_cookies.project_path
+
+    # Assert
+    # Verify .env contents
+    with Path.open(Path(project_path) / ".env") as file:
+        env = file.read()
+        assert f'MATCH_PASSWORD="{expected_encryption_passphrase}"' in env
 
 
 def test_remove_xcodegen_yml(cookies: Cookies) -> None:
