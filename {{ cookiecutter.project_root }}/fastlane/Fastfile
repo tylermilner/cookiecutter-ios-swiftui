@@ -53,8 +53,15 @@ platform :ios do
 
   desc "Create an App ID on the Apple Developer Portal"
   lane :setup_app_id do
-    # Create the App ID in the Apple Developer Portal only
-    # Assumes FASTLANE_USER and FASTLANE_TEAM_ID are set in the environment (e.g. .env file)
+    # Make sure the required environment variables are present (e.g. in .env file)
+    ensure_env_vars(
+      env_vars: [
+        "FASTLANE_USER", # Apple ID username
+        "FASTLANE_TEAM_ID" # Apple Developer Team ID
+      ]
+    )
+
+    # Create the App ID in the Apple Developer Portal (and not App Store Connect)
     produce(
       app_name: app_name,
       skip_itc: true
@@ -63,15 +70,28 @@ platform :ios do
 
   desc "Create certificates and provisioning profiles"
   lane :setup_certs do
-    # Load the API key for App Store Connect using environment values in .env file
-    # Assumes APP_STORE_CONNECT_API_KEY_KEY_ID, APP_STORE_CONNECT_API_KEY_ISSUER_ID, and APP_STORE_CONNECT_API_KEY_KEY are set in the environment (e.g. .env file)
+    # Make sure the required environment variables are present (e.g. in .env file)
+    ensure_env_vars(
+      env_vars: [
+        "MATCH_GIT_URL", # URL to the certificates repository
+        "MATCH_GIT_BASIC_AUTHORIZATION", # Base64 encoded GitHub PAT to access the certificates repository
+        "MATCH_PASSWORD", # Decrypts the certificates and profiles
+        
+        # Environment variables for App Store Connect.
+        # See https://docs.fastlane.tools/app-store-connect-api/#using-an-app-store-connect-api-key.
+        "APP_STORE_CONNECT_API_KEY_KEY_ID", # Key ID
+        "APP_STORE_CONNECT_API_KEY_ISSUER_ID", # Key Issuer ID
+        "APP_STORE_CONNECT_API_KEY_KEY" # Base64 encoded key content (e.g. `cat [YOUR_KEY_NAME].p8 | base64`)
+      ]
+    )
+
+    # Load the API key for App Store Connect
     app_store_connect_api_key(
       is_key_content_base64: true
     )
 
     # Create certificates and provisioning profiles
-    # Use is_ci flag to prevent accidentally modifying certs and profiles when running on CI
-    # Assumes MATCH_GIT_URL, MATCH_GIT_BASIC_AUTHORIZATION, and MATCH_PASSWORD are set in the environment (e.g. .env file)
+    # Use the is_ci flag to prevent accidentally modifying certs and profiles when running on CI
     match(
       type: "development",
       readonly: is_ci
