@@ -295,7 +295,7 @@ def test_organization_name_replaced(baked_cookies: BakeResult) -> None:
 def test_bundle_identifier_replaced(baked_cookies: BakeResult) -> None:
     """Test that bundle_identifier is replaced correctly in all necessary files."""
     # Arrange
-    expected_bundle_identifier = "com.example.demoapp"
+    expected_bundle_identifier = f"com.example.{APP_TARGET_NAME.lower()}"
 
     # Act
     project_path = baked_cookies.project_path
