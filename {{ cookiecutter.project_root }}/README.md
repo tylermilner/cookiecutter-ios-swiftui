@@ -19,9 +19,9 @@ and how to install Ruby (via version manager like `rbenv`) and `bundler`.
 
 ### Running the Project
 
-- [ ] TODO: Fill in `git clone` repo URL below.
+- [ ] TODO: Fill in `git clone` repository URL below.
 
-1. Clone or download this repo - `git clone ...`.
+1. Clone or download this repository - `git clone ...`.
 2. Install build dependencies - `bundle install`.
 3. Open `{{ cookiecutter.__project_name_no_spaces }}.xcodeproj` in Xcode.
 4. Click "Run" or press `CMD` + `R` shortcut.
@@ -42,7 +42,7 @@ A convenience script is also available:
 
 ### Initial Project Setup for CI/CD
 
-If you're planning to build upon this repo and you want to utilize the Fastlane
+If you're planning to build upon this repository and you want to utilize the Fastlane
 build automation tools, you'll need to do some initial setup for this project:
 
 - Environment Variables
@@ -70,7 +70,7 @@ CI/CD operations on your local machine. For running these operations on a remote
 machine (e.g. CI system), these values will be set in the CI's settings.
 
 Note that because this `.env` file contains sensitive information, it is
-**included** in the `.gitignore` to **prevent** it from being committed to the repo.
+**included** in the `.gitignore` to **prevent** it from being committed to the repository.
 
 #### Apple Developer Portal
 
