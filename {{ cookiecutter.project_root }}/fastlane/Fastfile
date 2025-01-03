@@ -105,4 +105,51 @@ platform :ios do
       readonly: is_ci
     )
   end
+
+  desc "Add development device to the Apple Developer Portal and regenerate provisioning profiles"
+  lane :add_device do |options|
+    # Make sure the required parameters are provided
+    device_name = options[:device_name] || (is_ci ? UI.user_error!("Please provide a 'device_name'.") : UI.input("Device name: "))
+    device_udid = options[:device_udid] || (is_ci ? UI.user_error!("Please provide a 'device_udid'.") : UI.input("Device UDID: "))
+
+    # Make sure the required environment variables are present (e.g. in .env file)
+    ensure_env_vars(
+      env_vars: [
+        "MATCH_GIT_URL", # URL to the certificates repository
+        "MATCH_GIT_BASIC_AUTHORIZATION", # Base64 encoded GitHub PAT to access the certificates repository
+        "MATCH_PASSWORD", # Decrypts the certificates and profiles
+        
+        # Environment variables for App Store Connect.
+        # See https://docs.fastlane.tools/app-store-connect-api/#using-an-app-store-connect-api-key.
+        "APP_STORE_CONNECT_API_KEY_KEY_ID", # Key ID
+        "APP_STORE_CONNECT_API_KEY_ISSUER_ID", # Key Issuer ID
+        "APP_STORE_CONNECT_API_KEY_KEY" # Base64 encoded key content (e.g. `cat [YOUR_KEY_NAME].p8 | base64`)
+      ]
+    )
+
+    # Load the API key for App Store Connect (default values provided via environment variables)
+    app_store_connect_api_key(
+      is_key_content_base64: true
+    )
+
+    # Add the device to the Apple Developer Portal
+    register_devices(
+      devices: {
+        device_name => device_udid
+      }
+    )
+
+    # Create new provisioning profiles
+    # Use `force_for_new_devices` to have match regenerate provisioning profiles for newly added devices
+    match(
+      type: "development",
+      readonly: false,
+      force_for_new_devices: true
+    )
+    match(
+      type: "adhoc",
+      readonly: false,
+      force_for_new_devices: true
+    )
+  end
 end
