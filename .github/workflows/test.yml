@@ -110,3 +110,13 @@ jobs:
 
       - name: Run tests
         run: ./run-tests.sh
+
+      - name: Create build
+        run: ./create-build.sh
+        env:
+          # yamllint disable rule:line-length
+          BUILD_NUMBER: ${{ github.run_number }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          # yamllint enable rule:line-length

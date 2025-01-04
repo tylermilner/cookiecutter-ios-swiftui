@@ -181,12 +181,30 @@ The `build_qa` lane can be run to create a QA build using Fastlane `gym`:
 bundle exec fastlane build_qa
 ```
 
+A convenience script is also available:
+
+```shell
+./create-build.sh
+```
+
 Once finished, the resulting build files (`ipa`, `dSYM`, and `xcarchive`) will
 be available in the `./builds` directory.
 
 Alternatively, a build can be created manually using Xcode by selecting the "Any
 iOS Device" destination and then selecting "Product" --> "Archive" in the menu
 bar.
+
+#### Creating Builds on CI
+
+In order for the CI to successfully generate builds, the following repository secrets
+will need to be set up:
+
+- `MATCH_GIT_URL`
+- `MATCH_GIT_BASIC_AUTHORIZATION`
+- `MATCH_PASSWORD`
+
+On GitHub, these are set in the repository's Settings --> "Secrets and variables"
+--> "Actions" --> "Repository secrets".
 
 #### Adding Development Devices
 

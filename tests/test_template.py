@@ -124,12 +124,6 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
         ".github/workflows/deploy_qa.yml",
         ".gitignore",
         ".ruby-version",
-        "fastlane/Appfile",
-        "fastlane/Fastfile",
-        "fastlane/Matchfile",
-        "Gemfile",
-        "Gemfile.lock",
-        "run-tests.sh",
         f"{APP_TARGET_NAME}/Assets.xcassets/AccentColor.colorset/Contents.json",
         f"{APP_TARGET_NAME}/Assets.xcassets/AppIcon.appiconset/Contents.json",
         f"{APP_TARGET_NAME}/Assets.xcassets/Contents.json",
@@ -140,8 +134,15 @@ def test_project_generation_file_structure(baked_cookies: BakeResult) -> None:
         f"{APP_TARGET_NAME}.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
         f"{APP_TESTS_TARGET_NAME}/{APP_TESTS_TARGET_NAME}.swift",
         f"{APP_UITESTS_TARGET_NAME}/{APP_UITESTS_TARGET_NAME}.swift",
+        "create-build.sh",
+        "fastlane/Appfile",
+        "fastlane/Fastfile",
+        "fastlane/Matchfile",
+        "Gemfile",
+        "Gemfile.lock",
         "project.yml",
         "README.md",
+        "run-tests.sh",
     ]
 
     for file_path in expected_file_paths:
