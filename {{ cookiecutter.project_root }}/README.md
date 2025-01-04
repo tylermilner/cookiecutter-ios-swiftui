@@ -86,7 +86,7 @@ Note that because this `.env` file contains sensitive information, it is
 
 In order to create certificates and provisioning profiles, you'll need to create
 an App ID in the Apple Developer Portal. This can be done manually or automatically
-via fastlane `produce` and the `setup_app_id` lane:
+via Fastlane `produce` and the `setup_app_id` lane:
 
 1. Update the value of `FASTLANE_USER` in the `.env` file with the Apple ID for
 your Apple Developer account.
@@ -159,7 +159,7 @@ that `match` will use to encrypt/decrypt the certificates.
 
 #### Certificates and Provisioning Profiles
 
-To generate the certificates and provisioning profiles using fastlane `match`,
+To generate the certificates and provisioning profiles using Fastlane `match`,
 use the `setup_certs` lane:
 
 ```shell
