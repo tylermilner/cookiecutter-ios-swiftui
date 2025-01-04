@@ -52,6 +52,11 @@ targets:
         MARKETING_VERSION: "1.0"
         PRODUCT_BUNDLE_IDENTIFIER: "{{ cookiecutter.bundle_identifier }}"
         SWIFT_EMIT_LOC_STRINGS: "YES"
+      configs:
+        QA:
+          DEVELOPMENT_TEAM: {{ cookiecutter.apple_developer_team_id }}
+        Release:
+          DEVELOPMENT_TEAM: {{ cookiecutter.apple_developer_team_id }}
   {{ cookiecutter.target_name }}Tests:
     type: bundle.unit-test
     platform: iOS
