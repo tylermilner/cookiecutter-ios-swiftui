@@ -175,9 +175,18 @@ for more information).
 
 ### Creating a Build
 
-A build can be creating using Xcode or via Fastlane:
+The `build_qa` lane can be run to create a QA build using Fastlane `gym`:
 
-_TBD_: Document the build creation process.
+```shell
+bundle exec fastlane build_qa
+```
+
+Once finished, the resulting build files (`ipa`, `dSYM`, and `xcarchive`) will
+be available in the `./builds` directory.
+
+Alternatively, a build can be created manually using Xcode by selecting the "Any
+iOS Device" destination and then selecting "Product" --> "Archive" in the menu
+bar.
 
 #### Adding Development Devices
 
