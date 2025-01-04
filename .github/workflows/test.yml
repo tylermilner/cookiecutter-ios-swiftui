@@ -111,6 +111,15 @@ jobs:
       - name: Run tests
         run: ./run-tests.sh
 
+      # Update the bundle id and development team so that a build can be created
+      # (i.e. they need to map to a real values in the Apple Developer Portal)
+      # yamllint disable rule:line-length
+      - name: Update build values
+        run: |
+          bundle exec fastlane run update_app_identifier app_identifier:"com.tylermilner.myapp"
+          bundle exec fastlane run update_project_team teamid:"3X9D9ZKDMN"
+      # yamllint enable rule:line-length
+
       - name: Create build
         run: ./create-build.sh
         env:
