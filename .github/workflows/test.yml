@@ -59,14 +59,19 @@ jobs:
       - name: Run tests
         run: pipenv run pytest
 
-      - name: Generate template from defaults
-        run: make generate
+      # Override bundle identifier and team id so that a build can be created
+      # from the generated template (needs to match an actual App ID in the
+      # Apple Developer Portal)
+      # yamllint disable rule:line-length
+      - name: Generate template
+        run: make generate COOKIECUTTER_OPTIONS="--overwrite-if-exists --no-input initialize_git_repo=False open_xcode_project=False run_tests=False bundle_identifier=com.tylermilner.myapp apple_developer_team_id=3X9D9ZKDMN"
+      # yamllint enable rule:line-length
 
       - name: List generated files
         run: ls -la ${{ env.TEMPLATE_OUTPUT_DIR}}
 
-      # yamllint disable rule:line-length
       # Tar files before upload to preserve file permissions
+      # yamllint disable rule:line-length
       - name: Tar files
         run: tar -czvf ${{ env.TEMPLATE_OUTPUT_ARTIFACT_NAME}}.tar.gz ${{ env.TEMPLATE_OUTPUT_DIR}}
       # yamllint enable rule:line-length
@@ -110,15 +115,6 @@ jobs:
 
       - name: Run tests
         run: ./run-tests.sh
-
-      # Update the bundle id and development team so that a build can be created
-      # (i.e. they need to map to a real values in the Apple Developer Portal)
-      # yamllint disable rule:line-length
-      - name: Update build values
-        run: |
-          bundle exec fastlane run update_app_identifier app_identifier:"com.tylermilner.myapp"
-          bundle exec fastlane run update_project_team teamid:"3X9D9ZKDMN"
-      # yamllint enable rule:line-length
 
       - name: Create build
         run: ./create-build.sh
