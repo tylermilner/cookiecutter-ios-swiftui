@@ -5,6 +5,9 @@ OUTPUT_DIR := .
 # Command to run cookiecutter
 COOKIECUTTER := pipenv run cookiecutter
 
+# Default options passed to cookiecutter
+COOKIECUTTER_OPTIONS := --overwrite-if-exists --no-input initialize_git_repo=False open_xcode_project=False run_tests=False
+
 # The default directory of the generated project
 # Should match default value for 'project_root' in cookiecutter.json
 GENERATED_PROJECT_DIR := my-app
@@ -13,7 +16,7 @@ GENERATED_PROJECT_DIR := my-app
 .PHONY: generate
 generate:
 	@echo "Generating project with default values..."
-	$(COOKIECUTTER) $(OUTPUT_DIR) --overwrite-if-exists --no-input initialize_git_repo=False open_xcode_project=False run_tests=False
+	$(COOKIECUTTER) $(OUTPUT_DIR) $(COOKIECUTTER_OPTIONS)
 
 # Generate a new project using user-provided values and overwrite if exists
 .PHONY: generate-with-inputs

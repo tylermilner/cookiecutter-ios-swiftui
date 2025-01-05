@@ -86,10 +86,22 @@ then regenerate the project:
     make generate
     ```
 
-    or
+    or, to be prompted for the inputs:
 
     ```Shell
     make generate-with-inputs
+    ```
+
+    You can also override the default options provided to Cookiecutter in the `Makefile`:
+
+    ```Shell
+    make generate COOKIECUTTER_OPTIONS="option1 option2 option3"
+    ```
+
+    For instance:
+
+    ```Shell
+    make generate COOKIECUTTER_OPTIONS="--overwrite-if-exists --no-input initialize_git_repo=True"
     ```
 
 4. Add or update the tests, then run them:
