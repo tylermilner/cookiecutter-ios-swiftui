@@ -32,9 +32,10 @@ targets:
     settings:
       base:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "AccentColor"
-        CODE_SIGN_IDENTITY: "Apple Development"
+        CODE_SIGN_STYLE: "Manual"
         CURRENT_PROJECT_VERSION: "1"
         DEVELOPMENT_ASSET_PATHS: "\"{{ cookiecutter.target_name }}/Preview Content\""
+        DEVELOPMENT_TEAM: "{{ cookiecutter.apple_developer_team_id }}"
         ENABLE_PREVIEWS: "YES"
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: "YES"
@@ -54,11 +55,14 @@ targets:
         SWIFT_EMIT_LOC_STRINGS: "YES"
       configs:
         Debug:
-          DEVELOPMENT_TEAM: {{ cookiecutter.apple_developer_team_id }}
+          CODE_SIGN_IDENTITY: "Apple Development"
+          PROVISIONING_PROFILE_SPECIFIER: "match Development {{ cookiecutter.bundle_identifier }}"
         QA:
-          DEVELOPMENT_TEAM: {{ cookiecutter.apple_developer_team_id }}
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "match AdHoc {{ cookiecutter.bundle_identifier }}"
         Release:
-          DEVELOPMENT_TEAM: {{ cookiecutter.apple_developer_team_id }}
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "match AppStore {{ cookiecutter.bundle_identifier }}"
   {{ cookiecutter.target_name }}Tests:
     type: bundle.unit-test
     platform: iOS
