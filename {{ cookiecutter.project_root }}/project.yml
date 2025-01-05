@@ -17,6 +17,7 @@ settings:
   configs:
     QA:
       GCC_PREPROCESSOR_DEFINITIONS: "QA=1"
+      PROVISIONING_PROFILE_SPECIFIER: "$(sigh_com.tylermilner.myapp_adhoc_profile-name)"
       SWIFT_ACTIVE_COMPILATION_CONDITIONS: "QA"
       VALIDATE_PRODUCT: "YES"
     Release:
