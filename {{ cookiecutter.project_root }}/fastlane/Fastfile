@@ -94,6 +94,11 @@ platform :ios do
         build_number: build_number
       )
 
+      # Disable automatic signing before building app (see https://docs.fastlane.tools/codesigning/getting-started/#using-xcodes-code-signing-feature)
+      update_code_signing_settings(
+        use_automatic_signing: false
+      )
+
       # Build app
       output_name = "#{scheme}_#{qa_build_configuration}_#{version_number}_#{build_number}"
       gym(
