@@ -7,7 +7,7 @@ COOKIECUTTER := pipenv run cookiecutter
 
 # The default directory of the generated project
 # Should match default value for 'project_root' in cookiecutter.json
-DEFAULT_PROJECT_FOLDER := my-app
+GENERATED_PROJECT_DIR := my-app
 
 # Generate a new project using default values and overwrite if exists
 .PHONY: generate
@@ -24,11 +24,11 @@ generate-with-inputs:
 # Clean up generated project
 .PHONY: clean
 clean:
-	@if [ -d "$(DEFAULT_PROJECT_FOLDER)" ]; then \
+	@if [ -d "$(GENERATED_PROJECT_DIR)" ]; then \
 		echo "Cleaning up generated project..."; \
-		rm -rf $(DEFAULT_PROJECT_FOLDER); \
+		rm -rf $(GENERATED_PROJECT_DIR); \
 	else \
-		echo "Clean failed. '$(DEFAULT_PROJECT_FOLDER)' directory not found."; \
+		echo "Clean not necessary. '$(GENERATED_PROJECT_DIR)' directory not found."; \
 	fi
 
 # Setup development environment (assumes Homebrew and pyenv is installed)
