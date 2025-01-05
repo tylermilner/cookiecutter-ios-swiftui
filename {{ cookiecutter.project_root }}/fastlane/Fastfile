@@ -78,6 +78,11 @@ platform :ios do
 
     # Catch any errors from this point forward so that the temporary keychain can be cleaned up
     begin
+      # Disable automatic signing before building app (see https://docs.fastlane.tools/codesigning/getting-started/#using-xcodes-code-signing-feature)
+      update_code_signing_settings(
+        use_automatic_signing: false
+      )
+
       # Run match to install signing certificates and provisioning profiles
       match(
         type: qa_build_type,
@@ -92,11 +97,6 @@ platform :ios do
       # Set the build number to the value provided via the environment
       increment_build_number(
         build_number: build_number
-      )
-
-      # Disable automatic signing before building app (see https://docs.fastlane.tools/codesigning/getting-started/#using-xcodes-code-signing-feature)
-      update_code_signing_settings(
-        use_automatic_signing: false
       )
 
       # Build app
