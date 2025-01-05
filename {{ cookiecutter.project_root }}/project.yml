@@ -53,6 +53,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: "{{ cookiecutter.bundle_identifier }}"
         SWIFT_EMIT_LOC_STRINGS: "YES"
       configs:
+        Debug:
+          DEVELOPMENT_TEAM: {{ cookiecutter.apple_developer_team_id }}
         QA:
           DEVELOPMENT_TEAM: {{ cookiecutter.apple_developer_team_id }}
         Release:
